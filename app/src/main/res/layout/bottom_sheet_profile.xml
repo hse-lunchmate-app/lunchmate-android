@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_background">
+
+    <ImageView
+        android:id="@+id/rect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/bottom_sheet_rect" />
+
+    <RelativeLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rect">
+
+        <ImageView
+            android:id="@+id/photo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="20dp"
+            android:src="@drawable/photo" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/photo">
+
+            <TextView
+                android:id="@+id/profileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="Иван Иванов"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/profileNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profileName"
+                android:layout_marginTop="12dp"
+                android:maxLines="1"
+                android:text="\@ivan12345"
+                android:textColor="@color/grey_600"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/tgButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/head"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:drawableTint="@color/white"
+        android:paddingStart="10dp"
+        android:text="Связаться в телеграм"
+        android:textAllCaps="false"
+        app:backgroundTint="@color/tg"
+        app:cornerRadius="16dp"
+        app:icon="@drawable/telegram" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tgButton">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/office"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:background="@drawable/rounded_grey_top"
+                android:drawableStart="@drawable/location"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:padding="16dp"
+                android:text="Название офиса"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/taste"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/office"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/rounded_grey_middle"
+                android:drawableStart="@drawable/taste"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:padding="16dp"
+                android:text="Котлетка с пюрешкой"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:id="@+id/info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/taste"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/rounded_grey_bottom"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/infoIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:ellipsize="end"
+                    android:text="О себе"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/grey_600"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/infoText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/infoIcon"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:ellipsize="end"
+                    android:text="Я\nобычный\nИван\nЯ\nпросто\nкласс"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/schedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/info"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:text="Расписание"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:id="@+id/datePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/schedule"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp">
+
+                <ImageButton
+                    android:id="@+id/leftButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/arrow_left"
+                    app:tint="@color/blue_700" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/leftButton"
+                    android:maxLines="1"
+                    android:text="Среда, 21.02"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/rightButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/arrow_right"
+                    app:tint="@color/blue_700" />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/availableSlots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/datePicker"
+                android:layout_marginVertical="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                tools:listitem="@layout/item_available_slot" />
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

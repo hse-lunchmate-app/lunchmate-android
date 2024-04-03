@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
+
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Мой профиль"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <ImageButton
+            android:id="@+id/editButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/edit" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/photo" />
+
+            <TextView
+                android:id="@+id/profileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/photo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:maxLines="1"
+                android:text="Иван Иванов"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/profileNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profileName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:maxLines="1"
+                android:text="\@ivan12345"
+                android:textColor="@color/grey_600"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/telegram"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profileNickname"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/rounded_grey"
+                android:drawableStart="@drawable/telegram"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:padding="16dp"
+                android:text="\@ivan-pro100klass"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/office"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/telegram"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/rounded_grey"
+                android:drawableStart="@drawable/location"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:padding="16dp"
+                android:text="Название офиса"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/taste"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/office"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/rounded_grey"
+                android:drawableStart="@drawable/taste"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:padding="16dp"
+                android:text="Котлетка с пюрешкой"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:id="@+id/info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/taste"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/rounded_grey"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/infoIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:ellipsize="end"
+                    android:text="О себе"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/grey_600"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/infoText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/infoIcon"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:ellipsize="end"
+                    android:text="Я\nобычный\nИван\nЯ\nпросто\nкласс"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

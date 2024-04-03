@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/arrow_back" />
+
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toEndOf="@id/backButton"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Редактирование профиля"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/check" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/photo" />
+
+            <ImageView
+                android:id="@+id/changePhotoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/photo"
+                android:layout_alignTop="@id/photo"
+                android:layout_alignEnd="@id/photo"
+                android:layout_alignBottom="@id/photo"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="35dp"
+                android:src="@drawable/add_photo" />
+
+            <TextView
+                android:id="@+id/personalData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/photo"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:text="Личные данные"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edittextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/personalData"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="Без имени"
+                android:iconifiedByDefault="false"
+                android:importantForAutofill="no"
+                android:paddingVertical="12dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/edittextName"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="-8dp"
+                android:background="@color/white"
+                android:labelFor="@id/edittextName"
+                android:text="Имя" />
+
+            <RelativeLayout
+                android:id="@+id/edittextOffice"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/edittextName"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_edit_text">
+
+                <Spinner
+                    android:id="@+id/spinnerOffice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:iconifiedByDefault="false"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/edittextOffice"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="-8dp"
+                android:background="@color/white"
+                android:labelFor="@id/edittextOffice"
+                android:text="Офис" />
+
+            <EditText
+                android:id="@+id/edittextTaste"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edittextOffice"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="Без предпочтений"
+                android:iconifiedByDefault="false"
+                android:importantForAutofill="no"
+                android:paddingVertical="12dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/edittextTaste"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="-8dp"
+                android:background="@color/white"
+                android:labelFor="@id/edittextTaste"
+                android:text="Вкусовые предпочтения" />
+
+
+            <EditText
+                android:id="@+id/edittextInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edittextTaste"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="Без информации"
+                android:iconifiedByDefault="false"
+                android:importantForAutofill="no"
+                android:paddingVertical="12dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp" />
+
+            <TextView
+                android:id="@+id/labelInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/edittextInfo"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="-8dp"
+                android:background="@color/white"
+                android:labelFor="@id/edittextInfo"
+                android:text="О себе" />
+
+            <TextView
+                android:id="@+id/contactData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edittextInfo"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:text="Контактная информация"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edittextTg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/contactData"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_edit_text"
+                android:drawableStart="@drawable/at_sign"
+                android:drawablePadding="4dp"
+                android:hint="Без телеграма"
+                android:iconifiedByDefault="false"
+                android:importantForAutofill="no"
+                android:maxLines="1"
+                android:paddingVertical="12dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/edittextTg"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="-8dp"
+                android:background="@color/white"
+                android:labelFor="@id/edittextTg"
+                android:text="Телеграм" />
+
+            <TextView
+                android:id="@+id/accountData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edittextTg"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:text="Учетные данные"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edittextLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accountData"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_edit_text"
+                android:iconifiedByDefault="false"
+                android:importantForAutofill="no"
+                android:maxLines="1"
+                android:paddingVertical="12dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:enabled="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/edittextLogin"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="-8dp"
+                android:background="@color/white"
+                android:labelFor="@id/edittextLogin"
+                android:text="Логин" />
+
+            <EditText
+                android:id="@+id/edittextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edittextLogin"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/rounded_edit_text"
+                android:iconifiedByDefault="false"
+                android:importantForAutofill="no"
+                android:maxLines="1"
+                android:paddingVertical="12dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/edittextPassword"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="-8dp"
+                android:background="@color/white"
+                android:labelFor="@id/edittextPassword"
+                android:text="Пароль" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
