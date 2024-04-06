@@ -19,11 +19,12 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
+            android:layout_centerVertical="true"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Мой профиль"
             android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:textSize="20sp" />
 
         <ImageButton
             android:id="@+id/editButton"

@@ -14,78 +14,160 @@
         android:layout_marginTop="20dp"
         android:src="@drawable/bottom_sheet_rect" />
 
-    <RelativeLayout
-        android:id="@+id/head"
+    <TextView
+        android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rect">
+        android:layout_below="@id/rect"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="28dp"
+        android:text="Среда, 21 февр. 2024г."
+        android:textColor="@color/black"
+        android:textSize="22dp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/timeSetter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="36dp">
 
         <ImageView
-            android:id="@+id/photo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="20dp"
-            android:src="@drawable/photo" />
-
-        <RelativeLayout
+            android:id="@+id/clockIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/photo">
+            android:src="@drawable/clock" />
 
-            <TextView
-                android:id="@+id/profileName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="Иван Иванов"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="28dp"
+            android:layout_toEndOf="@id/clockIcon"
+            android:background="@drawable/rounded_dark_grey"
+            android:inputType="time"
+            android:paddingVertical="5dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="28dp"
+            android:text="13:00"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
 
-            <TextView
-                android:id="@+id/profileNickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/profileName"
-                android:layout_marginTop="12dp"
-                android:maxLines="1"
-                android:text="\@ivan12345"
-                android:textColor="@color/grey_600"
-                android:textSize="16sp" />
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/dashIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/start"
+            android:src="@drawable/dash" />
+
+        <TextView
+            android:id="@+id/finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/dashIcon"
+            android:background="@drawable/rounded_dark_grey"
+            android:inputType="time"
+            android:paddingVertical="5dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="28dp"
+            android:text="14:00"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/repeatingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/repeat"
+            android:visibility="gone"
+            app:tint="@color/black" />
+
     </RelativeLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/tgButton"
+        android:id="@+id/lunchMate"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/head"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:drawableTint="@color/white"
-        android:paddingStart="10dp"
-        android:text="Связаться в телеграм"
+        android:layout_below="@id/timeSetter"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:paddingStart="0dp"
+        android:text="Петр Петров"
         android:textAllCaps="false"
-        app:backgroundTint="@color/tg"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/telegram" />
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:backgroundTint="@color/white"
+        app:icon="@drawable/arrow_right"
+        app:iconTint="@color/blue_700" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tgButton">
+        android:layout_below="@id/lunchMate"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="16dp"
+                android:src="@drawable/photo" />
+
+            <TextView
+                android:id="@+id/profileNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/photo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="4dp"
+                android:maxLines="1"
+                android:text="\@ivan12345"
+                android:textColor="@color/grey_600"
+                android:textSize="16sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/tgButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profileNickname"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:drawableTint="@color/white"
+                android:paddingStart="10dp"
+                android:text="Связаться в телеграм"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/tg"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/telegram" />
+
             <TextView
                 android:id="@+id/office"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/tgButton"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/rounded_grey_top"
                 android:drawableStart="@drawable/location"
                 android:drawablePadding="10dp"
@@ -178,12 +260,12 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:backgroundTint="@color/white"
+                    android:clickable="false"
                     android:src="@drawable/arrow_left"
-                    app:tint="@color/grey_400"
-                    android:clickable="false"/>
+                    app:tint="@color/grey_400" />
 
                 <TextView
-                    android:id="@+id/date"
+                    android:id="@+id/dateSchedule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -211,7 +293,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/datePicker"
-                android:layout_marginVertical="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"

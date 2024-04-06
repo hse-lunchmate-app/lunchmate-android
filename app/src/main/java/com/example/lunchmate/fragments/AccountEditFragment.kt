@@ -25,16 +25,7 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
         bottomNav.setVisibility(View.GONE)
 
         val activity = activity as MainActivity
-        binding.photo.setImageResource(activity.currentUser.getPhoto())
-        binding.edittextName.setText(activity.currentUser.getName())
-        binding.edittextLogin.setText(activity.currentUser.getLogin())
-        binding.edittextTg.setText(activity.currentUser.getTg())
-        binding.spinnerOffice.setSelection(activity.currentUser.getOffice())
-        binding.edittextTaste.setText(activity.currentUser.getTaste())
-        binding.edittextInfo.setText(activity.currentUser.getInfo())
-        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, activity.offices)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerOffice.setAdapter(adapter)
+        setUpCurrentUser(activity.currentUser, activity.offices)
 
         binding.backButton.setOnClickListener {
             setCurrentFragment(accountFragment)
@@ -49,6 +40,19 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
             activity.currentUser.setInfo(binding.edittextInfo.text.toString())
             setCurrentFragment(accountFragment)
         }
+    }
+
+    private fun setUpCurrentUser(currentUser: Account, offices: Array<String>) {
+        binding.photo.setImageResource(currentUser.getPhoto())
+        binding.edittextName.setText(currentUser.getName())
+        binding.edittextLogin.setText(currentUser.getLogin())
+        binding.edittextTg.setText(currentUser.getTg())
+        binding.spinnerOffice.setSelection(currentUser.getOffice())
+        binding.edittextTaste.setText(currentUser.getTaste())
+        binding.edittextInfo.setText(currentUser.getInfo())
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, offices)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerOffice.setAdapter(adapter)
     }
 
     private fun setCurrentFragment(fragment: Fragment) =

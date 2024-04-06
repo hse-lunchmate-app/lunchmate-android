@@ -23,13 +23,7 @@ class AccountFragment: Fragment(R.layout.fragment_account) {
         bottomNav.setVisibility(View.VISIBLE)
 
         val activity = activity as MainActivity
-        binding.photo.setImageResource(activity.currentUser.getPhoto())
-        binding.profileName.setText(activity.currentUser.getName())
-        binding.profileNickname.setText(activity.currentUser.getLogin())
-        binding.telegram.setText(activity.currentUser.getTg())
-        binding.office.setText(activity.offices[activity.currentUser.getOffice()])
-        binding.taste.setText(activity.currentUser.getTaste())
-        binding.infoText.setText(activity.currentUser.getInfo())
+        setUpCurrentUser(activity.currentUser, activity.offices)
 
         binding.editButton.setOnClickListener {
             setCurrentFragment(accountEditFragment)
@@ -41,4 +35,14 @@ class AccountFragment: Fragment(R.layout.fragment_account) {
             replace(R.id.mainFragment,fragment)
             commit()
         }
+
+    private fun setUpCurrentUser(currentUser: Account, offices: Array<String>){
+        binding.photo.setImageResource(currentUser.getPhoto())
+        binding.profileName.setText(currentUser.getName())
+        binding.profileNickname.setText(currentUser.getLogin())
+        binding.telegram.setText(currentUser.getTg())
+        binding.office.setText(offices[currentUser.getOffice()])
+        binding.taste.setText(currentUser.getTaste())
+        binding.infoText.setText(currentUser.getInfo())
+    }
 }

@@ -1,6 +1,5 @@
 package com.example.lunchmatelocal
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -66,16 +65,22 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         val activity = activity as MainActivity
         val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_profile, null)
+
         val profileName = view.findViewById<TextView>(R.id.profileName)
         profileName.setText(accountsList[position].getName())
+
         val profileNickname = view.findViewById<TextView>(R.id.profileNickname)
         profileNickname.setText(accountsList[position].getLogin())
+
         val profileOffice = view.findViewById<TextView>(R.id.office)
         profileOffice.setText(activity.offices[accountsList[position].getOffice()])
+
         val profileTaste = view.findViewById<TextView>(R.id.taste)
         profileTaste.setText(accountsList[position].getTaste())
+
         val profileInfo = view.findViewById<TextView>(R.id.infoText)
         profileInfo.setText(accountsList[position].getInfo())
+
         val availableSlots = view.findViewById<RecyclerView>(R.id.availableSlots)
         val slotsList = ArrayList<Slot>()
         slotsList.add(Slot("11:00", "12:00"))
@@ -83,13 +88,14 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         slotsList.add(Slot("14:00", "15:00"))
         slotsList.add(Slot("14:00", "15:00"))
         slotsList.add(Slot("14:00", "15:00"))
-        val slotAdapter = AvailableSlotsAdapter(slotsList)
+        val slotsAdapter = AvailableSlotsAdapter(slotsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         availableSlots.layoutManager = linearLayoutManager
-        availableSlots.adapter = slotAdapter
+        availableSlots.adapter = slotsAdapter
+
         val btn = view.findViewById<ImageButton>(R.id.leftButton)
-        btn.isEnabled = false
-        btn.setColorFilter(Color.rgb(150, 150, 150))
+        btn.isClickable = true
+
         dialog.setContentView(view)
         dialog.show()
     }

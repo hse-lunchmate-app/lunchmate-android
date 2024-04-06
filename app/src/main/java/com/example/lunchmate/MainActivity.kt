@@ -8,6 +8,7 @@ import com.example.lunchmate.databinding.FragmentAccountEditBinding
 import com.example.lunchmatelocal.Account
 import com.example.lunchmatelocal.AccountFragment
 import com.example.lunchmatelocal.HomeFragment
+import com.example.lunchmatelocal.ScheduleFragment
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -24,22 +25,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val homeFragment = HomeFragment()
-        val profileFragment = AccountFragment()
+        val accountFragment = AccountFragment()
+        val scheduleFragment = ScheduleFragment()
         setCurrentFragment(homeFragment)
 
         updateBadge()
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.home->setCurrentFragment(homeFragment)
-                R.id.profile->setCurrentFragment(profileFragment)
+                R.id.profile->setCurrentFragment(accountFragment)
                 R.id.notifications->{badge_counter = 0
                     updateBadge()}
-                R.id.schedule-> {
-                    if (binding.bottomNavigationView.selectedItemId != R.id.notifications) {
-                        badge_counter++
-                        updateBadge()
-                    }
-                }
+                R.id.schedule-> setCurrentFragment(scheduleFragment)
             }
             true
         }

@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:ellipsize="end"
+            android:text="Расписание"
+            android:textAlignment="textStart"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:maxLines="1"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/weekPicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:layout_below="@id/topBar">
+
+        <ImageButton
+            android:id="@+id/leftButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/arrow_left"
+            app:tint="@color/grey_400"
+            android:clickable="false"/>
+
+        <TextView
+            android:id="@+id/month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/leftButton"
+            android:maxLines="1"
+            android:text="Февраль"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/rightButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/arrow_right"
+            app:tint="@color/black" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/weekLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/weekPicker">
+
+        <RelativeLayout
+            android:id="@+id/mondayBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingVertical="14dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/rounded_blue_stroke">
+
+            <TextView
+                android:id="@+id/monday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Пн"
+                android:textColor="@color/blue_700"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/mondayDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/monday"
+                android:maxLines="1"
+                android:text="19"
+                android:textColor="@color/blue_700"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/mondaySlotsIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/mondayDate"
+                android:src="@drawable/taste"
+                app:tint="@color/blue_700"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tuesdayBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:paddingVertical="14dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/rounded_blue_stroke">
+
+            <TextView
+                android:id="@+id/tuesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Вт"
+                android:textColor="@color/blue_700"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tuesdayDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/tuesday"
+                android:maxLines="1"
+                android:text="20"
+                android:textColor="@color/blue_700"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/tuesdaySlotsIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/tuesdayDate"
+                android:src="@drawable/taste"
+                app:tint="@color/blue_700"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/wednesdayBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:paddingVertical="14dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/rounded_blue_stroke">
+
+            <TextView
+                android:id="@+id/wednesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Ср"
+                android:textColor="@color/blue_700"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/wednesdayDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/wednesday"
+                android:maxLines="1"
+                android:text="21"
+                android:textColor="@color/blue_700"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/wednesdaySlotsIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/wednesdayDate"
+                android:src="@drawable/taste"
+                app:tint="@color/blue_700"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/thursdayBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:paddingVertical="14dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/rounded_blue_stroke">
+
+            <TextView
+                android:id="@+id/thursday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Чт"
+                android:textColor="@color/blue_700"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/thursdayDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/thursday"
+                android:maxLines="1"
+                android:text="22"
+                android:textColor="@color/blue_700"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/thursdaySlotsIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/thursdayDate"
+                android:src="@drawable/taste"
+                app:tint="@color/blue_700"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/fridayBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:paddingVertical="14dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/rounded_blue_stroke">
+
+            <TextView
+                android:id="@+id/friday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Пт"
+                android:textColor="@color/blue_700"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/fridayDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/friday"
+                android:maxLines="1"
+                android:text="23"
+                android:textColor="@color/blue_700"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/fridaySlotsIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/fridayDate"
+                android:src="@drawable/taste"
+                app:tint="@color/blue_700"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:paddingVertical="14dp">
+
+            <TextView
+                android:id="@+id/saturday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Сб"
+                android:textColor="@color/grey_500"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/saturdayDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/saturday"
+                android:maxLines="1"
+                android:text="24"
+                android:textColor="@color/grey_500"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/sundayBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:paddingVertical="14dp">
+
+            <TextView
+                android:id="@+id/sunday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Вс"
+                android:textColor="@color/grey_500"
+                android:textSize="20sp"
+                />
+
+            <TextView
+                android:id="@+id/sundayDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/sunday"
+                android:maxLines="1"
+                android:text="25"
+                android:textColor="@color/grey_500"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/slotsRV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/weekLine"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="14dp"
+        tools:listitem="@layout/item_slot" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/addSlotBtn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_yellow"
+        android:text="Добавить слот"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:layout_alignParentBottom="true"/>
+
+
+
+</RelativeLayout>
