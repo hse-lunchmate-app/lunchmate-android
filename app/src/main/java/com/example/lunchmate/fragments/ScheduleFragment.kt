@@ -42,10 +42,10 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         val activity = activity as MainActivity
 
         slotsList = ArrayList<Slot>()
-        slotsList.add(Slot("11:00", "12:00", true))
-        slotsList.add(Slot("14:00", "15:00", true, activity.currentUser))
-        slotsList.add(Slot("14:00", "15:00"))
-        setUpSlotsRV(slotsList)
+        slotsList.add(Slot("1 марта","11:00", "12:00", true))
+        slotsList.add(Slot("1 марта", "14:00", "15:00", true, activity.currentUser))
+        slotsList.add(Slot("1 марта", "14:00", "15:00"))
+        setUpRV(slotsList)
 
         currentDay = CurrentDay(
             binding.wednesdayBtn, binding.wednesday,
@@ -83,17 +83,20 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         }
         binding.addSlotBtn.setOnClickListener {
             addSlot()
-            if (slotsList.size >= 4){
-                binding.addSlotBtn.visibility = View.GONE
-            }
         }
     }
 
-    private fun setUpSlotsRV(slotsList: ArrayList<Slot>){
+    private fun setUpRV(slotsList: ArrayList<Slot>){
         val slotsAdapter = SlotsAdapter(::openFreeSlot, ::openReservedSlot, slotsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.slotsRV.layoutManager = linearLayoutManager
         binding.slotsRV.adapter = slotsAdapter
+        if (slotsList.size >= 3){
+            binding.addSlotBtn.visibility = View.GONE
+        }
+        else {
+            binding.addSlotBtn.visibility = View.VISIBLE
+        }
     }
 
     private fun setCurrentFragment(fragment: Fragment)=
@@ -116,9 +119,9 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
 
         val addBtn = view.findViewById<AppCompatButton>(R.id.addBtn)
         addBtn.setOnClickListener {
-            slotsList.add(Slot(start.text.toString(), finish.text.toString(), isRepeating.isChecked))
+            slotsList.add(Slot(currentDay.date.toString()+" "+binding.month.toString(), start.text.toString(), finish.text.toString(), isRepeating.isChecked))
             dialog.dismiss()
-            setUpSlotsRV(slotsList)
+            setUpRV(slotsList)
         }
 
         dialog.setContentView(view)
@@ -144,7 +147,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         deleteBtn.setOnClickListener {
             slotsList.removeAt(position)
             dialog.dismiss()
-            setUpSlotsRV(slotsList)
+            setUpRV(slotsList)
         }
 
         val saveBtn = view.findViewById<AppCompatButton>(R.id.saveBtn)
@@ -153,7 +156,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
             slotsList[position].setFinish(finish.text.toString())
             slotsList[position].setIsRepeating(switch.isChecked)
             dialog.dismiss()
-            setUpSlotsRV(slotsList)
+            setUpRV(slotsList)
         }
 
         dialog.setContentView(view)
@@ -163,8 +166,6 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
     fun openReservedSlot(position: Int){
         val activity = activity as MainActivity
         val dialog = ReservedSlotBottomSheet(slotsList, position)
-
-
         dialog.show(activity.supportFragmentManager, "")
     }
 

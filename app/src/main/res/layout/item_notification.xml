@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/rounded_yellow_stroke">
+
+    <RelativeLayout
+        android:id="@+id/contentPart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/itemPhoto"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/photo" />
+
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="4dp"
+            android:layout_toEndOf="@id/itemPhoto"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Новое приглашение"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/itemContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemTitle"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/itemPhoto"
+            android:text="Иван Иванов позвал Вас на ланч"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/itemDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemContent"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/itemPhoto"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="1 марта, 13:00 - 14:00"
+            android:textColor="@color/grey_400"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/event"
+            android:drawablePadding="4dp"
+            app:drawableTint="@color/grey_400"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/btnsPart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contentPart"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/denyBtn"
+            android:layout_width="0dp"
+            android:layout_height="40sp"
+            android:layout_weight="1"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/rounded_light_yellow"
+            android:text="Отклонить"
+            android:textAllCaps="false"
+            android:textColor="@color/yellow_700" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acceptBtn"
+            android:layout_width="0dp"
+            android:layout_height="40sp"
+            android:layout_weight="1"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/rounded_yellow"
+            android:text="Принять"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+</RelativeLayout>

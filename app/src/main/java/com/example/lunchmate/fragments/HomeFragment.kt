@@ -83,11 +83,11 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         val availableSlots = view.findViewById<RecyclerView>(R.id.availableSlots)
         val slotsList = ArrayList<Slot>()
-        slotsList.add(Slot("11:00", "12:00"))
-        slotsList.add(Slot("14:00", "15:00"))
-        slotsList.add(Slot("14:00", "15:00"))
-        slotsList.add(Slot("14:00", "15:00"))
-        slotsList.add(Slot("14:00", "15:00"))
+        slotsList.add(Slot("1 марта","11:00", "12:00"))
+        slotsList.add(Slot("1 марта", "14:00", "15:00"))
+        slotsList.add(Slot("1 марта", "14:00", "15:00"))
+        slotsList.add(Slot("1 марта", "14:00", "15:00"))
+        slotsList.add(Slot("1 марта", "14:00", "15:00"))
         val slotsAdapter = AvailableSlotsAdapter(slotsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         availableSlots.layoutManager = linearLayoutManager

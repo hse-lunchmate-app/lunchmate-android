@@ -1,9 +1,17 @@
 package com.example.lunchmatelocal
 
-class Slot(private var start: String,
+class Slot(private var date: String,
+           private var start: String,
            private var finish: String,
            private var isRepeating: Boolean = false,
            private var lunchMate: Account? = null) {
+
+    fun getDate(): String {
+        return date
+    }
+    fun setDate(date: String) {
+        this.date = date
+    }
 
     fun getStart(): String {
         return start

@@ -18,6 +18,9 @@
     <color name="grey_50">#FAFAFA</color>
     <color name="tg">#009EEB</color>
     <color name="blue_700">#336EEE</color>
+    <color name="yellow_800">#FDAB1A</color>
+    <color name="yellow_700">#FDAB1A</color>
     <color name="yellow_600">#FFDC2D</color>
+    <color name="yellow_100">#FFFAC3</color>
     <color name="red_700">#D5001D</color>
 </resources>

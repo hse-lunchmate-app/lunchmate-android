@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.lunchmate.databinding.ActivityMainBinding
 import com.example.lunchmate.databinding.FragmentAccountEditBinding
+import com.example.lunchmate.fragments.NotificationsFragment
 import com.example.lunchmatelocal.Account
 import com.example.lunchmatelocal.AccountFragment
 import com.example.lunchmatelocal.HomeFragment
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val homeFragment = HomeFragment()
         val accountFragment = AccountFragment()
         val scheduleFragment = ScheduleFragment()
+        val notificationsFragment = NotificationsFragment()
         setCurrentFragment(homeFragment)
 
         updateBadge()
@@ -34,8 +36,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.home->setCurrentFragment(homeFragment)
                 R.id.profile->setCurrentFragment(accountFragment)
-                R.id.notifications->{badge_counter = 0
-                    updateBadge()}
+                R.id.notifications->setCurrentFragment(notificationsFragment)
                 R.id.schedule-> setCurrentFragment(scheduleFragment)
             }
             true
