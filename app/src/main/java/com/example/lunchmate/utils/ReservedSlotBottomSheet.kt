@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
@@ -23,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
-class ReservedSlotBottomSheet(val slotsList: ArrayList<Slot>, val position: Int): BottomSheetDialogFragment() {
+class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsList: ArrayList<Slot>, val position: Int): BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetReservedSlotBinding
 
@@ -46,9 +47,9 @@ class ReservedSlotBottomSheet(val slotsList: ArrayList<Slot>, val position: Int)
         val activity = activity as MainActivity
         binding.office.setText(activity.offices[lunchMateAccount?.getOffice()!!])
 
-        binding.taste.setText(lunchMateAccount?.getTaste())
+        binding.taste.setText(lunchMateAccount.getTaste())
 
-        binding.infoText.setText(lunchMateAccount?.getInfo())
+        binding.infoText.setText(lunchMateAccount.getInfo())
 
         val availableSlotsList = ArrayList<Slot>()
         availableSlotsList.add(Slot("1 марта", "11:00", "12:00"))
@@ -90,6 +91,12 @@ class ReservedSlotBottomSheet(val slotsList: ArrayList<Slot>, val position: Int)
                 it.findViewById<FrameLayout>(com.google.android.material.R.id.container)
             val buttons = bottomSheetDialog.layoutInflater.inflate(R.layout.item_sticky_button, null)
 
+            val cancelBtn = buttons.findViewById<AppCompatButton>(R.id.cancelBtn)
+            cancelBtn.setOnClickListener {
+                cancelReservation(position)
+                bottomSheetDialog.dismiss()
+            }
+
             buttons.layoutParams = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT
@@ -109,7 +116,9 @@ class ReservedSlotBottomSheet(val slotsList: ArrayList<Slot>, val position: Int)
                 }
             }
 
+
         }
+
         return bottomSheetDialog
     }
 }

@@ -37,7 +37,7 @@ class Slot(private var date: String,
     fun getLunchMate(): Account? {
         return lunchMate
     }
-    fun setLunchMate(lunchMate: Account) {
+    fun setLunchMate(lunchMate: Account? = null) {
         this.lunchMate = lunchMate
     }
 }

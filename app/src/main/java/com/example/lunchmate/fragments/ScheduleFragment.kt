@@ -4,11 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.adapters.SlotsAdapter
@@ -16,7 +13,6 @@ import com.example.lunchmate.databinding.FragmentScheduleBinding
 import com.example.lunchmate.utils.MaskWatcher
 import com.example.lunchmate.utils.ReservedSlotBottomSheet
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 data class CurrentDay(
@@ -172,8 +168,13 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
 
     fun openReservedSlot(position: Int){
         val activity = activity as MainActivity
-        val dialog = ReservedSlotBottomSheet(slotsList, position)
+        val dialog = ReservedSlotBottomSheet(::cancelReservation, slotsList, position)
         dialog.show(activity.supportFragmentManager, "")
+    }
+
+    fun cancelReservation(position: Int){
+        slotsList[position].setLunchMate(null)
+        slotsAdapter.notifyItemChanged(position)
     }
 
     private fun onWeekdayClick(newDay: CurrentDay) {

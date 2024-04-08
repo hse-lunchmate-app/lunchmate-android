@@ -4,7 +4,7 @@
     android:background="@color/white">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/deleteBtn"
+        android:id="@+id/cancelBtn"
         android:layout_width="match_parent"
         android:layout_height="40sp"
         android:layout_marginHorizontal="16dp"
