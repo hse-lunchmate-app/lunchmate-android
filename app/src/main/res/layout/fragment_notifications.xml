@@ -40,7 +40,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:padding="4dp"
-            android:text="Очистить всё"
+            android:text="Очистить"
             android:textAllCaps="false"
             android:textColor="@color/blue_700"
             android:textSize="14sp"

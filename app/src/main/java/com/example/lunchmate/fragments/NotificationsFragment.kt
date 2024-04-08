@@ -129,9 +129,15 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
         }).attachToRecyclerView(binding.recyclerView)
 
         binding.clearBtn.setOnClickListener {
-            val count = notificationsList.size
-            notificationsList.clear()
-            notificationsAdapter.notifyItemRangeRemoved(0, count)
+            var i = 0;
+            while (i < notificationsList.size){
+                if (notificationsList[i].getTitle() != "Новое приглашение"){
+                    notificationsList.removeAt(i)
+                    notificationsAdapter.notifyItemRemoved(i)
+                    i--
+                }
+                i++
+            }
         }
     }
 }
