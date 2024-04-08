@@ -29,6 +29,7 @@ data class CurrentDay(
 class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
     private lateinit var binding: FragmentScheduleBinding
     private lateinit var currentDay: CurrentDay
+    private lateinit var slotsAdapter: SlotsAdapter
     lateinit var slotsList: ArrayList<Slot>
     val timeWatcher = MaskWatcher("##:##")
 
@@ -87,10 +88,14 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
     }
 
     private fun setUpRV(slotsList: ArrayList<Slot>){
-        val slotsAdapter = SlotsAdapter(::openFreeSlot, ::openReservedSlot, slotsList)
+        slotsAdapter = SlotsAdapter(::openFreeSlot, ::openReservedSlot, slotsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.slotsRV.layoutManager = linearLayoutManager
         binding.slotsRV.adapter = slotsAdapter
+        checkSlotsCount()
+    }
+
+    private fun checkSlotsCount(){
         if (slotsList.size >= 3){
             binding.addSlotBtn.visibility = View.GONE
         }
@@ -121,7 +126,8 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         addBtn.setOnClickListener {
             slotsList.add(Slot(currentDay.date.toString()+" "+binding.month.toString(), start.text.toString(), finish.text.toString(), isRepeating.isChecked))
             dialog.dismiss()
-            setUpRV(slotsList)
+            slotsAdapter.notifyItemInserted(slotsList.size - 1)
+            checkSlotsCount()
         }
 
         dialog.setContentView(view)
@@ -147,7 +153,8 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         deleteBtn.setOnClickListener {
             slotsList.removeAt(position)
             dialog.dismiss()
-            setUpRV(slotsList)
+            slotsAdapter.notifyItemRemoved(position)
+            checkSlotsCount()
         }
 
         val saveBtn = view.findViewById<AppCompatButton>(R.id.saveBtn)
@@ -156,7 +163,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
             slotsList[position].setFinish(finish.text.toString())
             slotsList[position].setIsRepeating(switch.isChecked)
             dialog.dismiss()
-            setUpRV(slotsList)
+            slotsAdapter.notifyItemChanged(slotsList.size - 1)
         }
 
         dialog.setContentView(view)

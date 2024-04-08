@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
     private lateinit var binding: FragmentNotificationsBinding
     private lateinit var notificationsList: ArrayList<Notification>
+    private lateinit var notificationsAdapter: NotificationsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -83,11 +84,11 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
 
     fun denyRequest(position: Int){
         notificationsList.removeAt(position)
-        setUpRV(notificationsList)
+        notificationsAdapter.notifyItemRemoved(position)
     }
 
     private fun setUpRV(notificationsList: ArrayList<Notification>){
-        val notificationsAdapter = NotificationsAdapter(::onProfileClick, ::denyRequest, notificationsList)
+        notificationsAdapter = NotificationsAdapter(::onProfileClick, ::denyRequest, notificationsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = notificationsAdapter
