@@ -159,7 +159,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
             slotsList[position].setFinish(finish.text.toString())
             slotsList[position].setIsRepeating(switch.isChecked)
             dialog.dismiss()
-            slotsAdapter.notifyItemChanged(slotsList.size - 1)
+            slotsAdapter.notifyItemChanged(position)
         }
 
         dialog.setContentView(view)
@@ -174,7 +174,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
 
     fun cancelReservation(position: Int){
         slotsList[position].setLunchMate(null)
-        slotsAdapter.notifyItemChanged(position)
+        setUpRV(slotsList)
     }
 
     private fun onWeekdayClick(newDay: CurrentDay) {
