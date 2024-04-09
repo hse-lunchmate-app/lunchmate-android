@@ -174,7 +174,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
 
     fun cancelReservation(position: Int){
         slotsList[position].setLunchMate(null)
-        setUpRV(slotsList)
+        slotsAdapter.notifyItemChanged(position)
     }
 
     private fun onWeekdayClick(newDay: CurrentDay) {

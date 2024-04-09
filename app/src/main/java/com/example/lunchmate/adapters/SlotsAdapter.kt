@@ -44,6 +44,9 @@ class SlotsAdapter(val openFreeSlot: (Int) -> Unit, val openReservedSlot: (Int) 
             holder.lunchMate.visibility = View.VISIBLE
             holder.lunchMate.text = model.getLunchMate()!!.getName()
         }
+        else{
+            holder.lunchMate.visibility = View.GONE
+        }
 
         holder.parent.setOnClickListener {
             if (holder.lunchMate.isVisible){
