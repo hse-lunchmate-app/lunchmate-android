@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lunchmate.MainActivity
@@ -16,7 +17,6 @@ import com.example.lunchmate.databinding.FragmentScheduleBinding
 import com.example.lunchmate.utils.MaskWatcher
 import com.example.lunchmate.utils.ReservedSlotBottomSheet
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.switchmaterial.SwitchMaterial
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -142,7 +142,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         val finish = view.findViewById<EditText>(R.id.finish)
         finish.addTextChangedListener(timeWatcher)
 
-        val isRepeating = view.findViewById<SwitchMaterial>(R.id.switchIsRepeating)
+        val isRepeating = view.findViewById<SwitchCompat>(R.id.switchIsRepeating)
 
         val addBtn = view.findViewById<AppCompatButton>(R.id.addBtn)
         addBtn.setOnClickListener {
@@ -168,7 +168,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         finish.setText(slotsList[position].getFinish())
         finish.addTextChangedListener(timeWatcher)
 
-        val switch = view.findViewById<SwitchMaterial>(R.id.switchIsRepeating)
+        val switch = view.findViewById<SwitchCompat>(R.id.switchIsRepeating)
         switch.setChecked(slotsList[position].getIsRepeating())
 
         val deleteBtn = view.findViewById<AppCompatButton>(R.id.deleteBtn)
