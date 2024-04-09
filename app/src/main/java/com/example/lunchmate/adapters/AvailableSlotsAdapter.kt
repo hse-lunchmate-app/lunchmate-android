@@ -23,7 +23,6 @@ class AvailableSlotsAdapter(slotsList: ArrayList<Slot>) :
             parent = binding.itemParent
             time = binding.itemTime
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AvailableSlotsAdapter.ViewHolder {

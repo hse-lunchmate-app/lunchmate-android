@@ -35,10 +35,10 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         binding = FragmentHomeBinding.bind(view)
 
         accountsList = ArrayList<Account>()
-        accountsList.add(Account("Иван Иванов 1", 0,"Котлетка с пюрешкой", "Я обычный Иван", "ka_rine_s", "ivan12345", "0000", R.drawable.photo))
-        accountsList.add(Account("Иван Иванов 2", 1,"Щи", "Я\nо\nб\nы\nч\nн\nы\nй\nИ\nв\nа\nн", "", "ivan12345", "0000", R.drawable.photo))
-        accountsList.add(Account("Иван Иванов 3", 2,"Рассольник", "Я необычный Иван", "ivan123", "ivan12345", "0000", R.drawable.photo))
-        accountsList.add(Account("Петр Петров", 0,"Борщ", "Я обычный Петр", "petr123", "petr12345", "0000", R.drawable.photo))
+        accountsList.add(Account(0, "Иван Иванов 1", 0,"Котлетка с пюрешкой", "Я обычный Иван", "ka_rine_s", "ivan12345", "0000", R.drawable.photo))
+        accountsList.add(Account(1, "Иван Иванов 2", 1,"Щи", "Я\nо\nб\nы\nч\nн\nы\nй\nИ\nв\nа\nн", "", "ivan12345", "0000", R.drawable.photo))
+        accountsList.add(Account(2, "Иван Иванов 3", 2,"Рассольник", "Я необычный Иван", "ivan123", "ivan12345", "0000", R.drawable.photo))
+        accountsList.add(Account(3, "Петр Петров", 0,"Борщ", "Я обычный Петр", "petr123", "petr12345", "0000", R.drawable.photo))
 
         val accountAdapter = ProfilesAdapter(::onProfileClick, accountsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -121,11 +121,11 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         }
 
         val slotsList = ArrayList<Slot>()
-        slotsList.add(Slot("1 марта","11:00", "12:00"))
-        slotsList.add(Slot("1 марта", "14:00", "15:00"))
-        slotsList.add(Slot("1 марта", "14:00", "15:00"))
-        slotsList.add(Slot("1 марта", "14:00", "15:00"))
-        slotsList.add(Slot("1 марта", "14:00", "15:00"))
+        slotsList.add(Slot(0, "1 марта","11:00", "12:00"))
+        slotsList.add(Slot(1, "1 марта", "14:00", "15:00"))
+        slotsList.add(Slot(2, "1 марта", "14:00", "15:00"))
+        slotsList.add(Slot(3, "1 марта", "14:00", "15:00"))
+        slotsList.add(Slot(4, "1 марта", "14:00", "15:00"))
         val slotsAdapter = AvailableSlotsAdapter(slotsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         bottomBinding.availableSlots.layoutManager = linearLayoutManager

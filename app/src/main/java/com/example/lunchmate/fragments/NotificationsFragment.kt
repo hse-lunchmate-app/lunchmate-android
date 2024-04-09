@@ -45,10 +45,10 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
         activity.updateBadge()
 
         notificationsList = ArrayList<Notification>()
-        notificationsList.add(Notification("Новое приглашение", "1 марта, 13:00 - 14:00", activity.currentUser))
-        notificationsList.add(Notification("Отказ", "1 марта, 13:00 - 14:00", activity.currentUser))
-        notificationsList.add(Notification("Согласие", "1 марта, 13:00 - 14:00", activity.currentUser))
-        notificationsList.add(Notification("Напоминание", "1 марта, 13:00 - 14:00", activity.currentUser))
+        notificationsList.add(Notification(0, "Новое приглашение", "1 марта, 13:00 - 14:00", activity.currentUser))
+        notificationsList.add(Notification(0, "Отказ", "1 марта, 13:00 - 14:00", activity.currentUser))
+        notificationsList.add(Notification(0, "Согласие", "1 марта, 13:00 - 14:00", activity.currentUser))
+        notificationsList.add(Notification(0, "Напоминание", "1 марта, 13:00 - 14:00", activity.currentUser))
 
         setUpRV(notificationsList)
     }
@@ -104,11 +104,11 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
         }
 
         val slotsList = ArrayList<Slot>()
-        slotsList.add(Slot("1 марта", "11:00", "12:00"))
-        slotsList.add(Slot("1 марта", "14:00", "15:00"))
-        slotsList.add(Slot("1 марта", "14:00", "15:00"))
-        slotsList.add(Slot("1 марта", "14:00", "15:00"))
-        slotsList.add(Slot("1 марта", "14:00", "15:00"))
+        slotsList.add(Slot(0, "1 марта", "11:00", "12:00"))
+        slotsList.add(Slot(1, "1 марта", "14:00", "15:00"))
+        slotsList.add(Slot(2, "1 марта", "14:00", "15:00"))
+        slotsList.add(Slot(3, "1 марта", "14:00", "15:00"))
+        slotsList.add(Slot(4, "1 марта", "14:00", "15:00"))
         val slotsAdapter = AvailableSlotsAdapter(slotsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         bottomBinding.availableSlots.layoutManager = linearLayoutManager

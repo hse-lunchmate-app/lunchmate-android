@@ -97,11 +97,11 @@ class ReservedSlotBottomSheet(val date: String, val cancelReservation: (Int) -> 
         }
 
         val availableSlotsList = ArrayList<Slot>()
-        availableSlotsList.add(Slot("1 марта", "11:00", "12:00"))
-        availableSlotsList.add(Slot("1 марта", "14:00", "15:00"))
-        availableSlotsList.add(Slot("1 марта", "14:00", "15:00"))
-        availableSlotsList.add(Slot("1 марта", "14:00", "15:00"))
-        availableSlotsList.add(Slot("1 марта", "14:00", "15:00"))
+        availableSlotsList.add(Slot(0, "1 марта", "11:00", "12:00"))
+        availableSlotsList.add(Slot(0, "1 марта", "14:00", "15:00"))
+        availableSlotsList.add(Slot(0, "1 марта", "14:00", "15:00"))
+        availableSlotsList.add(Slot(0, "1 марта", "14:00", "15:00"))
+        availableSlotsList.add(Slot(0, "1 марта", "14:00", "15:00"))
         val slotsAdapter = AvailableSlotsAdapter(availableSlotsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.availableSlots.layoutManager = linearLayoutManager

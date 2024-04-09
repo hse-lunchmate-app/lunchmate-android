@@ -1,10 +1,15 @@
 package com.example.lunchmatelocal
 
-class Slot(private var date: String,
+class Slot(private val id: Int,
+           private var date: String,
            private var start: String,
            private var finish: String,
            private var isRepeating: Boolean = false,
            private var lunchMate: Account? = null) {
+
+    fun getId(): Int{
+        return id
+    }
 
     fun getDate(): String {
         return date

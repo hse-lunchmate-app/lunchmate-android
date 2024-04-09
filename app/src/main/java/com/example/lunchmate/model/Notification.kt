@@ -3,9 +3,14 @@ package com.example.lunchmate.model
 import com.example.lunchmatelocal.Account
 import com.example.lunchmatelocal.Slot
 
-class Notification (private var title: String,
+class Notification (private val id: Int,
+                    private var title: String,
                     private var time: String,
                     private var lunchMate: Account) {
+
+    fun getId(): Int{
+        return id
+    }
 
     fun getTitle(): String {
         return title

@@ -1,6 +1,7 @@
 package com.example.lunchmatelocal
 
-class Account (private var name: String = "Без имени",
+class Account (private val id: Int,
+               private var name: String = "Без имени",
                private var office: Int = 0,
                private var taste: String = "Без предпочтений",
                private var info: String = "Без информации",
@@ -9,7 +10,9 @@ class Account (private var name: String = "Без имени",
                private var password: String,
                private var photo: Int) {
 
-
+    fun getId(): Int {
+        return id
+    }
 
     fun getName(): String {
         return name

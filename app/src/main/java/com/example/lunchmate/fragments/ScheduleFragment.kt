@@ -52,9 +52,9 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         val activity = activity as MainActivity
 
         slotsList = ArrayList<Slot>()
-        slotsList.add(Slot("1 марта","11:00", "12:00", true))
-        slotsList.add(Slot("1 марта", "14:00", "15:00", true, activity.currentUser))
-        slotsList.add(Slot("1 марта", "14:00", "15:00"))
+        slotsList.add(Slot(0, "1 марта","11:00", "12:00", true))
+        slotsList.add(Slot(1, "1 марта", "14:00", "15:00", true, activity.currentUser))
+        slotsList.add(Slot(2, "1 марта", "14:00", "15:00"))
         setUpRV(slotsList)
 
 
@@ -183,7 +183,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
             else {
                 slotsList.add(
                     Slot(
-                        currentDay!!.date.toString() + " " + binding.month.toString(),
+                        0, currentDay!!.date.toString() + " " + binding.month.toString(),
                         bottomBinding.start.text.toString(),
                         bottomBinding.finish.text.toString(),
                         bottomBinding.switchIsRepeating.isChecked

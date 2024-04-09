@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        currentUser = Account("Иван Иванов", 0,"Котлетка с пюрешкой", "Я обычный Иван", "ivan123", "ivan12345", "0000", R.drawable.photo)
+        currentUser = Account(0, "Иван Иванов", 0,"Котлетка с пюрешкой", "Я обычный Иван", "ivan123", "ivan12345", "0000", R.drawable.photo)
     }
 
     private fun setCurrentFragment(fragment: Fragment)=
