@@ -54,7 +54,7 @@ class NotificationsAdapter(val onProfileClick: (Int) -> Unit, val denyRequest: (
         val model: Notification = notificationsList[position]
         holder.title.setText(model.getTitle())
         holder.content.setText(model.getContent())
-        holder.time.setText(model.getSlot().getStart()+" - "+model.getSlot().getFinish())
+        holder.time.setText(model.getTime())
 
         if (model.getTitle() == "Новое приглашение"){
             holder.btnsPart.visibility = View.VISIBLE

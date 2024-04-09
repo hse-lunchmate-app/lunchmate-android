@@ -4,7 +4,7 @@ import com.example.lunchmatelocal.Account
 import com.example.lunchmatelocal.Slot
 
 class Notification (private var title: String,
-                    private var slot: Slot,
+                    private var time: String,
                     private var lunchMate: Account) {
 
     fun getTitle(): String {
@@ -26,11 +26,11 @@ class Notification (private var title: String,
         return ""
     }
 
-    fun getSlot(): Slot {
-        return slot
+    fun getTime(): String {
+        return time
     }
-    fun setSlot(slot: Slot) {
-        this.slot = slot
+    fun setTime(slot: String) {
+        this.time = time
     }
 
     fun getLunchMate(): Account {
@@ -38,9 +38,5 @@ class Notification (private var title: String,
     }
     fun setLunchMate(lunchMate: Account) {
         this.lunchMate = lunchMate
-    }
-
-    fun getIsSwipeable(): Boolean {
-        return title != "Новое приглашение"
     }
 }

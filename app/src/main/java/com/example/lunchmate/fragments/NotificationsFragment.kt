@@ -45,10 +45,10 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
         activity.updateBadge()
 
         notificationsList = ArrayList<Notification>()
-        notificationsList.add(Notification("Новое приглашение", Slot("1 марта", "11:00", "12:00"), activity.currentUser))
-        notificationsList.add(Notification("Отказ", Slot("1 марта", "11:00", "12:00"), activity.currentUser))
-        notificationsList.add(Notification("Согласие", Slot("1 марта", "11:00", "12:00"), activity.currentUser))
-        notificationsList.add(Notification("Напоминание", Slot("1 марта", "11:00", "12:00"), activity.currentUser))
+        notificationsList.add(Notification("Новое приглашение", "1 марта, 13:00 - 14:00", activity.currentUser))
+        notificationsList.add(Notification("Отказ", "1 марта, 13:00 - 14:00", activity.currentUser))
+        notificationsList.add(Notification("Согласие", "1 марта, 13:00 - 14:00", activity.currentUser))
+        notificationsList.add(Notification("Напоминание", "1 марта, 13:00 - 14:00", activity.currentUser))
 
         setUpRV(notificationsList)
     }
