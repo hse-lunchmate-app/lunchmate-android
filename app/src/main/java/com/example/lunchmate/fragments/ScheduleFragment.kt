@@ -160,11 +160,39 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         bottomBinding.finish.addTextChangedListener(timeWatcher)
 
         bottomBinding.addBtn.setOnClickListener {
-            slotsList.add(Slot(currentDay!!.date.toString()+" "+binding.month.toString(),
-                bottomBinding.start.text.toString(), bottomBinding.finish.text.toString(), bottomBinding.switchIsRepeating.isChecked))
-            dialog.dismiss()
-            slotsAdapter.notifyItemInserted(slotsList.size - 1)
-            checkSlotsCount()
+            if (bottomBinding.start.text.isEmpty() || bottomBinding.finish.text.isEmpty()){
+                bottomBinding.start.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.finish.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.errorMsg.visibility = View.VISIBLE
+                bottomBinding.errorMsg.text = "Все поля должны быть заполнены"
+            }
+            else if (bottomBinding.start.text[2].toString() != ":" || bottomBinding.finish.text[2].toString() != ":"
+                ||timeToHour(bottomBinding.start.text.toString()) > 23 || timeToHour(bottomBinding.finish.text.toString()) > 23
+                || timeToMinute(bottomBinding.start.text.toString()) > 59 || timeToMinute(bottomBinding.finish.text.toString()) > 59){
+                bottomBinding.start.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.finish.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.errorMsg.visibility = View.VISIBLE
+                bottomBinding.errorMsg.text = "Поля должны иметь допустимые значения"
+            }
+            else if (timeToInt(bottomBinding.start.text.toString()) >= timeToInt(bottomBinding.finish.text.toString())){
+                bottomBinding.start.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.finish.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.errorMsg.visibility = View.VISIBLE
+                bottomBinding.errorMsg.text = "Начало должно быть раньше, чем конец"
+            }
+            else {
+                slotsList.add(
+                    Slot(
+                        currentDay!!.date.toString() + " " + binding.month.toString(),
+                        bottomBinding.start.text.toString(),
+                        bottomBinding.finish.text.toString(),
+                        bottomBinding.switchIsRepeating.isChecked
+                    )
+                )
+                dialog.dismiss()
+                slotsAdapter.notifyItemInserted(slotsList.size - 1)
+                checkSlotsCount()
+            }
         }
 
         dialog.setContentView(bottomBinding.root)
@@ -193,11 +221,33 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         }
 
         bottomBinding.saveBtn.setOnClickListener {
-            slotsList[position].setStart(bottomBinding.start.text.toString())
-            slotsList[position].setFinish(bottomBinding.finish.text.toString())
-            slotsList[position].setIsRepeating(bottomBinding.switchIsRepeating.isChecked)
-            dialog.dismiss()
-            slotsAdapter.notifyItemChanged(position)
+            if (bottomBinding.start.text.isEmpty() || bottomBinding.finish.text.isEmpty()){
+                bottomBinding.start.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.finish.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.errorMsg.visibility = View.VISIBLE
+                bottomBinding.errorMsg.text = "Все поля должны быть заполнены"
+            }
+            else if (bottomBinding.start.text[2].toString() != ":" || bottomBinding.finish.text[2].toString() != ":"
+                ||timeToHour(bottomBinding.start.text.toString()) > 23 || timeToHour(bottomBinding.finish.text.toString()) > 23
+                || timeToMinute(bottomBinding.start.text.toString()) > 59 || timeToMinute(bottomBinding.finish.text.toString()) > 59){
+                bottomBinding.start.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.finish.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.errorMsg.visibility = View.VISIBLE
+                bottomBinding.errorMsg.text = "Поля должны иметь допустимые значения"
+            }
+            else if (timeToInt(bottomBinding.start.text.toString()) >= timeToInt(bottomBinding.finish.text.toString())){
+                bottomBinding.start.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.finish.setBackgroundResource(R.drawable.rounded_dark_grey_error)
+                bottomBinding.errorMsg.visibility = View.VISIBLE
+                bottomBinding.errorMsg.text = "Начало должно быть раньше, чем конец"
+            }
+            else {
+                slotsList[position].setStart(bottomBinding.start.text.toString())
+                slotsList[position].setFinish(bottomBinding.finish.text.toString())
+                slotsList[position].setIsRepeating(bottomBinding.switchIsRepeating.isChecked)
+                dialog.dismiss()
+                slotsAdapter.notifyItemChanged(position)
+            }
         }
 
         dialog.setContentView(bottomBinding.root)
@@ -310,5 +360,17 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
 
     private fun getDateStr(calendar: Calendar): String{
         return weekdaysNames[calendar.get(Calendar.DAY_OF_WEEK)-1]+SimpleDateFormat(", dd MMM yyyyг.").format(calendar.time)
+    }
+
+    private fun timeToInt(time: String): Int{
+        return Integer.parseInt(time[0].toString()+time[1]+time[3]+time[4])
+    }
+
+    private fun timeToHour(time: String): Int{
+        return Integer.parseInt(time[0].toString()+time[1])
+    }
+
+    private fun timeToMinute(time: String): Int{
+        return Integer.parseInt(time[3].toString()+time[4])
     }
 }
