@@ -70,7 +70,7 @@
         app:cornerRadius="16dp"
         app:icon="@drawable/telegram"
         android:fontFamily="@font/roboto_regular"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

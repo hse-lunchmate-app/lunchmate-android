@@ -1,5 +1,7 @@
 package com.example.lunchmate.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -17,6 +19,7 @@ import com.example.lunchmate.model.Notification
 import com.example.lunchmatelocal.AvailableSlotsAdapter
 import com.example.lunchmatelocal.Slot
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import java.text.SimpleDateFormat
@@ -69,6 +72,18 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
 
         val profileInfo = view.findViewById<TextView>(R.id.infoText)
         profileInfo.text = notificationsList[position].getLunchMate().getInfo()
+
+        val tgButton = view.findViewById<MaterialButton>(R.id.tgButton)
+        if (notificationsList[position].getLunchMate().getTg() != "" && notificationsList[position].getLunchMate().getTg() != "Без телеграма") {
+            tgButton.visibility = View.VISIBLE
+            tgButton.setOnClickListener {
+                val tgIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://t.me/" + notificationsList[position].getLunchMate().getTg())
+                )
+                startActivity(tgIntent)
+            }
+        }
 
         val date = view.findViewById<TextView>(R.id.date)
         val calendar = Calendar.getInstance()

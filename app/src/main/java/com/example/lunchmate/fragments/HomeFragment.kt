@@ -1,5 +1,7 @@
 package com.example.lunchmatelocal
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -12,9 +14,10 @@ import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.FragmentHomeBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class HomeFragment: Fragment(R.layout.fragment_home) {
     val weekdaysNames = arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
@@ -30,8 +33,8 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         binding = FragmentHomeBinding.bind(view)
 
         accountsList = ArrayList<Account>()
-        accountsList.add(Account("Иван Иванов 1", 0,"Котлетка с пюрешкой", "Я обычный Иван", "ivan123", "ivan12345", "0000", R.drawable.photo))
-        accountsList.add(Account("Иван Иванов 2", 1,"Щи", "Я\nо\nб\nы\nч\nн\nы\nй\nИ\nв\nа\nн", "ivan123", "ivan12345", "0000", R.drawable.photo))
+        accountsList.add(Account("Иван Иванов 1", 0,"Котлетка с пюрешкой", "Я обычный Иван", "ka_rine_s", "ivan12345", "0000", R.drawable.photo))
+        accountsList.add(Account("Иван Иванов 2", 1,"Щи", "Я\nо\nб\nы\nч\nн\nы\nй\nИ\nв\nа\nн", "", "ivan12345", "0000", R.drawable.photo))
         accountsList.add(Account("Иван Иванов 3", 2,"Рассольник", "Я необычный Иван", "ivan123", "ivan12345", "0000", R.drawable.photo))
         accountsList.add(Account("Петр Петров", 0,"Борщ", "Я обычный Петр", "petr123", "petr12345", "0000", R.drawable.photo))
 
@@ -85,6 +88,18 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         val profileInfo = view.findViewById<TextView>(R.id.infoText)
         profileInfo.text = accountsList[position].getInfo()
+
+        val tgButton = view.findViewById<MaterialButton>(R.id.tgButton)
+        if (accountsList[position].getTg() != "" && accountsList[position].getTg() != "Без телеграма") {
+            tgButton.visibility = View.VISIBLE
+            tgButton.setOnClickListener {
+                val tgIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://t.me/" + accountsList[position].getTg())
+                )
+                startActivity(tgIntent)
+            }
+        }
 
         val date = view.findViewById<TextView>(R.id.date)
         val calendar = Calendar.getInstance()

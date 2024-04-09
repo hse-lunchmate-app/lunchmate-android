@@ -1,6 +1,8 @@
 package com.example.lunchmate.utils
 
 import android.app.Dialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -45,7 +47,7 @@ class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsLis
 
         val lunchMateAccount = slotsList[position].getLunchMate()
 
-        binding.lunchMate.text = lunchMateAccount?.getName() ?: "Без имени"
+        binding.lunchMate.text = lunchMateAccount?.getName()
 
         binding.profileNickname.text = lunchMateAccount?.getLogin()
 
@@ -55,6 +57,17 @@ class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsLis
         binding.taste.text = lunchMateAccount.getTaste()
 
         binding.infoText.text = lunchMateAccount.getInfo()
+
+        if (lunchMateAccount.getTg() != "" && lunchMateAccount.getTg() != "Без телеграма") {
+            binding.tgButton.visibility = View.VISIBLE
+            binding.tgButton.setOnClickListener {
+                val tgIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://t.me/" + lunchMateAccount.getTg())
+                )
+                startActivity(tgIntent)
+            }
+        }
 
         var day_num = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         val calendar = Calendar.getInstance()
