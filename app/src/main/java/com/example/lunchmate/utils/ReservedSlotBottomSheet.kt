@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
@@ -23,10 +24,14 @@ import com.example.lunchmatelocal.Slot
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsList: ArrayList<Slot>, val position: Int): BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetReservedSlotBinding
+    val weekdaysNames = arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,22 +39,44 @@ class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsLis
         savedInstanceState: Bundle?
     ): View? {
         binding = BottomSheetReservedSlotBinding.bind(inflater.inflate(R.layout.bottom_sheet_reserved_slot, container))
-        binding.start.setText(slotsList[position].getStart())
+        binding.start.text = slotsList[position].getStart()
 
-        binding.finish.setText(slotsList[position].getFinish())
+        binding.finish.text = slotsList[position].getFinish()
 
         val lunchMateAccount = slotsList[position].getLunchMate()
 
-        binding.lunchMate.setText(lunchMateAccount?.getName() ?: "Без имени")
+        binding.lunchMate.text = lunchMateAccount?.getName() ?: "Без имени"
 
-        binding.profileNickname.setText(lunchMateAccount?.getLogin())
+        binding.profileNickname.text = lunchMateAccount?.getLogin()
 
         val activity = activity as MainActivity
-        binding.office.setText(activity.offices[lunchMateAccount?.getOffice()!!])
+        binding.office.text = activity.offices[lunchMateAccount?.getOffice()!!]
 
-        binding.taste.setText(lunchMateAccount.getTaste())
+        binding.taste.text = lunchMateAccount.getTaste()
 
-        binding.infoText.setText(lunchMateAccount.getInfo())
+        binding.infoText.text = lunchMateAccount.getInfo()
+
+        var day_num = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_YEAR, day_num)
+        binding.dateSchedule.text = getDateStr(calendar)
+
+        binding.rightButton.setOnClickListener{
+            calendar.set(Calendar.DAY_OF_YEAR, ++day_num)
+            binding.dateSchedule.text = getDateStr(calendar)
+            if (day_num > Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
+                binding.leftButton.setColorFilter(resources.getColor(R.color.blue_700))
+                binding.leftButton.isClickable = true
+            }
+        }
+        binding.leftButton.setOnClickListener{
+            calendar.set(Calendar.DAY_OF_YEAR, --day_num)
+            binding.dateSchedule.text = getDateStr(calendar)
+            if (day_num <= Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
+                binding.leftButton.setColorFilter(resources.getColor(R.color.grey_400))
+                binding.leftButton.isClickable = false
+            }
+        }
 
         val availableSlotsList = ArrayList<Slot>()
         availableSlotsList.add(Slot("1 марта", "11:00", "12:00"))
@@ -120,5 +147,9 @@ class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsLis
         }
 
         return bottomSheetDialog
+    }
+
+    private fun getDateStr(calendar: Calendar): String{
+        return weekdaysNames[calendar.get(Calendar.DAY_OF_WEEK)-1]+ SimpleDateFormat(", dd.MM").format(calendar.time)
     }
 }

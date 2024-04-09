@@ -19,8 +19,12 @@ import com.example.lunchmatelocal.Slot
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
+    val weekdaysNames = arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
     private lateinit var binding: FragmentNotificationsBinding
     private lateinit var notificationsList: ArrayList<Notification>
     private lateinit var notificationsAdapter: NotificationsAdapter
@@ -46,24 +50,49 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
     }
 
     fun onProfileClick(position: Int) {
+        var day_num = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         val activity = activity as MainActivity
         val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_profile, null)
 
         val profileName = view.findViewById<TextView>(R.id.profileName)
-        profileName.setText(notificationsList[position].getLunchMate().getName())
+        profileName.text = notificationsList[position].getLunchMate().getName()
 
         val profileNickname = view.findViewById<TextView>(R.id.profileNickname)
-        profileNickname.setText(notificationsList[position].getLunchMate().getLogin())
+        profileNickname.text = notificationsList[position].getLunchMate().getLogin()
 
         val profileOffice = view.findViewById<TextView>(R.id.office)
-        profileOffice.setText(activity.offices[notificationsList[position].getLunchMate().getOffice()])
+        profileOffice.text = activity.offices[notificationsList[position].getLunchMate().getOffice()]
 
         val profileTaste = view.findViewById<TextView>(R.id.taste)
-        profileTaste.setText(notificationsList[position].getLunchMate().getTaste())
+        profileTaste.text = notificationsList[position].getLunchMate().getTaste()
 
         val profileInfo = view.findViewById<TextView>(R.id.infoText)
-        profileInfo.setText(notificationsList[position].getLunchMate().getInfo())
+        profileInfo.text = notificationsList[position].getLunchMate().getInfo()
+
+        val date = view.findViewById<TextView>(R.id.date)
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_YEAR, day_num)
+        date.text = getDateStr(calendar)
+
+        val leftButton = view.findViewById<ImageButton>(R.id.leftButton)
+        val rightButton = view.findViewById<ImageButton>(R.id.rightButton)
+        rightButton.setOnClickListener{
+            calendar.set(Calendar.DAY_OF_YEAR, ++day_num)
+            date.text = getDateStr(calendar)
+            if (day_num > Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
+                leftButton.setColorFilter(resources.getColor(R.color.blue_700))
+                leftButton.isClickable = true
+            }
+        }
+        leftButton.setOnClickListener{
+            calendar.set(Calendar.DAY_OF_YEAR, --day_num)
+            date.text = getDateStr(calendar)
+            if (day_num <= Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
+                leftButton.setColorFilter(resources.getColor(R.color.grey_400))
+                leftButton.isClickable = false
+            }
+        }
 
         val availableSlots = view.findViewById<RecyclerView>(R.id.availableSlots)
         val slotsList = ArrayList<Slot>()
@@ -84,7 +113,7 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
         dialog.show()
     }
 
-    fun denyRequest(position: Int){
+    private fun denyRequest(position: Int){
         notificationsList.removeAt(position)
         notificationsAdapter.notifyItemRemoved(position)
     }
@@ -139,5 +168,9 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
                 i++
             }
         }
+    }
+
+    private fun getDateStr(calendar: Calendar): String{
+        return weekdaysNames[calendar.get(Calendar.DAY_OF_WEEK)-1]+ SimpleDateFormat(", dd.MM").format(calendar.time)
     }
 }

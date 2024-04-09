@@ -15,7 +15,10 @@ class Account (private var name: String = "Без имени",
         return name
     }
     fun setName(name: String = "Без имени") {
-        this.name = name
+        if (name == "")
+            this.name = "Без имени"
+        else
+            this.name = name
     }
 
     fun getOffice(): Int {
@@ -29,21 +32,30 @@ class Account (private var name: String = "Без имени",
         return taste
     }
     fun setTaste(taste: String = "Без предпочтений") {
-        this.taste = taste
+        if (taste == "")
+            this.taste = "Без предпочтений"
+        else
+            this.taste = taste
     }
 
     fun getInfo(): String {
         return info
     }
     fun setInfo(info: String = "Без информации") {
-        this.info = info
+        if (info == "")
+            this.info = "Без информации"
+        else
+            this.info = info
     }
 
     fun getTg(): String {
         return tg
     }
     fun setTg(tg: String = "Без телеграма") {
-        this.tg = tg
+        if (tg == "")
+            this.tg = "Без телеграма"
+        else
+            this.tg = tg
     }
 
     fun getLogin(): String {

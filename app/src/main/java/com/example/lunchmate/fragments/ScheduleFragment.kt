@@ -2,7 +2,10 @@ package com.example.lunchmatelocal
 
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +17,9 @@ import com.example.lunchmate.utils.MaskWatcher
 import com.example.lunchmate.utils.ReservedSlotBottomSheet
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.switchmaterial.SwitchMaterial
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 data class CurrentDay(
     var btn: RelativeLayout,
@@ -23,11 +29,13 @@ data class CurrentDay(
 )
 
 class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
+    val monthNames = arrayOf("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь")
     private lateinit var binding: FragmentScheduleBinding
-    private lateinit var currentDay: CurrentDay
+    private var currentDay: CurrentDay? = null
     private lateinit var slotsAdapter: SlotsAdapter
     lateinit var slotsList: ArrayList<Slot>
     val timeWatcher = MaskWatcher("##:##")
+    var week_num = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +52,14 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         slotsList.add(Slot("1 марта", "14:00", "15:00"))
         setUpRV(slotsList)
 
-        currentDay = CurrentDay(
-            binding.wednesdayBtn, binding.wednesday,
-            binding.wednesdayDate, binding.wednesdaySlotsIndicator
-        )
+
+        currentDay = setUpCurrentWeek()
+        if (currentDay != null){
+            currentDay!!.btn.setBackgroundResource(R.drawable.rounded_yellow)
+            currentDay!!.text.setTextColor(getResources().getColor(R.color.black))
+            currentDay!!.date.setTextColor(getResources().getColor(R.color.black))
+            currentDay!!.slotsIndicator.setColorFilter(getResources().getColor(R.color.black))
+        }
         binding.mondayBtn.setOnClickListener {
             onWeekdayClick(CurrentDay(
                 binding.mondayBtn, binding.monday,
@@ -80,6 +92,20 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         }
         binding.addSlotBtn.setOnClickListener {
             addSlot()
+        }
+        binding.rightButton.setOnClickListener{
+            setUpWeek(++week_num)
+            if (week_num > Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)){
+                binding.leftButton.setColorFilter(resources.getColor(R.color.black))
+                binding.leftButton.isClickable = true
+            }
+        }
+        binding.leftButton.setOnClickListener{
+            setUpWeek(--week_num)
+            if (week_num <= Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)){
+                binding.leftButton.setColorFilter(resources.getColor(R.color.grey_400))
+                binding.leftButton.isClickable = false
+            }
         }
     }
 
@@ -120,7 +146,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
 
         val addBtn = view.findViewById<AppCompatButton>(R.id.addBtn)
         addBtn.setOnClickListener {
-            slotsList.add(Slot(currentDay.date.toString()+" "+binding.month.toString(), start.text.toString(), finish.text.toString(), isRepeating.isChecked))
+            slotsList.add(Slot(currentDay!!.date.toString()+" "+binding.month.toString(), start.text.toString(), finish.text.toString(), isRepeating.isChecked))
             dialog.dismiss()
             slotsAdapter.notifyItemInserted(slotsList.size - 1)
             checkSlotsCount()
@@ -178,19 +204,94 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
     }
 
     private fun onWeekdayClick(newDay: CurrentDay) {
-        if (newDay.btn != currentDay.btn) {
-            currentDay.btn.setBackgroundResource(R.drawable.rounded_blue_stroke)
-            currentDay.text.setTextColor(getResources().getColor(R.color.blue_700))
-            currentDay.date.setTextColor(getResources().getColor(R.color.blue_700))
-            currentDay.slotsIndicator.setColorFilter(getResources().getColor(R.color.blue_700))
-            currentDay.btn = newDay.btn
-            currentDay.text = newDay.text
-            currentDay.date = newDay.date
-            currentDay.slotsIndicator = newDay.slotsIndicator
-            newDay.btn.setBackgroundResource(R.drawable.rounded_yellow)
-            newDay.text.setTextColor(getResources().getColor(R.color.black))
-            newDay.date.setTextColor(getResources().getColor(R.color.black))
-            newDay.slotsIndicator.setColorFilter(getResources().getColor(R.color.black))
+        if (currentDay != null && newDay.btn != currentDay!!.btn) {
+                currentDay!!.btn.setBackgroundResource(R.drawable.rounded_blue_stroke)
+                currentDay!!.text.setTextColor(getResources().getColor(R.color.blue_700))
+                currentDay!!.date.setTextColor(getResources().getColor(R.color.blue_700))
+                currentDay!!.slotsIndicator.setColorFilter(getResources().getColor(R.color.blue_700))
         }
+        currentDay = CurrentDay(newDay.btn, newDay.text, newDay.date, newDay.slotsIndicator)
+        newDay.btn.setBackgroundResource(R.drawable.rounded_yellow)
+        newDay.text.setTextColor(getResources().getColor(R.color.black))
+        newDay.date.setTextColor(getResources().getColor(R.color.black))
+        newDay.slotsIndicator.setColorFilter(getResources().getColor(R.color.black))
+    }
+
+    private fun setUpCurrentWeek(): CurrentDay? {
+        val calendar: Calendar = Calendar.getInstance()
+        val day = calendar.get(Calendar.DAY_OF_WEEK)
+
+        val weekdays = arrayOf(Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY)
+        val dates = arrayOf(binding.mondayDate, binding.tuesdayDate, binding.wednesdayDate, binding.thursdayDate, binding.fridayDate, binding.saturdayDate, binding.sundayDate)
+        val months: ArrayList<Int> = ArrayList<Int>()
+        val simpleDateFormat = SimpleDateFormat("dd")
+        for (i in 0..weekdays.size - 1){
+            calendar.set(Calendar.DAY_OF_WEEK, weekdays[i])
+            dates[i].text = simpleDateFormat.format(calendar.time)
+            months.add(calendar.get(Calendar.MONTH))
+        }
+
+        if (months[0] != months[6]){
+            binding.month.setText(monthNames[months[0]]+" - "+monthNames[months[6]])
+        }
+        else{
+            binding.month.setText(monthNames[months[0]])
+        }
+
+        when (day) {
+            Calendar.MONDAY -> {
+                return CurrentDay(
+                binding.mondayBtn, binding.monday,
+                binding.mondayDate, binding.mondaySlotsIndicator
+            )}
+            Calendar.TUESDAY -> {
+                return CurrentDay(
+                    binding.tuesdayBtn, binding.tuesday,
+                    binding.tuesdayDate, binding.tuesdaySlotsIndicator
+                )}
+            Calendar.WEDNESDAY -> {
+                return CurrentDay(
+                    binding.wednesdayBtn, binding.wednesday,
+                    binding.wednesdayDate, binding.wednesdaySlotsIndicator
+                )}
+            Calendar.THURSDAY -> {
+                return CurrentDay(
+                    binding.thursdayBtn, binding.thursday,
+                    binding.thursdayDate, binding.thursdaySlotsIndicator
+                )}
+            Calendar.FRIDAY -> {
+                return CurrentDay(
+                    binding.fridayBtn, binding.friday,
+                    binding.fridayDate, binding.fridaySlotsIndicator
+                )}
+        }
+        return null
+    }
+
+    private fun setUpWeek(week_num: Int) {
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.set(Calendar.WEEK_OF_YEAR, week_num)
+
+        val weekdays = arrayOf(Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY)
+        val dates = arrayOf(binding.mondayDate, binding.tuesdayDate, binding.wednesdayDate, binding.thursdayDate, binding.fridayDate, binding.saturdayDate, binding.sundayDate)
+        val months: ArrayList<Int> = ArrayList<Int>()
+        val simpleDateFormat = SimpleDateFormat("dd")
+        for (i in 0..weekdays.size - 1){
+            calendar.set(Calendar.DAY_OF_WEEK, weekdays[i])
+            dates[i].text = simpleDateFormat.format(calendar.time)
+            months.add(calendar.get(Calendar.MONTH))
+        }
+
+        if (months[0] != months[6]){
+            binding.month.setText(monthNames[months[0]]+" - "+monthNames[months[6]])
+        }
+        else{
+            binding.month.setText(monthNames[months[0]])
+        }
+
+        onWeekdayClick(CurrentDay(
+            binding.mondayBtn, binding.monday,
+            binding.mondayDate, binding.mondaySlotsIndicator
+        ))
     }
 }
