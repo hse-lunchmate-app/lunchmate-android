@@ -30,7 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsList: ArrayList<Slot>, val position: Int): BottomSheetDialogFragment() {
+class ReservedSlotBottomSheet(val date: String, val cancelReservation: (Int) -> Unit, val slotsList: ArrayList<Slot>, val position: Int): BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetReservedSlotBinding
     val weekdaysNames = arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
@@ -41,6 +41,9 @@ class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsLis
         savedInstanceState: Bundle?
     ): View? {
         binding = BottomSheetReservedSlotBinding.bind(inflater.inflate(R.layout.bottom_sheet_reserved_slot, container))
+
+        binding.date.text = date
+
         binding.start.text = slotsList[position].getStart()
 
         binding.finish.text = slotsList[position].getFinish()
@@ -75,6 +78,7 @@ class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsLis
         binding.dateSchedule.text = getDateStr(calendar)
 
         binding.rightButton.setOnClickListener{
+            binding.leftButton.isEnabled = true
             calendar.set(Calendar.DAY_OF_YEAR, ++day_num)
             binding.dateSchedule.text = getDateStr(calendar)
             if (day_num > Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
@@ -82,6 +86,7 @@ class ReservedSlotBottomSheet(val cancelReservation: (Int) -> Unit, val slotsLis
                 binding.leftButton.isClickable = true
             }
         }
+        binding.leftButton.isEnabled = false
         binding.leftButton.setOnClickListener{
             calendar.set(Calendar.DAY_OF_YEAR, --day_num)
             binding.dateSchedule.text = getDateStr(calendar)

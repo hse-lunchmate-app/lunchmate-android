@@ -180,8 +180,7 @@
                     android:layout_centerVertical="true"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/arrow_left"
-                    app:tint="@color/grey_400"
-                    android:clickable="false"/>
+                    app:tint="@color/grey_400"/>
 
                 <TextView
                     android:id="@+id/date"

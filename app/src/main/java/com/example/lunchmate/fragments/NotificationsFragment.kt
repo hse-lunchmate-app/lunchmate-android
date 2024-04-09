@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.adapters.NotificationsAdapter
+import com.example.lunchmate.databinding.BottomSheetProfileBinding
 import com.example.lunchmate.databinding.FragmentNotificationsBinding
 import com.example.lunchmate.model.Notification
 import com.example.lunchmatelocal.AvailableSlotsAdapter
@@ -52,31 +53,25 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
         setUpRV(notificationsList)
     }
 
-    fun onProfileClick(position: Int) {
+    private fun onProfileClick(position: Int) {
         var day_num = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         val activity = activity as MainActivity
         val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_profile, null)
+        val bottomBinding = BottomSheetProfileBinding.bind(layoutInflater.inflate(R.layout.bottom_sheet_profile, null))
 
-        val profileName = view.findViewById<TextView>(R.id.profileName)
-        profileName.text = notificationsList[position].getLunchMate().getName()
+        bottomBinding.profileName.text = notificationsList[position].getLunchMate().getName()
 
-        val profileNickname = view.findViewById<TextView>(R.id.profileNickname)
-        profileNickname.text = notificationsList[position].getLunchMate().getLogin()
+        bottomBinding.profileNickname.text = notificationsList[position].getLunchMate().getLogin()
 
-        val profileOffice = view.findViewById<TextView>(R.id.office)
-        profileOffice.text = activity.offices[notificationsList[position].getLunchMate().getOffice()]
+        bottomBinding.office.text = activity.offices[notificationsList[position].getLunchMate().getOffice()]
 
-        val profileTaste = view.findViewById<TextView>(R.id.taste)
-        profileTaste.text = notificationsList[position].getLunchMate().getTaste()
+        bottomBinding.taste.text = notificationsList[position].getLunchMate().getTaste()
 
-        val profileInfo = view.findViewById<TextView>(R.id.infoText)
-        profileInfo.text = notificationsList[position].getLunchMate().getInfo()
+        bottomBinding.infoText.text = notificationsList[position].getLunchMate().getInfo()
 
-        val tgButton = view.findViewById<MaterialButton>(R.id.tgButton)
         if (notificationsList[position].getLunchMate().getTg() != "" && notificationsList[position].getLunchMate().getTg() != "Без телеграма") {
-            tgButton.visibility = View.VISIBLE
-            tgButton.setOnClickListener {
+            bottomBinding.tgButton.visibility = View.VISIBLE
+            bottomBinding.tgButton.setOnClickListener {
                 val tgIntent = Intent(
                     Intent.ACTION_VIEW,
                     Uri.parse("https://t.me/" + notificationsList[position].getLunchMate().getTg())
@@ -85,31 +80,29 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
             }
         }
 
-        val date = view.findViewById<TextView>(R.id.date)
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.DAY_OF_YEAR, day_num)
-        date.text = getDateStr(calendar)
+        bottomBinding.date.text = getDateStr(calendar)
 
-        val leftButton = view.findViewById<ImageButton>(R.id.leftButton)
-        val rightButton = view.findViewById<ImageButton>(R.id.rightButton)
-        rightButton.setOnClickListener{
+        bottomBinding.rightButton.setOnClickListener{
+            bottomBinding.leftButton.isEnabled = true
             calendar.set(Calendar.DAY_OF_YEAR, ++day_num)
-            date.text = getDateStr(calendar)
+            bottomBinding.date.text = getDateStr(calendar)
             if (day_num > Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
-                leftButton.setColorFilter(resources.getColor(R.color.blue_700))
-                leftButton.isClickable = true
+                bottomBinding.leftButton.setColorFilter(resources.getColor(R.color.blue_700))
+                bottomBinding.leftButton.isClickable = true
             }
         }
-        leftButton.setOnClickListener{
+        bottomBinding.leftButton.isEnabled = false
+        bottomBinding.leftButton.setOnClickListener{
             calendar.set(Calendar.DAY_OF_YEAR, --day_num)
-            date.text = getDateStr(calendar)
+            bottomBinding.date.text = getDateStr(calendar)
             if (day_num <= Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
-                leftButton.setColorFilter(resources.getColor(R.color.grey_400))
-                leftButton.isClickable = false
+                bottomBinding.leftButton.setColorFilter(resources.getColor(R.color.grey_400))
+                bottomBinding.leftButton.isClickable = false
             }
         }
 
-        val availableSlots = view.findViewById<RecyclerView>(R.id.availableSlots)
         val slotsList = ArrayList<Slot>()
         slotsList.add(Slot("1 марта", "11:00", "12:00"))
         slotsList.add(Slot("1 марта", "14:00", "15:00"))
@@ -118,13 +111,10 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
         slotsList.add(Slot("1 марта", "14:00", "15:00"))
         val slotsAdapter = AvailableSlotsAdapter(slotsList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        availableSlots.layoutManager = linearLayoutManager
-        availableSlots.adapter = slotsAdapter
+        bottomBinding.availableSlots.layoutManager = linearLayoutManager
+        bottomBinding.availableSlots.adapter = slotsAdapter
 
-        val btn = view.findViewById<ImageButton>(R.id.leftButton)
-        btn.isClickable = true
-
-        dialog.setContentView(view)
+        dialog.setContentView(bottomBinding.root)
         dialog.show()
     }
 

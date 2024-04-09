@@ -20,7 +20,7 @@ class AccountFragment: Fragment(R.layout.fragment_account) {
         binding = FragmentAccountBinding.bind(view)
         val accountEditFragment = AccountEditFragment()
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        bottomNav.setVisibility(View.VISIBLE)
+        bottomNav.visibility = View.VISIBLE
 
         val activity = activity as MainActivity
         setUpCurrentUser(activity.currentUser, activity.offices)

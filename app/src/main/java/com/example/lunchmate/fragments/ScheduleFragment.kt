@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.adapters.SlotsAdapter
+import com.example.lunchmate.databinding.BottomSheetAddSlotBinding
+import com.example.lunchmate.databinding.BottomSheetFreeSlotBinding
+import com.example.lunchmate.databinding.BottomSheetReservedSlotBinding
 import com.example.lunchmate.databinding.FragmentScheduleBinding
 import com.example.lunchmate.utils.MaskWatcher
 import com.example.lunchmate.utils.ReservedSlotBottomSheet
@@ -29,13 +32,15 @@ data class CurrentDay(
 )
 
 class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
+    val weekdaysNames = arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
     val monthNames = arrayOf("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь")
     private lateinit var binding: FragmentScheduleBinding
     private var currentDay: CurrentDay? = null
     private lateinit var slotsAdapter: SlotsAdapter
     lateinit var slotsList: ArrayList<Slot>
     val timeWatcher = MaskWatcher("##:##")
-    var week_num = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
+    val calendar: Calendar = Calendar.getInstance()
+    var week_num = calendar.get(Calendar.WEEK_OF_YEAR)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,35 +61,45 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         currentDay = setUpCurrentWeek()
         if (currentDay != null){
             currentDay!!.btn.setBackgroundResource(R.drawable.rounded_yellow)
-            currentDay!!.text.setTextColor(getResources().getColor(R.color.black))
-            currentDay!!.date.setTextColor(getResources().getColor(R.color.black))
-            currentDay!!.slotsIndicator.setColorFilter(getResources().getColor(R.color.black))
+            currentDay!!.text.setTextColor(resources.getColor(R.color.black))
+            currentDay!!.date.setTextColor(resources.getColor(R.color.black))
+            currentDay!!.slotsIndicator.setColorFilter(resources.getColor(R.color.black))
         }
         binding.mondayBtn.setOnClickListener {
+            calendar.set(Calendar.WEEK_OF_YEAR, week_num)
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
             onWeekdayClick(CurrentDay(
                 binding.mondayBtn, binding.monday,
                 binding.mondayDate, binding.mondaySlotsIndicator
             ))
         }
         binding.tuesdayBtn.setOnClickListener {
+            calendar.set(Calendar.WEEK_OF_YEAR, week_num)
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY)
             onWeekdayClick(CurrentDay(
                 binding.tuesdayBtn, binding.tuesday,
                 binding.tuesdayDate, binding.tuesdaySlotsIndicator
             ))
         }
         binding.wednesdayBtn.setOnClickListener {
+            calendar.set(Calendar.WEEK_OF_YEAR, week_num)
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY)
             onWeekdayClick(CurrentDay(
                 binding.wednesdayBtn, binding.wednesday,
                 binding.wednesdayDate, binding.wednesdaySlotsIndicator
             ))
         }
         binding.thursdayBtn.setOnClickListener {
+            calendar.set(Calendar.WEEK_OF_YEAR, week_num)
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY)
             onWeekdayClick(CurrentDay(
                 binding.thursdayBtn, binding.thursday,
                 binding.thursdayDate, binding.thursdaySlotsIndicator
             ))
         }
         binding.fridayBtn.setOnClickListener {
+            calendar.set(Calendar.WEEK_OF_YEAR, week_num)
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
             onWeekdayClick(CurrentDay(
                 binding.fridayBtn, binding.friday,
                 binding.fridayDate, binding.fridaySlotsIndicator
@@ -94,12 +109,14 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
             addSlot()
         }
         binding.rightButton.setOnClickListener{
+            binding.leftButton.isEnabled = true
             setUpWeek(++week_num)
             if (week_num > Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)){
                 binding.leftButton.setColorFilter(resources.getColor(R.color.black))
                 binding.leftButton.isClickable = true
             }
         }
+        binding.leftButton.isEnabled = false
         binding.leftButton.setOnClickListener{
             setUpWeek(--week_num)
             if (week_num <= Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)){
@@ -134,71 +151,66 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
 
     private fun addSlot(){
         val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_add_slot, null)
+        val bottomBinding = BottomSheetAddSlotBinding.bind(layoutInflater.inflate(R.layout.bottom_sheet_add_slot, null))
 
-        val start = view.findViewById<EditText>(R.id.start)
-        start.addTextChangedListener(timeWatcher)
+        bottomBinding.date.text = getDateStr(calendar)
 
-        val finish = view.findViewById<EditText>(R.id.finish)
-        finish.addTextChangedListener(timeWatcher)
+        bottomBinding.start.addTextChangedListener(timeWatcher)
 
-        val isRepeating = view.findViewById<SwitchCompat>(R.id.switchIsRepeating)
+        bottomBinding.finish.addTextChangedListener(timeWatcher)
 
-        val addBtn = view.findViewById<AppCompatButton>(R.id.addBtn)
-        addBtn.setOnClickListener {
-            slotsList.add(Slot(currentDay!!.date.toString()+" "+binding.month.toString(), start.text.toString(), finish.text.toString(), isRepeating.isChecked))
+        bottomBinding.addBtn.setOnClickListener {
+            slotsList.add(Slot(currentDay!!.date.toString()+" "+binding.month.toString(),
+                bottomBinding.start.text.toString(), bottomBinding.finish.text.toString(), bottomBinding.switchIsRepeating.isChecked))
             dialog.dismiss()
             slotsAdapter.notifyItemInserted(slotsList.size - 1)
             checkSlotsCount()
         }
 
-        dialog.setContentView(view)
+        dialog.setContentView(bottomBinding.root)
         dialog.show()
     }
 
-    fun openFreeSlot(position: Int){
+    private fun openFreeSlot(position: Int){
         val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_free_slot, null)
+        val bottomBinding = BottomSheetFreeSlotBinding.bind(layoutInflater.inflate(R.layout.bottom_sheet_free_slot, null))
 
-        val start = view.findViewById<EditText>(R.id.start)
-        start.setText(slotsList[position].getStart())
-        start.addTextChangedListener(timeWatcher)
+        bottomBinding.date.text = getDateStr(calendar)
 
-        val finish = view.findViewById<EditText>(R.id.finish)
-        finish.setText(slotsList[position].getFinish())
-        finish.addTextChangedListener(timeWatcher)
+        bottomBinding.start.setText(slotsList[position].getStart())
+        bottomBinding.start.addTextChangedListener(timeWatcher)
 
-        val switch = view.findViewById<SwitchCompat>(R.id.switchIsRepeating)
-        switch.setChecked(slotsList[position].getIsRepeating())
+        bottomBinding.finish.setText(slotsList[position].getFinish())
+        bottomBinding.finish.addTextChangedListener(timeWatcher)
 
-        val deleteBtn = view.findViewById<AppCompatButton>(R.id.deleteBtn)
-        deleteBtn.setOnClickListener {
+        bottomBinding.switchIsRepeating.isChecked = slotsList[position].getIsRepeating()
+
+        bottomBinding.deleteBtn.setOnClickListener {
             slotsList.removeAt(position)
             dialog.dismiss()
             slotsAdapter.notifyItemRemoved(position)
             checkSlotsCount()
         }
 
-        val saveBtn = view.findViewById<AppCompatButton>(R.id.saveBtn)
-        saveBtn.setOnClickListener {
-            slotsList[position].setStart(start.text.toString())
-            slotsList[position].setFinish(finish.text.toString())
-            slotsList[position].setIsRepeating(switch.isChecked)
+        bottomBinding.saveBtn.setOnClickListener {
+            slotsList[position].setStart(bottomBinding.start.text.toString())
+            slotsList[position].setFinish(bottomBinding.finish.text.toString())
+            slotsList[position].setIsRepeating(bottomBinding.switchIsRepeating.isChecked)
             dialog.dismiss()
             slotsAdapter.notifyItemChanged(position)
         }
 
-        dialog.setContentView(view)
+        dialog.setContentView(bottomBinding.root)
         dialog.show()
     }
 
-    fun openReservedSlot(position: Int){
+    private fun openReservedSlot(position: Int){
         val activity = activity as MainActivity
-        val dialog = ReservedSlotBottomSheet(::cancelReservation, slotsList, position)
+        val dialog = ReservedSlotBottomSheet(getDateStr(calendar), ::cancelReservation, slotsList, position)
         dialog.show(activity.supportFragmentManager, "")
     }
 
-    fun cancelReservation(position: Int){
+    private fun cancelReservation(position: Int){
         slotsList[position].setLunchMate(null)
         slotsAdapter.notifyItemChanged(position)
     }
@@ -206,29 +218,28 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
     private fun onWeekdayClick(newDay: CurrentDay) {
         if (currentDay != null && newDay.btn != currentDay!!.btn) {
                 currentDay!!.btn.setBackgroundResource(R.drawable.rounded_blue_stroke)
-                currentDay!!.text.setTextColor(getResources().getColor(R.color.blue_700))
-                currentDay!!.date.setTextColor(getResources().getColor(R.color.blue_700))
-                currentDay!!.slotsIndicator.setColorFilter(getResources().getColor(R.color.blue_700))
+                currentDay!!.text.setTextColor(resources.getColor(R.color.blue_700))
+                currentDay!!.date.setTextColor(resources.getColor(R.color.blue_700))
+                currentDay!!.slotsIndicator.setColorFilter(resources.getColor(R.color.blue_700))
         }
         currentDay = CurrentDay(newDay.btn, newDay.text, newDay.date, newDay.slotsIndicator)
         newDay.btn.setBackgroundResource(R.drawable.rounded_yellow)
-        newDay.text.setTextColor(getResources().getColor(R.color.black))
-        newDay.date.setTextColor(getResources().getColor(R.color.black))
-        newDay.slotsIndicator.setColorFilter(getResources().getColor(R.color.black))
+        newDay.text.setTextColor(resources.getColor(R.color.black))
+        newDay.date.setTextColor(resources.getColor(R.color.black))
+        newDay.slotsIndicator.setColorFilter(resources.getColor(R.color.black))
     }
 
     private fun setUpCurrentWeek(): CurrentDay? {
-        val calendar: Calendar = Calendar.getInstance()
-        val day = calendar.get(Calendar.DAY_OF_WEEK)
+        val setUpCalendar = Calendar.getInstance()
 
         val weekdays = arrayOf(Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY)
         val dates = arrayOf(binding.mondayDate, binding.tuesdayDate, binding.wednesdayDate, binding.thursdayDate, binding.fridayDate, binding.saturdayDate, binding.sundayDate)
         val months: ArrayList<Int> = ArrayList<Int>()
         val simpleDateFormat = SimpleDateFormat("dd")
         for (i in 0..weekdays.size - 1){
-            calendar.set(Calendar.DAY_OF_WEEK, weekdays[i])
-            dates[i].text = simpleDateFormat.format(calendar.time)
-            months.add(calendar.get(Calendar.MONTH))
+            setUpCalendar.set(Calendar.DAY_OF_WEEK, weekdays[i])
+            dates[i].text = simpleDateFormat.format(setUpCalendar.time)
+            months.add(setUpCalendar.get(Calendar.MONTH))
         }
 
         if (months[0] != months[6]){
@@ -238,7 +249,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
             binding.month.setText(monthNames[months[0]])
         }
 
-        when (day) {
+        when (calendar.get(Calendar.DAY_OF_WEEK)) {
             Calendar.MONDAY -> {
                 return CurrentDay(
                 binding.mondayBtn, binding.monday,
@@ -269,17 +280,19 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
     }
 
     private fun setUpWeek(week_num: Int) {
-        val calendar: Calendar = Calendar.getInstance()
         calendar.set(Calendar.WEEK_OF_YEAR, week_num)
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        val setUpCalendar = Calendar.getInstance()
+        setUpCalendar.set(Calendar.WEEK_OF_YEAR, week_num)
 
         val weekdays = arrayOf(Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY)
         val dates = arrayOf(binding.mondayDate, binding.tuesdayDate, binding.wednesdayDate, binding.thursdayDate, binding.fridayDate, binding.saturdayDate, binding.sundayDate)
         val months: ArrayList<Int> = ArrayList<Int>()
         val simpleDateFormat = SimpleDateFormat("dd")
         for (i in 0..weekdays.size - 1){
-            calendar.set(Calendar.DAY_OF_WEEK, weekdays[i])
-            dates[i].text = simpleDateFormat.format(calendar.time)
-            months.add(calendar.get(Calendar.MONTH))
+            setUpCalendar.set(Calendar.DAY_OF_WEEK, weekdays[i])
+            dates[i].text = simpleDateFormat.format(setUpCalendar.time)
+            months.add(setUpCalendar.get(Calendar.MONTH))
         }
 
         if (months[0] != months[6]){
@@ -293,5 +306,9 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
             binding.mondayBtn, binding.monday,
             binding.mondayDate, binding.mondaySlotsIndicator
         ))
+    }
+
+    private fun getDateStr(calendar: Calendar): String{
+        return weekdaysNames[calendar.get(Calendar.DAY_OF_WEEK)-1]+SimpleDateFormat(", dd MMM yyyyг.").format(calendar.time)
     }
 }
