@@ -121,6 +121,7 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
     private fun denyRequest(position: Int){
         notificationsList.removeAt(position)
         notificationsAdapter.notifyItemRemoved(position)
+        checkEmptyState()
     }
 
     private fun setUpRV(notificationsList: ArrayList<Notification>){
@@ -145,6 +146,8 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
                     notificationsList.get(position)
                 notificationsList.removeAt(position)
                 notificationsAdapter.notifyItemRemoved(position)
+                checkEmptyState()
+
                 val snackBar = Snackbar.make(requireView(), "Уведомление удалено", Snackbar.LENGTH_LONG)
                     .setTextColor(ContextCompat.getColor(
                         requireContext(), R.color.white
@@ -158,6 +161,7 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
                         View.OnClickListener {
                             notificationsList.add(position, notification)
                             notificationsAdapter.notifyItemInserted(position)
+                            checkEmptyState()
                         }).show()
             }
         }).attachToRecyclerView(binding.recyclerView)
@@ -172,10 +176,25 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
                 }
                 i++
             }
+            checkEmptyState()
         }
+
+        checkEmptyState()
     }
 
     private fun getDateStr(calendar: Calendar): String{
         return weekdaysNames[calendar.get(Calendar.DAY_OF_WEEK)-1]+ SimpleDateFormat(", dd.MM").format(calendar.time)
+    }
+
+    private fun checkEmptyState() {
+        if (notificationsList.size == 0) {
+            binding.emptyIcon.visibility = View.VISIBLE
+            binding.emptyTitle.visibility = View.VISIBLE
+            binding.emptyContent.visibility = View.VISIBLE
+        } else {
+            binding.emptyIcon.visibility = View.GONE
+            binding.emptyTitle.visibility = View.GONE
+            binding.emptyContent.visibility = View.GONE
+        }
     }
 }

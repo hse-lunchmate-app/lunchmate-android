@@ -48,6 +48,39 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/emptyIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/empty_state_notifications"
+        android:layout_below="@id/topBar"
+        android:layout_marginTop="120dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/emptyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emptyIcon"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Кажется, Вы в курсе всех последних событий!"
+        android:textStyle="bold"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/emptyContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emptyTitle"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Возвращайтесь позже\nза новыми уведомлениями"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -61,6 +94,6 @@
         android:transitionGroup="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_notification" />
+        tools:listitem="@layout/item_notification"/>
 
 </RelativeLayout>

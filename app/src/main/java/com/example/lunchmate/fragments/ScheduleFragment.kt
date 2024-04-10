@@ -141,6 +141,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         else {
             binding.addSlotBtn.visibility = View.VISIBLE
         }
+        checkEmptyState()
     }
 
     private fun setCurrentFragment(fragment: Fragment)=
@@ -216,7 +217,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         bottomBinding.deleteBtn.setOnClickListener {
             slotsList.removeAt(position)
             dialog.dismiss()
-            slotsAdapter.notifyItemRemoved(position)
+            slotsAdapter.notifyDataSetChanged()
             checkSlotsCount()
         }
 
@@ -372,5 +373,17 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
 
     private fun timeToMinute(time: String): Int{
         return Integer.parseInt(time[3].toString()+time[4])
+    }
+
+    private fun checkEmptyState() {
+        if (slotsList.size == 0) {
+            binding.emptyIcon.visibility = View.VISIBLE
+            binding.emptyTitle.visibility = View.VISIBLE
+            binding.emptyContent.visibility = View.VISIBLE
+        } else {
+            binding.emptyIcon.visibility = View.GONE
+            binding.emptyTitle.visibility = View.GONE
+            binding.emptyContent.visibility = View.GONE
+        }
     }
 }

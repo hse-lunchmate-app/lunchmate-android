@@ -44,6 +44,26 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/emptyIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchView"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/empty_state_search"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/emptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emptyIcon"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="К сожалению, по вашему запросу\nничего не было найдено..."
+        android:visibility="gone"/>
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
@@ -71,6 +91,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView"
-        tools:listitem="@layout/item_profile" />
+        tools:listitem="@layout/item_profile"
+        />
 
 </RelativeLayout>

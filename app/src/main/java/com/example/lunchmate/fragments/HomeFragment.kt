@@ -68,6 +68,8 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = courseAdapter
+
+        checkEmptyState(filteredList)
     }
 
     private fun onProfileClick(position: Int) {
@@ -137,5 +139,15 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
     private fun getDateStr(calendar: Calendar): String{
         return weekdaysNames[calendar.get(Calendar.DAY_OF_WEEK)-1]+SimpleDateFormat(", dd.MM").format(calendar.time)
+    }
+
+    private fun checkEmptyState(filteredList: ArrayList<Account>) {
+        if (filteredList.size == 0) {
+            binding.emptyIcon.visibility = View.VISIBLE
+            binding.emptyText.visibility = View.VISIBLE
+        } else {
+            binding.emptyIcon.visibility = View.GONE
+            binding.emptyText.visibility = View.GONE
+        }
     }
 }

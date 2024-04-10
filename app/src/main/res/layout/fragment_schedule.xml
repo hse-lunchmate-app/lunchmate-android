@@ -373,6 +373,38 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/emptyIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/empty_state_schedule"
+        android:layout_below="@id/weekLine"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/emptyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emptyIcon"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Пока у Вас нет слотов на этот день"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/emptyContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emptyTitle"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Создайте новый слот по кнопке ниже!"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/slotsRV"
         android:layout_width="match_parent"
@@ -380,7 +412,7 @@
         android:layout_below="@id/weekLine"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="14dp"
-        tools:listitem="@layout/item_slot" />
+        tools:listitem="@layout/item_slot"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addSlotBtn"
