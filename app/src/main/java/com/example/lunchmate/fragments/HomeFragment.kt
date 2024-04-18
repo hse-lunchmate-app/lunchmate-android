@@ -60,16 +60,19 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 when (resource.status) {
                     Status.SUCCESS -> {
                         binding.recyclerView.visibility = View.VISIBLE
+                        binding.shimmerLayout.visibility = View.GONE
                         resource.data?.let { users ->
                             usersList = users
                             setUpRv(users) }
                     }
                     Status.ERROR -> {
                         binding.recyclerView.visibility = View.VISIBLE
+                        binding.shimmerLayout.visibility = View.GONE
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                     }
                     Status.LOADING -> {
-                        binding.recyclerView.visibility = View.GONE
+                        binding.recyclerView.visibility = View.INVISIBLE
+                        binding.shimmerLayout.visibility = View.VISIBLE
                     }
                 }
             }
