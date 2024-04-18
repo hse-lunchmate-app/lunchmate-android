@@ -45,10 +45,10 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
         activity.updateBadge()
 
         notificationsList = ArrayList<Notification>()
-        notificationsList.add(Notification(0, "Новое приглашение", "1 марта, 13:00 - 14:00", activity.currentUser))
-        notificationsList.add(Notification(0, "Отказ", "1 марта, 13:00 - 14:00", activity.currentUser))
-        notificationsList.add(Notification(0, "Согласие", "1 марта, 13:00 - 14:00", activity.currentUser))
-        notificationsList.add(Notification(0, "Напоминание", "1 марта, 13:00 - 14:00", activity.currentUser))
+        //notificationsList.add(Notification(0, "Новое приглашение", "1 марта, 13:00 - 14:00", activity.currentUser))
+        //notificationsList.add(Notification(0, "Отказ", "1 марта, 13:00 - 14:00", activity.currentUser))
+        //notificationsList.add(Notification(0, "Согласие", "1 марта, 13:00 - 14:00", activity.currentUser))
+        //notificationsList.add(Notification(0, "Напоминание", "1 марта, 13:00 - 14:00", activity.currentUser))
 
         setUpRV(notificationsList)
     }
@@ -63,7 +63,7 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
 
         bottomBinding.profileNickname.text = notificationsList[position].getLunchMate().getLogin()
 
-        bottomBinding.office.text = activity.offices[notificationsList[position].getLunchMate().getOffice()]
+        //bottomBinding.office.text = activity.offices[notificationsList[position].getLunchMate().getOffice()]
 
         bottomBinding.taste.text = notificationsList[position].getLunchMate().getTaste()
 

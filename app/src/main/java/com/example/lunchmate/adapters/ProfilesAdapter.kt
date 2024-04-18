@@ -9,11 +9,12 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.ItemProfileBinding
+import com.example.lunchmate.model.User
 
 
-class ProfilesAdapter(val onProfileClick: (Int) -> Unit, accountsList: ArrayList<Account>) :
+class ProfilesAdapter(val onProfileClick: (User) -> Unit, accountsList: List<User>) :
     RecyclerView.Adapter<ProfilesAdapter.ViewHolder>() {
-    private val accountsList: ArrayList<Account>
+    private val accountsList: List<User>
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemProfileBinding.bind(itemView)
@@ -36,13 +37,13 @@ class ProfilesAdapter(val onProfileClick: (Int) -> Unit, accountsList: ArrayList
     }
 
     override fun onBindViewHolder(holder: ProfilesAdapter.ViewHolder, position: Int) {
-        val model: Account = accountsList[position]
-        holder.name.setText(model.getName())
-        holder.info.setText(model.getInfo())
-        holder.photo.setImageResource(model.getPhoto())
+        val model: User = accountsList[position]
+        holder.name.setText(model.name)
+        holder.info.setText(model.aboutMe)
+        //holder.photo.setImageResource(model.)
 
         holder.parent.setOnClickListener {
-            onProfileClick(position)
+            onProfileClick(model)
         }
     }
 

@@ -2,10 +2,13 @@ package com.example.lunchmatelocal
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.FragmentAccountBinding
+import com.example.lunchmate.model.User
+import com.example.lunchmate.utils.Status
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AccountFragment: Fragment(R.layout.fragment_account) {
@@ -22,11 +25,32 @@ class AccountFragment: Fragment(R.layout.fragment_account) {
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.visibility = View.VISIBLE
 
-        val activity = activity as MainActivity
-        setUpCurrentUser(activity.currentUser, activity.offices)
+        setUpObserver()
 
         binding.editButton.setOnClickListener {
             setCurrentFragment(accountEditFragment)
+        }
+    }
+
+    private fun setUpObserver() {
+        val activity = activity as MainActivity
+        activity.viewModel.getUser("1").observe(viewLifecycleOwner) {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { user ->
+                            activity.currentUser = user
+                            setUpCurrentUser(activity.currentUser) }
+                    }
+                    Status.ERROR -> {
+
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {
+
+                    }
+                }
+            }
         }
     }
 
@@ -36,13 +60,13 @@ class AccountFragment: Fragment(R.layout.fragment_account) {
             commit()
         }
 
-    private fun setUpCurrentUser(currentUser: Account, offices: Array<String>){
-        binding.photo.setImageResource(currentUser.getPhoto())
-        binding.profileName.setText(currentUser.getName())
-        binding.profileNickname.setText(currentUser.getLogin())
-        binding.telegram.setText(currentUser.getTg())
-        binding.office.setText(offices[currentUser.getOffice()])
-        binding.taste.setText(currentUser.getTaste())
-        binding.infoText.setText(currentUser.getInfo())
+    private fun setUpCurrentUser(currentUser: User){
+        //binding.photo.setImageResource(currentUser.getPhoto())
+        binding.profileName.text = currentUser.name
+        binding.profileNickname.text = currentUser.login
+        binding.telegram.text = currentUser.messenger
+        binding.office.text = currentUser.office.name
+        binding.taste.text = currentUser.tastes
+        binding.infoText.text = currentUser.aboutMe
     }
 }

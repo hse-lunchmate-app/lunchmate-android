@@ -1,11 +1,22 @@
 package com.example.lunchmate
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.lunchmate.api.ApiHelper
+import com.example.lunchmate.api.RetrofitBuilder
 import com.example.lunchmate.databinding.ActivityMainBinding
 import com.example.lunchmate.databinding.FragmentAccountEditBinding
 import com.example.lunchmate.fragments.NotificationsFragment
+import com.example.lunchmate.model.Office
+import com.example.lunchmate.model.User
+import com.example.lunchmate.repository.MainRepository
+import com.example.lunchmate.utils.Status
+import com.example.lunchmate.viewModel.MainViewModel
+import com.example.lunchmate.viewModel.ViewModelFactory
 import com.example.lunchmatelocal.Account
 import com.example.lunchmatelocal.AccountFragment
 import com.example.lunchmatelocal.HomeFragment
@@ -15,15 +26,27 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var currentUser: Account
-    val offices = arrayOf("Офис 1", "Офис 2", "Офис 3")
+    lateinit var viewModel: MainViewModel
+    lateinit var currentUser: User
+    lateinit var offices: List<Office>
+    var officeNames: ArrayList<String> = ArrayList<String>()
     var badge_counter = 13
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        try{
+            setContentView(binding.root)
+            viewModel = ViewModelProvider(
+                this,
+                ViewModelFactory(ApiHelper(RetrofitBuilder.apiService))
+            )[MainViewModel::class.java]
+        }
+        catch(e: Exception){
+            Log.d("TAG", "Error")
+        }
 
         val homeFragment = HomeFragment()
         val accountFragment = AccountFragment()
@@ -42,7 +65,25 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        currentUser = Account(0, "Иван Иванов", 0,"Котлетка с пюрешкой", "Я обычный Иван", "ivan123", "ivan12345", "0000", R.drawable.photo)
+        viewModel.getOffices().observe(this) {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { officeList ->
+                            offices = officeList
+                            for (office in offices)
+                                officeNames.add(office.name)
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {
+
+                    }
+                }
+            }
+        }
     }
 
     private fun setCurrentFragment(fragment: Fragment)=

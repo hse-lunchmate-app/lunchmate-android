@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,16 +16,19 @@ import com.example.lunchmate.R
 import com.example.lunchmate.databinding.BottomSheetFreeSlotBinding
 import com.example.lunchmate.databinding.BottomSheetProfileBinding
 import com.example.lunchmate.databinding.FragmentHomeBinding
+import com.example.lunchmate.model.User
+import com.example.lunchmate.utils.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomeFragment: Fragment(R.layout.fragment_home) {
     val weekdaysNames = arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var accountsList: ArrayList<Account>
+    private lateinit var usersList: List<User>
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -34,16 +38,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
 
-        accountsList = ArrayList<Account>()
-        accountsList.add(Account(0, "Иван Иванов 1", 0,"Котлетка с пюрешкой", "Я обычный Иван", "ka_rine_s", "ivan12345", "0000", R.drawable.photo))
-        accountsList.add(Account(1, "Иван Иванов 2", 1,"Щи", "Я\nо\nб\nы\nч\nн\nы\nй\nИ\nв\nа\nн", "", "ivan12345", "0000", R.drawable.photo))
-        accountsList.add(Account(2, "Иван Иванов 3", 2,"Рассольник", "Я необычный Иван", "ivan123", "ivan12345", "0000", R.drawable.photo))
-        accountsList.add(Account(3, "Петр Петров", 0,"Борщ", "Я обычный Петр", "petr123", "petr12345", "0000", R.drawable.photo))
-
-        val accountAdapter = ProfilesAdapter(::onProfileClick, accountsList)
-        val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.recyclerView.layoutManager = linearLayoutManager
-        binding.recyclerView.adapter = accountAdapter
+        setUpObservers()
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
@@ -58,42 +53,69 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         })
     }
 
-    fun filterList(qString: String){
-        val filteredList: ArrayList<Account> = ArrayList<Account>()
-        for (account in accountsList){
-            if (account.getName().lowercase().contains(qString.lowercase()))
-                filteredList.add(account)
+    private fun setUpObservers() {
+        val activity = activity as MainActivity
+        activity.viewModel.getUsers("1,2,3").observe(viewLifecycleOwner) {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        binding.recyclerView.visibility = View.VISIBLE
+                        resource.data?.let { users ->
+                            usersList = users
+                            setUpRv(users) }
+                    }
+                    Status.ERROR -> {
+                        binding.recyclerView.visibility = View.VISIBLE
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {
+                        binding.recyclerView.visibility = View.GONE
+                    }
+                }
+            }
         }
-        val courseAdapter = ProfilesAdapter(::onProfileClick, filteredList)
+    }
+
+    fun setUpRv(usersList: List<User>){
+        val accountAdapter = ProfilesAdapter(::onProfileClick, usersList)
         val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
-        binding.recyclerView.adapter = courseAdapter
+        binding.recyclerView.adapter = accountAdapter
+    }
 
+    fun filterList(qString: String){
+        val filteredList: ArrayList<User> = ArrayList<User>()
+        for (account in usersList){
+            if (account.name.lowercase().contains(qString.lowercase()))
+                filteredList.add(account)
+        }
+
+        setUpRv(filteredList as List<User>)
         checkEmptyState(filteredList)
     }
 
-    private fun onProfileClick(position: Int) {
+    private fun onProfileClick(user: User) {
         var day_num = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         val activity = activity as MainActivity
         val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
         val bottomBinding = BottomSheetProfileBinding.bind(layoutInflater.inflate(R.layout.bottom_sheet_profile, null))
 
-        bottomBinding.profileName.text = accountsList[position].getName()
+        bottomBinding.profileName.text = user.name
 
-        bottomBinding.profileNickname.text = accountsList[position].getLogin()
+        bottomBinding.profileNickname.text = user.login
 
-        bottomBinding.office.text = activity.offices[accountsList[position].getOffice()]
+        bottomBinding.office.text = user.office.name
 
-        bottomBinding.taste.text = accountsList[position].getTaste()
+        bottomBinding.taste.text = user.tastes
 
-        bottomBinding.infoText.text = accountsList[position].getInfo()
+        bottomBinding.infoText.text = user.aboutMe
 
-        if (accountsList[position].getTg() != "" && accountsList[position].getTg() != "Без телеграма") {
+        if (user.messenger != "" && user.messenger != "Без телеграма") {
             bottomBinding.tgButton.visibility = View.VISIBLE
             bottomBinding.tgButton.setOnClickListener {
                 val tgIntent = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://t.me/" + accountsList[position].getTg())
+                    Uri.parse("https://t.me/" + user.messenger)
                 )
                 startActivity(tgIntent)
             }
@@ -141,7 +163,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         return weekdaysNames[calendar.get(Calendar.DAY_OF_WEEK)-1]+SimpleDateFormat(", dd.MM").format(calendar.time)
     }
 
-    private fun checkEmptyState(filteredList: ArrayList<Account>) {
+    private fun checkEmptyState(filteredList: ArrayList<User>) {
         if (filteredList.size == 0) {
             binding.emptyIcon.visibility = View.VISIBLE
             binding.emptyText.visibility = View.VISIBLE

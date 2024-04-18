@@ -206,6 +206,16 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/emptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/datePicker"
+                android:layout_marginTop="16dp"
+                android:layout_centerHorizontal="true"
+                android:text="Нет доступных слотов"
+                android:visibility="gone"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/availableSlots"
                 android:layout_width="match_parent"
@@ -217,7 +227,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
-                tools:listitem="@layout/item_available_slot" />
+                tools:listitem="@layout/item_available_slot"/>
 
         </RelativeLayout>
 

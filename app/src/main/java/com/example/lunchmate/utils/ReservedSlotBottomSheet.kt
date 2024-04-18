@@ -55,13 +55,13 @@ class ReservedSlotBottomSheet(val date: String, val cancelReservation: (Int) -> 
         binding.profileNickname.text = lunchMateAccount?.getLogin()
 
         val activity = activity as MainActivity
-        binding.office.text = activity.offices[lunchMateAccount?.getOffice()!!]
+        //binding.office.text = activity.offices[lunchMateAccount?.getOffice()!!]
 
-        binding.taste.text = lunchMateAccount.getTaste()
+        //binding.taste.text = lunchMateAccount.getTaste()
 
-        binding.infoText.text = lunchMateAccount.getInfo()
+        //binding.infoText.text = lunchMateAccount.getInfo()
 
-        if (lunchMateAccount.getTg() != "" && lunchMateAccount.getTg() != "Без телеграма") {
+        /*if (lunchMateAccount.getTg() != "" && lunchMateAccount.getTg() != "Без телеграма") {
             binding.tgButton.visibility = View.VISIBLE
             binding.tgButton.setOnClickListener {
                 val tgIntent = Intent(
@@ -70,7 +70,7 @@ class ReservedSlotBottomSheet(val date: String, val cancelReservation: (Int) -> 
                 )
                 startActivity(tgIntent)
             }
-        }
+        }*/
 
         var day_num = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         val calendar = Calendar.getInstance()

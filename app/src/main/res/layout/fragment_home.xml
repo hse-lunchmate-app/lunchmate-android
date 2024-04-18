@@ -61,7 +61,7 @@
         android:layout_below="@id/emptyIcon"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:text="К сожалению, по вашему запросу\nничего не было найдено..."
+        android:text="К сожалению, по Вашему запросу\nничего не было найдено..."
         android:visibility="gone"/>
 
     <androidx.appcompat.widget.SearchView
