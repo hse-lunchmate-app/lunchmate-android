@@ -55,7 +55,6 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:drawablePadding="8dp"
-                android:text="Петр Петров"
                 android:textColor="@color/blue_700"
                 android:textSize="20sp"
                 app:drawableStartCompat="@drawable/group"
