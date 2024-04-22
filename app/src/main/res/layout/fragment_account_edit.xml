@@ -57,6 +57,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:animateLayoutChanges="true"
+                android:animationCache="true"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="linear">
+
+                <include layout="@layout/shimmer_photo" />
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/photo"
                 android:layout_centerHorizontal="true"

@@ -113,7 +113,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         bottomBinding.infoText.text = user.aboutMe
 
-        if (user.messenger != "" && user.messenger != "Без телеграма") {
+        if (user.messenger != "") {
             bottomBinding.tgButton.visibility = View.VISIBLE
             bottomBinding.tgButton.setOnClickListener {
                 val tgIntent = Intent(

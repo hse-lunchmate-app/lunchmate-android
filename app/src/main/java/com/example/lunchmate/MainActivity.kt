@@ -28,6 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
     lateinit var currentUser: User
+    //var sampleAccount: Account = Account(0, "Иван Иванов", 1, "Котлетка с пюрешкой", "Я обычный Иван", "", "ivan12345", "", R.drawable.photo)
     lateinit var offices: List<Office>
     var officeNames: ArrayList<String> = ArrayList<String>()
     var badge_counter = 13

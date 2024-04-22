@@ -26,6 +26,7 @@ import com.example.lunchmate.model.UserPatch
 import com.example.lunchmate.utils.Status
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.squareup.picasso.Picasso
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.util.*
@@ -153,9 +154,10 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
             if (resultCode == RESULT_OK && data != null) {
                 try {
                     val imageUri: Uri = data.data!!
-                    val imageStream: InputStream? = (activity as MainActivity).contentResolver?.openInputStream(imageUri)
-                    val selectedImage = BitmapFactory.decodeStream(imageStream)
-                    binding.photo.setImageBitmap(selectedImage)
+                    //val imageStream: InputStream? = (activity as MainActivity).contentResolver?.openInputStream(imageUri)
+                    //val selectedImage = BitmapFactory.decodeStream(imageStream)
+                    //binding.photo.setImageBitmap(selectedImage)
+                    Picasso.with(context).load(imageUri).into(binding.photo)
                 } catch (e: FileNotFoundException) {
                     e.printStackTrace()
                     Toast.makeText(requireContext(), "Что-то пошло не так...", Toast.LENGTH_LONG).show()
