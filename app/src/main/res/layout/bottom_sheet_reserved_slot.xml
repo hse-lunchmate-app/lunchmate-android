@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,99 +12,96 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:src="@drawable/bottom_sheet_rect" />
+        android:src="@drawable/bottom_sheet_rect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rect"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="28dp"
         android:text="Среда, 21 февр. 2024г."
         android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rect" />
 
-    <RelativeLayout
-        android:id="@+id/timeSetter"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/clockIcon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/date"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="36dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/clock"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date" />
 
-        <ImageView
-            android:id="@+id/clockIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/clock" />
+    <TextView
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:background="@drawable/rounded_dark_grey"
+        android:paddingVertical="5dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="28dp"
+        android:text="13:00"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@id/clockIcon"
+        app:layout_constraintStart_toEndOf="@id/clockIcon"
+        app:layout_constraintTop_toTopOf="@id/clockIcon" />
 
-        <TextView
-            android:id="@+id/start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="28dp"
-            android:layout_toEndOf="@id/clockIcon"
-            android:background="@drawable/rounded_dark_grey"
-            android:inputType="time"
-            android:paddingVertical="5dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="28dp"
-            android:text="13:00"
-            android:textColor="@color/black"
-            android:textSize="17sp" />
+    <ImageView
+        android:id="@+id/dashIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/dash"
+        app:layout_constraintBottom_toBottomOf="@id/clockIcon"
+        app:layout_constraintStart_toEndOf="@id/start"
+        app:layout_constraintTop_toTopOf="@id/clockIcon" />
 
-        <ImageView
-            android:id="@+id/dashIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/start"
-            android:src="@drawable/dash" />
+    <TextView
+        android:id="@+id/finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/rounded_dark_grey"
+        android:paddingVertical="5dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="28dp"
+        android:text="14:00"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@id/clockIcon"
+        app:layout_constraintStart_toEndOf="@id/dashIcon"
+        app:layout_constraintTop_toTopOf="@id/clockIcon" />
 
-        <TextView
-            android:id="@+id/finish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/dashIcon"
-            android:background="@drawable/rounded_dark_grey"
-            android:inputType="time"
-            android:paddingVertical="5dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="28dp"
-            android:text="14:00"
-            android:textColor="@color/black"
-            android:textSize="17sp" />
-
-        <ImageView
-            android:id="@+id/repeatingIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/repeat"
-            android:visibility="gone"
-            app:tint="@color/black" />
-
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/repeatingIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/repeat"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/clockIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/clockIcon"
+        app:tint="@color/black" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/lunchMate"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timeSetter"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="24dp"
         android:paddingStart="0dp"
         android:text="Петр Петров"
         android:textAllCaps="false"
@@ -112,34 +109,38 @@
         android:textSize="20sp"
         app:backgroundTint="@color/white"
         app:icon="@drawable/arrow_right"
-        app:iconTint="@color/blue_700" />
+        app:iconTint="@color/blue_700"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clockIcon"
+        tools:ignore="RtlSymmetry" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lunchMate"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lunchMate">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/photo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/photo" />
 
             <TextView
                 android:id="@+id/profileNickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/photo"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="4dp"
                 android:maxLines="1"
                 android:text="\@ivan12345"
@@ -150,59 +151,55 @@
                 android:id="@+id/tgButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/profileNickname"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:drawableTint="@color/white"
+                android:fontFamily="@font/roboto_regular"
                 android:paddingStart="10dp"
                 android:text="Связаться в телеграм"
                 android:textAllCaps="false"
                 app:backgroundTint="@color/tg"
                 app:cornerRadius="16dp"
                 app:icon="@drawable/telegram"
-                android:fontFamily="@font/roboto_regular"
-                android:visibility="gone"/>
+                tools:ignore="RtlSymmetry" />
 
             <TextView
                 android:id="@+id/office"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tgButton"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/rounded_grey_top"
-                android:drawableStart="@drawable/location"
                 android:drawablePadding="10dp"
                 android:ellipsize="end"
                 android:padding="16dp"
                 android:text="Название офиса"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/location" />
 
             <TextView
                 android:id="@+id/taste"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/office"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/rounded_grey_middle"
-                android:drawableStart="@drawable/taste"
                 android:drawablePadding="10dp"
                 android:ellipsize="end"
                 android:padding="16dp"
                 android:text="Котлетка с пюрешкой"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/taste" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/taste"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/rounded_grey_bottom"
+                android:orientation="vertical"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp">
 
@@ -224,7 +221,6 @@
                     android:id="@+id/infoText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/infoIcon"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="5dp"
@@ -233,13 +229,12 @@
                     android:text="Я\nобычный\nИван\nЯ\nпросто\nкласс"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/schedule"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/info"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
                 android:maxLines="1"
@@ -248,11 +243,10 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/datePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/schedule"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp">
 
@@ -263,19 +257,23 @@
                     android:layout_centerVertical="true"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/arrow_left"
+                    app:layout_constraintBottom_toBottomOf="@+id/rightButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/rightButton"
                     app:tint="@color/grey_400" />
 
                 <TextView
                     android:id="@+id/dateSchedule"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@id/leftButton"
                     android:maxLines="1"
                     android:text="Среда, 21.02"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/leftButton"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
                     android:id="@+id/rightButton"
@@ -285,15 +283,26 @@
                     android:layout_centerVertical="true"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/arrow_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/blue_700" />
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/emptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:text="Нет доступных слотов"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/availableSlots"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/datePicker"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
@@ -301,8 +310,8 @@
                 android:orientation="horizontal"
                 tools:listitem="@layout/item_available_slot" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

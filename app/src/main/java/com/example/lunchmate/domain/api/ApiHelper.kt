@@ -1,6 +1,6 @@
-package com.example.lunchmate.api
+package com.example.lunchmate.domain.api
 
-import com.example.lunchmate.model.UserPatch
+import com.example.lunchmate.domain.model.UserPatch
 
 class ApiHelper(private val apiService: ApiService) {
 

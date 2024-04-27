@@ -1,8 +1,8 @@
-package com.example.lunchmate.api
+package com.example.lunchmate.domain.api
 
-import com.example.lunchmate.model.Office
-import com.example.lunchmate.model.User
-import com.example.lunchmate.model.UserPatch
+import com.example.lunchmate.domain.model.Office
+import com.example.lunchmate.domain.model.User
+import com.example.lunchmate.domain.model.UserPatch
 import com.google.android.gms.common.api.Response
 import retrofit2.http.*
 import javax.security.auth.callback.Callback

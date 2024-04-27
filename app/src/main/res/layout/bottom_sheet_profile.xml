@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,75 +12,79 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:src="@drawable/bottom_sheet_rect" />
+        android:src="@drawable/bottom_sheet_rect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
-        android:id="@+id/head"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/photo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rect" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rect">
+        android:layout_marginStart="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/photo"
+        app:layout_constraintStart_toEndOf="@+id/photo"
+        app:layout_constraintTop_toTopOf="@id/photo">
 
-        <ImageView
-            android:id="@+id/photo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="20dp"
-            android:src="@drawable/photo" />
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/profileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/photo">
+            android:maxLines="1"
+            android:text="Иван Иванов"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/profileName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="Иван Иванов"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/profileNickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/profileName"
-                android:layout_marginTop="12dp"
-                android:maxLines="1"
-                android:text="\@ivan12345"
-                android:textColor="@color/grey_600"
-                android:textSize="16sp" />
-        </RelativeLayout>
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/profileNickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:maxLines="1"
+            android:text="\@ivan12345"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/tgButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/head"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:drawableTint="@color/white"
+        android:fontFamily="@font/roboto_regular"
         android:text="Связаться в телеграм"
         android:textAllCaps="false"
         app:backgroundTint="@color/tg"
         app:cornerRadius="16dp"
         app:icon="@drawable/telegram"
-        android:fontFamily="@font/roboto_regular"
-        android:visibility="gone"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/photo" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tgButton"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tgButton">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/office"
@@ -88,38 +92,37 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:background="@drawable/rounded_grey_top"
-                android:drawableStart="@drawable/location"
                 android:drawablePadding="10dp"
                 android:ellipsize="end"
                 android:padding="16dp"
                 android:text="Название офиса"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/location" />
 
             <TextView
                 android:id="@+id/taste"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/office"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/rounded_grey_middle"
-                android:drawableStart="@drawable/taste"
                 android:drawablePadding="10dp"
                 android:ellipsize="end"
                 android:padding="16dp"
                 android:text="Котлетка с пюрешкой"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/taste" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/taste"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/rounded_grey_bottom"
+                android:orientation="vertical"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp">
 
@@ -141,7 +144,6 @@
                     android:id="@+id/infoText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/infoIcon"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="5dp"
@@ -150,13 +152,12 @@
                     android:text="Я\nобычный\nИван\nЯ\nпросто\nкласс"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/schedule"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/info"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
                 android:maxLines="1"
@@ -165,11 +166,10 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/datePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/schedule"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp">
 
@@ -177,60 +177,62 @@
                     android:id="@+id/leftButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/arrow_left"
-                    app:tint="@color/grey_400"/>
+                    app:layout_constraintBottom_toBottomOf="@+id/rightButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/rightButton"
+                    app:tint="@color/grey_400" />
 
                 <TextView
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@id/leftButton"
                     android:maxLines="1"
                     android:text="Среда, 21.02"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/leftButton"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
                     android:id="@+id/rightButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/arrow_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/blue_700" />
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/emptyText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/datePicker"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
-                android:layout_centerHorizontal="true"
                 android:text="Нет доступных слотов"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/availableSlots"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/datePicker"
                 android:layout_marginVertical="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
-                tools:listitem="@layout/item_available_slot"/>
+                tools:listitem="@layout/item_available_slot" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

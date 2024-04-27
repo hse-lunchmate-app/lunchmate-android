@@ -1,4 +1,4 @@
-package com.example.lunchmatelocal
+package com.example.lunchmate.presentation.home.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +9,14 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.ItemProfileBinding
-import com.example.lunchmate.model.User
+import com.example.lunchmate.domain.model.User
 
 
-class ProfilesAdapter(val onProfileClick: (User) -> Unit, accountsList: List<User>) :
-    RecyclerView.Adapter<ProfilesAdapter.ViewHolder>() {
+class ProfilesAdapter(
+    val onProfileClick: (User) -> Unit,
     private val accountsList: List<User>
+) :
+    RecyclerView.Adapter<ProfilesAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemProfileBinding.bind(itemView)
@@ -22,6 +24,7 @@ class ProfilesAdapter(val onProfileClick: (User) -> Unit, accountsList: List<Use
         val photo: ImageView
         val name: TextView
         val info: TextView
+
         init {
             photo = binding.itemPhoto
             name = binding.itemTitle
@@ -29,29 +32,29 @@ class ProfilesAdapter(val onProfileClick: (User) -> Unit, accountsList: List<Use
             parent = binding.itemParent
         }
 
+        fun bind(model: User) {
+            name.text = model.name
+            info.text = model.aboutMe
+            //photo.setImageResource(model.)
+
+            parent.setOnClickListener {
+                onProfileClick(model)
+            }
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfilesAdapter.ViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_profile, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_profile, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ProfilesAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val model: User = accountsList[position]
-        holder.name.setText(model.name)
-        holder.info.setText(model.aboutMe)
-        //holder.photo.setImageResource(model.)
-
-        holder.parent.setOnClickListener {
-            onProfileClick(model)
-        }
+        holder.bind(model)
     }
 
     override fun getItemCount(): Int {
         return accountsList.size
-    }
-
-    init {
-        this.accountsList = accountsList
     }
 }

@@ -1,99 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/topBar"
+    <TextView
+        android:id="@+id/itemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="8dp"
-        android:paddingHorizontal="16dp"
-        android:layout_alignParentTop="true">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Расписание"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/itemTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:ellipsize="end"
-            android:text="Расписание"
-            android:textAlignment="textStart"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:maxLines="1"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/weekPicker"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/leftButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="4dp"
-        android:layout_below="@id/topBar">
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/arrow_left"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemTitle"
+        app:tint="@color/grey_400" />
 
-        <ImageButton
-            android:id="@+id/leftButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/arrow_left"
-            app:tint="@color/grey_400"/>
+    <TextView
+        android:id="@+id/month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/leftButton"
+        android:maxLines="1"
+        android:text="Февраль"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/leftButton"
+        app:layout_constraintStart_toEndOf="@id/leftButton"
+        app:layout_constraintTop_toTopOf="@+id/leftButton" />
 
-        <TextView
-            android:id="@+id/month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/leftButton"
-            android:maxLines="1"
-            android:text="Февраль"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-        <ImageButton
-            android:id="@+id/rightButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/arrow_right"
-            app:tint="@color/black" />
-
-    </RelativeLayout>
+    <ImageButton
+        android:id="@+id/rightButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/arrow_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemTitle"
+        app:tint="@color/black" />
 
     <LinearLayout
         android:id="@+id/weekLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@id/weekPicker">
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/leftButton">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/mondayBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingVertical="14dp"
+            android:background="@drawable/rounded_blue_stroke"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/rounded_blue_stroke">
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="14dp">
 
             <TextView
                 android:id="@+id/monday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:text="Пн"
                 android:textColor="@color/blue_700"
                 android:textSize="20sp" />
@@ -103,43 +92,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/monday"
                 android:maxLines="1"
                 android:text="19"
                 android:textColor="@color/blue_700"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/mondaySlotsIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/mondayDate"
                 android:src="@drawable/taste"
-                app:tint="@color/blue_700"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:tint="@color/blue_700" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/tuesdayBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:paddingVertical="14dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_blue_stroke"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/rounded_blue_stroke">
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="14dp">
 
             <TextView
                 android:id="@+id/tuesday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:text="Вт"
                 android:textColor="@color/blue_700"
                 android:textSize="20sp" />
@@ -149,8 +135,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/tuesday"
                 android:maxLines="1"
                 android:text="20"
                 android:textColor="@color/blue_700"
@@ -159,33 +143,32 @@
 
             <ImageView
                 android:id="@+id/tuesdaySlotsIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/tuesdayDate"
                 android:src="@drawable/taste"
-                app:tint="@color/blue_700"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:tint="@color/blue_700" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/wednesdayBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:paddingVertical="14dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_blue_stroke"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/rounded_blue_stroke">
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="14dp">
 
             <TextView
                 android:id="@+id/wednesday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:text="Ср"
                 android:textColor="@color/blue_700"
                 android:textSize="20sp" />
@@ -195,8 +178,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/wednesday"
                 android:maxLines="1"
                 android:text="21"
                 android:textColor="@color/blue_700"
@@ -205,33 +186,32 @@
 
             <ImageView
                 android:id="@+id/wednesdaySlotsIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/wednesdayDate"
                 android:src="@drawable/taste"
-                app:tint="@color/blue_700"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:tint="@color/blue_700" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/thursdayBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:paddingVertical="14dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_blue_stroke"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/rounded_blue_stroke">
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="14dp">
 
             <TextView
                 android:id="@+id/thursday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:text="Чт"
                 android:textColor="@color/blue_700"
                 android:textSize="20sp" />
@@ -241,43 +221,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/thursday"
                 android:maxLines="1"
                 android:text="22"
                 android:textColor="@color/blue_700"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/thursdaySlotsIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/thursdayDate"
                 android:src="@drawable/taste"
-                app:tint="@color/blue_700"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:tint="@color/blue_700" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/fridayBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:paddingVertical="14dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_blue_stroke"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/rounded_blue_stroke">
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="14dp">
 
             <TextView
                 android:id="@+id/friday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:text="Пт"
                 android:textColor="@color/blue_700"
                 android:textSize="20sp" />
@@ -287,39 +264,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/friday"
                 android:maxLines="1"
                 android:text="23"
                 android:textColor="@color/blue_700"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/fridaySlotsIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/fridayDate"
                 android:src="@drawable/taste"
-                app:tint="@color/blue_700"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:tint="@color/blue_700" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:paddingVertical="14dp">
 
             <TextView
                 android:id="@+id/saturday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:text="Сб"
                 android:textColor="@color/grey_500"
                 android:textSize="20sp" />
@@ -329,48 +303,44 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/saturday"
                 android:maxLines="1"
                 android:text="24"
                 android:textColor="@color/grey_500"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/sundayBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:paddingVertical="14dp">
 
             <TextView
                 android:id="@+id/sunday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:text="Вс"
                 android:textColor="@color/grey_500"
-                android:textSize="20sp"
-                />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/sundayDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/sunday"
                 android:maxLines="1"
                 android:text="25"
                 android:textColor="@color/grey_500"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <ImageView
@@ -378,41 +348,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/empty_state_schedule"
-        android:layout_below="@id/weekLine"
-        android:layout_marginTop="60dp"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/itemTitle" />
 
     <TextView
         android:id="@+id/emptyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/emptyIcon"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="Пока у Вас нет слотов на этот день"
         android:textStyle="bold"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emptyIcon" />
 
     <TextView
         android:id="@+id/emptyContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/emptyTitle"
         android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="Создайте новый слот по кнопке ниже!"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emptyTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/slotsRV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/weekLine"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="14dp"
-        tools:listitem="@layout/item_slot"/>
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weekLine"
+        tools:listitem="@layout/item_slot" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addSlotBtn"
@@ -424,8 +399,8 @@
         android:text="Добавить слот"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:layout_alignParentBottom="true"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

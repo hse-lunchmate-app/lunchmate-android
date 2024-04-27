@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:mask="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bottom_sheet_background">
@@ -13,130 +12,128 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:src="@drawable/bottom_sheet_rect" />
+        android:src="@drawable/bottom_sheet_rect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rect"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="28dp"
         android:text="Среда, 21 февр. 2024г."
         android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rect" />
 
-    <RelativeLayout
-        android:id="@+id/timeSetter"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/clockIcon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/date"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="36dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/clock"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date" />
 
-        <ImageView
-            android:id="@+id/clockIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/clock" />
+    <EditText
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:background="@drawable/rounded_dark_grey"
+        android:hint="XX:XX"
+        android:imeOptions="actionNext"
+        android:inputType="time"
+        android:maxLength="5"
+        android:maxLines="1"
+        android:nextFocusRight="@id/finish"
+        android:paddingVertical="5dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="28dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/clockIcon"
+        app:layout_constraintStart_toEndOf="@id/clockIcon"
+        app:layout_constraintTop_toTopOf="@id/clockIcon" />
 
-        <EditText
-            android:id="@+id/start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="28dp"
-            android:layout_toEndOf="@id/clockIcon"
-            android:background="@drawable/rounded_dark_grey"
-            android:inputType="time"
-            android:paddingVertical="5dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="28dp"
-            android:hint="XX:XX"
-            android:textSize="16sp"
-            android:maxLength="5"
-            android:maxLines="1"
-            android:imeOptions="actionNext"
-            android:nextFocusRight="@id/finish"
-            />
+    <ImageView
+        android:id="@+id/dashIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/dash"
+        app:layout_constraintBottom_toBottomOf="@id/start"
+        app:layout_constraintStart_toEndOf="@id/start"
+        app:layout_constraintTop_toTopOf="@id/start" />
 
-        <ImageView
-            android:id="@+id/dashIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/start"
-            android:src="@drawable/dash" />
-
-        <EditText
-            android:id="@+id/finish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/dashIcon"
-            android:background="@drawable/rounded_dark_grey"
-            android:inputType="time"
-            android:paddingVertical="5dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="28dp"
-            android:hint="XX:XX"
-            android:textSize="16sp"
-            android:maxLength="5"
-            android:maxLines="1"
-            android:imeOptions="actionPrevious"
-            android:nextFocusRight="@id/start"/>
-
-    </RelativeLayout>
+    <EditText
+        android:id="@+id/finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_dark_grey"
+        android:hint="XX:XX"
+        android:imeOptions="actionPrevious"
+        android:inputType="time"
+        android:maxLength="5"
+        android:maxLines="1"
+        android:nextFocusRight="@id/start"
+        android:paddingVertical="5dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="28dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/dashIcon"
+        app:layout_constraintStart_toEndOf="@id/dashIcon"
+        app:layout_constraintTop_toTopOf="@id/dashIcon" />
 
     <TextView
         android:id="@+id/errorMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
         android:text="Error message"
         android:textColor="@color/red_700"
         android:textSize="12sp"
-        android:layout_below="@id/timeSetter"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/start"
+        app:layout_constraintTop_toBottomOf="@id/start" />
 
-    <RelativeLayout
-        android:id="@+id/switchLayout"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchIsRepeating"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timeSetter"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:thumb="@drawable/custom_thumb"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clockIcon"
+        app:track="@drawable/custom_track"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchIsRepeating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:track="@drawable/custom_track"
-            android:thumb="@drawable/custom_thumb"
-            tools:ignore="UseSwitchCompatOrMaterialXml"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/switchIsRepeating"
-            android:layout_marginStart="8dp"
-            android:text="Повторять еженедельно"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_centerVertical="true"/>
-    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Повторять еженедельно"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switchIsRepeating"
+        app:layout_constraintStart_toEndOf="@id/switchIsRepeating"
+        app:layout_constraintTop_toTopOf="@id/switchIsRepeating" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@id/switchLayout"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchIsRepeating">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/deleteBtn"
@@ -165,4 +162,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

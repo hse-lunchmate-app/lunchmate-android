@@ -1,36 +1,28 @@
-package com.example.lunchmate.utils
+package com.example.lunchmate.presentation.schedule.ui
 
 import android.app.Dialog
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.BottomSheetReservedSlotBinding
-import com.example.lunchmatelocal.AvailableSlotsAdapter
+import com.example.lunchmate.presentation.availableSlots.AvailableSlotsAdapter
 import com.example.lunchmatelocal.Slot
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ReservedSlotBottomSheet(val date: String, val cancelReservation: (Int) -> Unit, val slotsList: ArrayList<Slot>, val position: Int): BottomSheetDialogFragment() {
+class AddPhotoBottomSheet(val date: String, val cancelReservation: (Int) -> Unit, val slotsList: ArrayList<Slot>, val position: Int): BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetReservedSlotBinding
     val weekdaysNames = arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")

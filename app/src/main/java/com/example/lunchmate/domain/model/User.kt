@@ -1,4 +1,4 @@
-package com.example.lunchmate.model
+package com.example.lunchmate.domain.model
 
 data class User(
     val id: Int,

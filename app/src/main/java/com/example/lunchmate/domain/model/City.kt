@@ -1,4 +1,4 @@
-package com.example.lunchmate.model
+package com.example.lunchmate.domain.model
 
 import android.widget.ImageView
 import android.widget.RelativeLayout

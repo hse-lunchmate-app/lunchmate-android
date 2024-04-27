@@ -1,99 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/itemTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="8dp"
-        android:paddingHorizontal="16dp"
-        android:layout_marginBottom="8dp"
-        android:layout_alignParentTop="true">
+        android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Уведомления"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/clearBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/clearBtn" />
 
-        <TextView
-            android:id="@+id/itemTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_centerVertical="true"
-            android:ellipsize="end"
-            android:text="Уведомления"
-            android:textAlignment="textStart"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:maxLines="1"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/clearBtn"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:padding="4dp"
-            android:text="Очистить"
-            android:textAllCaps="false"
-            android:textColor="@color/blue_700"
-            android:textSize="14sp"
-            app:backgroundTint="@color/white" />
-
-    </RelativeLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/clearBtn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Очистить"
+        android:textAllCaps="false"
+        android:textColor="@color/blue_700"
+        android:textSize="14sp"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/emptyIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/empty_state_notifications"
-        android:layout_below="@id/topBar"
-        android:layout_marginTop="120dp"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/emptyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/emptyIcon"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="Кажется, Вы в курсе всех последних событий!"
         android:textStyle="bold"
         android:visibility="gone"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emptyIcon" />
 
     <TextView
         android:id="@+id/emptyContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/emptyTitle"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:text="Возвращайтесь позже\nза новыми уведомлениями"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emptyTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/topBar"
+        android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="8dp"
         android:clipToPadding="false"
         android:transitionGroup="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_notification"/>
+        app:layout_constraintTop_toBottomOf="@+id/clearBtn"
+        tools:listitem="@layout/item_notification" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

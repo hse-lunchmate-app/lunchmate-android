@@ -1,4 +1,4 @@
-package com.example.lunchmate.model
+package com.example.lunchmate.domain.model
 
 import com.example.lunchmatelocal.Account
 import com.example.lunchmatelocal.Slot
