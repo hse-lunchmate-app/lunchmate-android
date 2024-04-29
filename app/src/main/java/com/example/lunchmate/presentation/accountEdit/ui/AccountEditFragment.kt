@@ -1,12 +1,9 @@
-package com.example.lunchmatelocal
+package com.example.lunchmate.presentation.accountEdit.ui
 
-import android.R.attr
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,17 +16,15 @@ import androidx.fragment.app.Fragment
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.BottomSheetAddPhotoBinding
-import com.example.lunchmate.databinding.BottomSheetFreeSlotBinding
 import com.example.lunchmate.databinding.FragmentAccountEditBinding
-import com.example.lunchmate.model.User
-import com.example.lunchmate.model.UserPatch
-import com.example.lunchmate.utils.Status
+import com.example.lunchmate.domain.model.User
+import com.example.lunchmate.domain.model.UserPatch
+import com.example.lunchmate.domain.api.Status
+import com.example.lunchmate.presentation.account.ui.AccountFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import java.io.FileNotFoundException
-import java.io.InputStream
-import java.util.*
 
 
 class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
@@ -74,30 +69,35 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
         }
 
         binding.saveButton.setOnClickListener {
-            activity.viewModel.patchUser("1", UserPatch(
-                binding.edittextName.text.toString(),
-                binding.edittextTg.text.toString(),
-                binding.edittextTaste.text.toString(),
-                binding.edittextInfo.text.toString(),
-                activity.offices[binding.spinnerOffice.selectedItemPosition].id
-            )).observe(viewLifecycleOwner) {
-                it?.let { resource ->
-                    when (resource.status) {
-                        Status.SUCCESS -> {
-                            resource.data?.let { user ->
-                                activity.currentUser = user
+            if (emptyFieldsCheck()) {
+                activity.viewModel.patchUser(
+                    "1", UserPatch(
+                        binding.edittextName.text.toString(),
+                        binding.edittextTg.text.toString(),
+                        binding.edittextTaste.text.toString(),
+                        binding.edittextInfo.text.toString(),
+                        activity.offices[binding.spinnerOffice.selectedItemPosition].id
+                    )
+                ).observe(viewLifecycleOwner) {
+                    it?.let { resource ->
+                        when (resource.status) {
+                            Status.SUCCESS -> {
+                                resource.data?.let { user ->
+                                    activity.currentUser = user
+                                }
                             }
-                        }
-                        Status.ERROR -> {
-                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                        }
-                        Status.LOADING -> {
+                            Status.ERROR -> {
+                                Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG)
+                                    .show()
+                            }
+                            Status.LOADING -> {
 
+                            }
                         }
                     }
                 }
+                setCurrentFragment(accountFragment)
             }
-            setCurrentFragment(accountFragment)
         }
     }
 
@@ -186,5 +186,41 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
             replace(R.id.mainFragment, fragment)
             commit()
         }
+
+    private fun emptyFieldsCheck(): Boolean {
+        var flag = true
+        if (binding.edittextName.text.toString().trim().isEmpty()){
+            binding.edittextName.setBackgroundResource(R.drawable.rounded_et_error)
+            binding.errorMsgName.visibility = View.VISIBLE
+            binding.errorMsgName.text = "Поле имени должно быть заполнено"
+            binding.labelName.setTextColor(resources.getColor(R.color.red_700))
+            flag = false
+        }
+        else{
+            binding.edittextName.setBackgroundResource(R.drawable.rounded_et)
+            binding.errorMsgName.visibility = View.GONE
+            binding.labelName.setTextColor(resources.getColor(R.color.grey_500))
+        }
+        if (binding.edittextTg.text.toString().trim().isEmpty()){
+            binding.edittextTg.setBackgroundResource(R.drawable.rounded_et_error)
+            binding.errorMsgTg.visibility = View.VISIBLE
+            binding.errorMsgTg.text = "Поле телеграма должно быть заполнено"
+            binding.labelTg.setTextColor(resources.getColor(R.color.red_700))
+            flag = false
+        }
+        else if (!binding.edittextTg.text.toString().trim().matches(Regex("""[A-Za-z0-9_]"""))){
+            binding.edittextTg.setBackgroundResource(R.drawable.rounded_et_error)
+            binding.errorMsgTg.visibility = View.VISIBLE
+            binding.errorMsgTg.text = "Телеграм должен иметь допустимое значение"
+            binding.labelTg.setTextColor(resources.getColor(R.color.red_700))
+            flag = false
+        }
+        else{
+            binding.edittextTg.setBackgroundResource(R.drawable.rounded_et)
+            binding.errorMsgTg.visibility = View.GONE
+            binding.labelTg.setTextColor(resources.getColor(R.color.grey_500))
+        }
+        return flag
+    }
 
 }

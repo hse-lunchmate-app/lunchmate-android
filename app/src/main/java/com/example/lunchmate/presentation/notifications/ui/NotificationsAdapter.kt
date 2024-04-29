@@ -12,9 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.ItemNotificationBinding
 import com.example.lunchmate.domain.model.Notification
+import com.example.lunchmate.domain.model.User
 
 class NotificationsAdapter(
-    val onProfileClick: (Int) -> Unit,
+    val onProfileClick: (User) -> Unit,
     val denyRequest: (Int) -> Unit,
     private val notificationsList: ArrayList<Notification>
 ) :
@@ -58,7 +59,7 @@ class NotificationsAdapter(
             }
 
             parent.setOnClickListener {
-                onProfileClick(position)
+                //onProfileClick(TODO)
             }
         }
     }

@@ -110,8 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_edit_text"
-                android:hint="Без имени"
+                android:background="@drawable/rounded_et"
                 android:iconifiedByDefault="false"
                 android:importantForAutofill="no"
                 android:paddingVertical="12dp"
@@ -122,12 +121,26 @@
                 app:layout_constraintTop_toBottomOf="@id/personalData" />
 
             <TextView
+                android:id="@+id/errorMsgName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="Error message"
+                android:textColor="@color/red_700"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/edittextName"
+                app:layout_constraintTop_toBottomOf="@+id/edittextName" />
+
+            <TextView
+                android:id="@+id/labelName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="-8dp"
                 android:background="@color/white"
                 android:labelFor="@id/edittextName"
+                android:textColor="@color/grey_500"
                 android:text="Имя"
                 app:layout_constraintStart_toStartOf="@id/edittextName"
                 app:layout_constraintTop_toTopOf="@id/edittextName" />
@@ -138,7 +151,7 @@
                 android:layout_height="50dp"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_edit_text"
+                android:background="@drawable/rounded_et"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edittextName">
@@ -159,6 +172,7 @@
                 android:layout_marginTop="-8dp"
                 android:background="@color/white"
                 android:labelFor="@id/edittextOffice"
+                android:textColor="@color/grey_500"
                 android:text="Офис"
                 app:layout_constraintStart_toStartOf="@id/edittextOffice"
                 app:layout_constraintTop_toTopOf="@id/edittextOffice" />
@@ -169,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_edit_text"
+                android:background="@drawable/rounded_et"
                 android:hint="Без предпочтений"
                 android:iconifiedByDefault="false"
                 android:importantForAutofill="no"
@@ -187,6 +201,7 @@
                 android:layout_marginTop="-8dp"
                 android:background="@color/white"
                 android:labelFor="@id/edittextTaste"
+                android:textColor="@color/grey_500"
                 android:text="Вкусовые предпочтения"
                 app:layout_constraintStart_toStartOf="@id/edittextTaste"
                 app:layout_constraintTop_toTopOf="@id/edittextTaste" />
@@ -198,7 +213,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_edit_text"
+                android:background="@drawable/rounded_et"
                 android:hint="Без информации"
                 android:iconifiedByDefault="false"
                 android:importantForAutofill="no"
@@ -210,13 +225,13 @@
                 app:layout_constraintTop_toBottomOf="@id/edittextTaste" />
 
             <TextView
-                android:id="@+id/labelInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="-8dp"
                 android:background="@color/white"
                 android:labelFor="@id/edittextInfo"
+                android:textColor="@color/grey_500"
                 android:text="О себе"
                 app:layout_constraintStart_toStartOf="@id/edittextInfo"
                 app:layout_constraintTop_toTopOf="@id/edittextInfo" />
@@ -241,10 +256,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_edit_text"
+                android:background="@drawable/rounded_et"
                 android:drawableStart="@drawable/at_sign"
                 android:drawablePadding="4dp"
-                android:hint="Без телеграма"
                 android:iconifiedByDefault="false"
                 android:importantForAutofill="no"
                 android:maxLines="1"
@@ -256,12 +270,26 @@
                 app:layout_constraintTop_toBottomOf="@id/contactData" />
 
             <TextView
+                android:id="@+id/errorMsgTg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Error message"
+                android:textColor="@color/red_700"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="@+id/edittextTg"
+                app:layout_constraintTop_toBottomOf="@+id/edittextTg"/>
+
+            <TextView
+                android:id="@+id/labelTg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="-8dp"
                 android:background="@color/white"
                 android:labelFor="@id/edittextTg"
+                android:textColor="@color/grey_500"
                 android:text="Телеграм"
                 app:layout_constraintStart_toStartOf="@id/edittextTg"
                 app:layout_constraintTop_toTopOf="@id/edittextTg" />
@@ -286,7 +314,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_edit_text"
+                android:background="@drawable/rounded_et"
                 android:enabled="false"
                 android:iconifiedByDefault="false"
                 android:importantForAutofill="no"
@@ -306,6 +334,7 @@
                 android:background="@color/white"
                 android:labelFor="@id/edittextLogin"
                 android:text="Логин"
+                android:textColor="@color/grey_500"
                 app:layout_constraintStart_toStartOf="@id/edittextLogin"
                 app:layout_constraintTop_toTopOf="@id/edittextLogin" />
 
@@ -318,7 +347,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/rounded_edit_text"
+                android:background="@drawable/rounded_et"
                 android:iconifiedByDefault="false"
                 android:importantForAutofill="no"
                 android:maxLines="1"
@@ -336,6 +365,7 @@
                 android:layout_marginTop="-8dp"
                 android:background="@color/white"
                 android:labelFor="@id/edittextPassword"
+                android:textColor="@color/grey_500"
                 android:text="Пароль"
                 app:layout_constraintStart_toStartOf="@id/edittextPassword"
                 app:layout_constraintTop_toTopOf="@id/edittextPassword" />

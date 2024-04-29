@@ -6,23 +6,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.lunchmate.api.ApiHelper
-import com.example.lunchmate.api.RetrofitBuilder
+import com.example.lunchmate.domain.api.ApiHelper
+import com.example.lunchmate.domain.api.RetrofitBuilder
 import com.example.lunchmate.databinding.ActivityMainBinding
-import com.example.lunchmate.databinding.FragmentAccountEditBinding
-import com.example.lunchmate.fragments.NotificationsFragment
-import com.example.lunchmate.model.Office
-import com.example.lunchmate.model.User
-import com.example.lunchmate.repository.MainRepository
-import com.example.lunchmate.utils.Status
+import com.example.lunchmate.presentation.notifications.ui.NotificationsFragment
+import com.example.lunchmate.domain.model.Office
+import com.example.lunchmate.domain.model.User
+import com.example.lunchmate.domain.api.Status
 import com.example.lunchmate.viewModel.MainViewModel
 import com.example.lunchmate.viewModel.ViewModelFactory
-import com.example.lunchmatelocal.Account
-import com.example.lunchmatelocal.AccountFragment
-import com.example.lunchmatelocal.HomeFragment
+import com.example.lunchmate.presentation.account.ui.AccountFragment
+import com.example.lunchmate.presentation.home.ui.HomeFragment
 import com.example.lunchmatelocal.ScheduleFragment
-import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {

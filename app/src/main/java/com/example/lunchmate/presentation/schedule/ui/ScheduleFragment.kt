@@ -24,12 +24,11 @@ data class CurrentDay(
 
 class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
     private val weekdays = arrayOf(Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY)
-    private val dates = arrayOf(binding.mondayDate, binding.tuesdayDate, binding.wednesdayDate, binding.thursdayDate, binding.fridayDate, binding.saturdayDate, binding.sundayDate)
     private val monthNames = arrayOf("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь")
     private lateinit var binding: FragmentScheduleBinding
     private var currentDay: CurrentDay? = null
     private lateinit var slotsAdapter: SlotsAdapter
-    lateinit var slotsList: ArrayList<Slot>
+    var slotsList: ArrayList<Slot> = ArrayList<Slot>()
     private val calendar: ScheduleCalendar = ScheduleCalendar()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,9 +39,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentScheduleBinding.bind(view)
 
-        slotsList = ArrayList<Slot>()
         slotsList.add(Slot(0, "1 марта","11:00", "12:00", true))
-        slotsList.add(Slot(2, "1 марта", "14:00", "15:00"))
         setUpRV(slotsList)
 
         currentDay = setUpCurrentWeek()
@@ -172,6 +169,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
     private fun setUpCurrentWeek(): CurrentDay? {
         val setUpCalendar = Calendar.getInstance()
 
+        val dates = arrayOf(binding.mondayDate, binding.tuesdayDate, binding.wednesdayDate, binding.thursdayDate, binding.fridayDate, binding.saturdayDate, binding.sundayDate)
         val months: ArrayList<Int> = ArrayList<Int>()
         for (i in weekdays.indices){
             setUpCalendar.set(Calendar.DAY_OF_WEEK, weekdays[i])
@@ -221,6 +219,7 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         val setUpCalendar = Calendar.getInstance()
         setUpCalendar.set(Calendar.WEEK_OF_YEAR, week_num)
 
+        val dates = arrayOf(binding.mondayDate, binding.tuesdayDate, binding.wednesdayDate, binding.thursdayDate, binding.fridayDate, binding.saturdayDate, binding.sundayDate)
         val months: ArrayList<Int> = ArrayList<Int>()
         for (i in weekdays.indices){
             setUpCalendar.set(Calendar.DAY_OF_WEEK, weekdays[i])

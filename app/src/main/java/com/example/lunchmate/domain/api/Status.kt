@@ -1,4 +1,4 @@
-package com.example.lunchmate.utils
+package com.example.lunchmate.domain.api
 
 enum class Status {
     SUCCESS,

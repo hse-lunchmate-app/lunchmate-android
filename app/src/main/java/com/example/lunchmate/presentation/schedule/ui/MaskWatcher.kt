@@ -1,4 +1,4 @@
-package com.example.lunchmate.utils
+package com.example.lunchmate.presentation.schedule.ui
 
 import android.text.Editable
 import android.text.TextWatcher

@@ -1,4 +1,4 @@
-package com.example.lunchmatelocal
+package com.example.lunchmate.presentation.account.ui
 
 import android.os.Bundle
 import android.view.View
@@ -7,8 +7,9 @@ import androidx.fragment.app.Fragment
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.FragmentAccountBinding
-import com.example.lunchmate.model.User
-import com.example.lunchmate.utils.Status
+import com.example.lunchmate.domain.model.User
+import com.example.lunchmate.presentation.accountEdit.ui.AccountEditFragment
+import com.example.lunchmate.domain.api.Status
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AccountFragment: Fragment(R.layout.fragment_account) {

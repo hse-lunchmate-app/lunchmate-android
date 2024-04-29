@@ -2,8 +2,8 @@ package com.example.lunchmate.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.lunchmate.api.ApiHelper
-import com.example.lunchmate.repository.MainRepository
+import com.example.lunchmate.domain.api.ApiHelper
+import com.example.lunchmate.data.MainRepository
 
 class ViewModelFactory(private val apiHelper: ApiHelper) :
     ViewModelProvider.Factory {

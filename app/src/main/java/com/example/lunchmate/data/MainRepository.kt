@@ -1,7 +1,7 @@
-package com.example.lunchmate.repository
+package com.example.lunchmate.data
 
-import com.example.lunchmate.api.ApiHelper
-import com.example.lunchmate.model.UserPatch
+import com.example.lunchmate.domain.api.ApiHelper
+import com.example.lunchmate.domain.model.UserPatch
 
 class MainRepository(private val apiHelper: ApiHelper) {
 

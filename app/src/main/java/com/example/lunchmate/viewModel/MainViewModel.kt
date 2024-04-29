@@ -2,9 +2,9 @@ package com.example.lunchmate.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.example.lunchmate.model.UserPatch
-import com.example.lunchmate.repository.MainRepository
-import com.example.lunchmate.utils.Resource
+import com.example.lunchmate.domain.model.UserPatch
+import com.example.lunchmate.data.MainRepository
+import com.example.lunchmate.domain.api.Resource
 import kotlinx.coroutines.Dispatchers
 
 class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {

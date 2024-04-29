@@ -1,4 +1,4 @@
-package com.example.lunchmate.utils
+package com.example.lunchmate.domain.api
 
 data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
     companion object {

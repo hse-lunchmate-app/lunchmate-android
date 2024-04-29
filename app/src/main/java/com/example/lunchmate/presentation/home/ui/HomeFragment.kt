@@ -1,32 +1,30 @@
-package com.example.lunchmatelocal
+package com.example.lunchmate.presentation.home.ui
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
-import com.example.lunchmate.databinding.BottomSheetFreeSlotBinding
 import com.example.lunchmate.databinding.BottomSheetProfileBinding
 import com.example.lunchmate.databinding.FragmentHomeBinding
-import com.example.lunchmate.model.User
-import com.example.lunchmate.utils.Status
+import com.example.lunchmate.domain.model.User
+import com.example.lunchmate.presentation.availableSlots.AvailableSlotsAdapter
+import com.example.lunchmate.domain.api.Status
+import com.example.lunchmate.presentation.profile.ProfileBottomSheet
+import com.example.lunchmate.presentation.schedule.ui.ReservedSlotBottomSheet
+import com.example.lunchmatelocal.Slot
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class HomeFragment: Fragment(R.layout.fragment_home) {
-    val weekdaysNames = arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
     private lateinit var binding: FragmentHomeBinding
     private lateinit var usersList: List<User>
 
@@ -98,72 +96,8 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
     }
 
     private fun onProfileClick(user: User) {
-        var day_num = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-        val activity = activity as MainActivity
-        val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
-        val bottomBinding = BottomSheetProfileBinding.bind(layoutInflater.inflate(R.layout.bottom_sheet_profile, null))
-
-        bottomBinding.profileName.text = user.name
-
-        bottomBinding.profileNickname.text = user.login
-
-        bottomBinding.office.text = user.office.name
-
-        bottomBinding.taste.text = user.tastes
-
-        bottomBinding.infoText.text = user.aboutMe
-
-        if (user.messenger != "") {
-            bottomBinding.tgButton.visibility = View.VISIBLE
-            bottomBinding.tgButton.setOnClickListener {
-                val tgIntent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://t.me/" + user.messenger)
-                )
-                startActivity(tgIntent)
-            }
-        }
-
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_YEAR, day_num)
-        bottomBinding.date.text = getDateStr(calendar)
-
-        bottomBinding.rightButton.setOnClickListener{
-            bottomBinding.leftButton.isEnabled = true
-            calendar.set(Calendar.DAY_OF_YEAR, ++day_num)
-            bottomBinding.date.text = getDateStr(calendar)
-            if (day_num > Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
-                bottomBinding.leftButton.setColorFilter(resources.getColor(R.color.blue_700))
-                bottomBinding.leftButton.isClickable = true
-            }
-        }
-        bottomBinding.leftButton.isEnabled = false
-        bottomBinding.leftButton.setOnClickListener{
-            calendar.set(Calendar.DAY_OF_YEAR, --day_num)
-            bottomBinding.date.text = getDateStr(calendar)
-            if (day_num <= Calendar.getInstance().get(Calendar.DAY_OF_YEAR)){
-                bottomBinding.leftButton.setColorFilter(resources.getColor(R.color.grey_400))
-                bottomBinding.leftButton.isClickable = false
-            }
-        }
-
-        val slotsList = ArrayList<Slot>()
-        slotsList.add(Slot(0, "1 марта","11:00", "12:00"))
-        slotsList.add(Slot(1, "1 марта", "14:00", "15:00"))
-        slotsList.add(Slot(2, "1 марта", "14:00", "15:00"))
-        slotsList.add(Slot(3, "1 марта", "14:00", "15:00"))
-        slotsList.add(Slot(4, "1 марта", "14:00", "15:00"))
-        val slotsAdapter = AvailableSlotsAdapter(slotsList)
-        val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        bottomBinding.availableSlots.layoutManager = linearLayoutManager
-        bottomBinding.availableSlots.adapter = slotsAdapter
-
-        dialog.setContentView(bottomBinding.root)
-        dialog.show()
-    }
-
-    private fun getDateStr(calendar: Calendar): String{
-        return weekdaysNames[calendar.get(Calendar.DAY_OF_WEEK)-1]+SimpleDateFormat(", dd.MM").format(calendar.time)
+        val dialog = ProfileBottomSheet(user)
+        dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
     private fun checkEmptyState(filteredList: ArrayList<User>) {
