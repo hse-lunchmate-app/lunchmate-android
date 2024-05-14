@@ -3,6 +3,7 @@ package com.example.lunchmate.presentation.account.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
@@ -22,20 +23,27 @@ class AccountFragment: Fragment(R.layout.fragment_account) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAccountBinding.bind(view)
-        val accountEditFragment = AccountEditFragment()
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.visibility = View.VISIBLE
 
         setUpObserver()
 
         binding.editButton.setOnClickListener {
-            setCurrentFragment(accountEditFragment)
+            setCurrentFragment(AccountEditFragment())
         }
+
+        binding.themeButton.setOnClickListener(View.OnClickListener {
+            if(false){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+        })
     }
 
     private fun setUpObserver() {
         val activity = activity as MainActivity
-        activity.viewModel.getUser("1").observe(viewLifecycleOwner) {
+        activity.viewModel.getUser("id1").observe(viewLifecycleOwner) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {

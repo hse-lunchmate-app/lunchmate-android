@@ -70,6 +70,7 @@ class AddSlotBottomSheet(
                     binding.errorMsg.visibility = View.VISIBLE
                     binding.errorMsg.text = "Начало должно быть раньше, чем конец"
                 } else {
+                    bottomSheetDialog.dismiss()
                     addSlot(
                         Slot(
                             0, currentDate + " " + currentMonth,

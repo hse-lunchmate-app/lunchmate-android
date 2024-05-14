@@ -7,7 +7,7 @@ class MainRepository(private val apiHelper: ApiHelper) {
 
     suspend fun getOffices() = apiHelper.getOffices()
 
-    suspend fun getUsers(id: String) = apiHelper.getUsers(id)
+    suspend fun getUsers(officeId: String, name: String) = apiHelper.getUsers(officeId, name)
 
     suspend fun getUser(id: String) = apiHelper.getUser(id)
 

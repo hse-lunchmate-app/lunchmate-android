@@ -1,5 +1,6 @@
 package com.example.lunchmate.presentation.accountEdit.ui
 
+import android.Manifest.permission.*
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -11,6 +12,8 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.lunchmate.MainActivity
@@ -21,6 +24,7 @@ import com.example.lunchmate.domain.model.User
 import com.example.lunchmate.domain.model.UserPatch
 import com.example.lunchmate.domain.api.Status
 import com.example.lunchmate.presentation.account.ui.AccountFragment
+import com.example.lunchmate.presentation.schedule.ui.ReservedSlotBottomSheet
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
@@ -31,9 +35,28 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
     private lateinit var binding: FragmentAccountEditBinding
     private val REQUEST_CODE_GALLERY = 1
     private val REQUEST_CODE_CAMERA = 2
+    private var galleryPermissionLauncher: ActivityResultLauncher<String>? = null
+    private var cameraPermissionLauncher: ActivityResultLauncher<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        galleryPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
+                startActivityForResult(intent, REQUEST_CODE_GALLERY)
+            } else {
+                Toast.makeText(requireContext(), "Please grant permission", Toast.LENGTH_LONG).show()
+            }
+        }
+        cameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(intent, REQUEST_CODE_CAMERA)
+            } else {
+                Toast.makeText(requireContext(), "Please grant permission", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,27 +74,14 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
         }
 
         binding.changePhotoButton.setOnClickListener {
-            val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
-            val bottomBinding = BottomSheetAddPhotoBinding.bind(layoutInflater.inflate(R.layout.bottom_sheet_add_photo, null))
-
-            bottomBinding.gallery.setOnClickListener {
-                openGalleryForImage()
-                dialog.dismiss()
-            }
-
-            bottomBinding.camera.setOnClickListener {
-                openCameraForImage()
-                dialog.dismiss()
-            }
-
-            dialog.setContentView(bottomBinding.root)
-            dialog.show()
+            val dialog = AddPhotoBottomSheet(::openGalleryForImage, ::openCameraForImage)
+            dialog.show((activity as MainActivity).supportFragmentManager, "")
         }
 
         binding.saveButton.setOnClickListener {
             if (emptyFieldsCheck()) {
                 activity.viewModel.patchUser(
-                    "1", UserPatch(
+                    "id1", UserPatch(
                         binding.edittextName.text.toString(),
                         binding.edittextTg.text.toString(),
                         binding.edittextTaste.text.toString(),
@@ -103,7 +113,7 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
 
     private fun setUpObserver() {
         val activity = activity as MainActivity
-        activity.viewModel.getUser("1").observe(viewLifecycleOwner) {
+        activity.viewModel.getUser("id1").observe(viewLifecycleOwner) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -136,14 +146,15 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
     }
 
     private fun openGalleryForImage() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, REQUEST_CODE_GALLERY)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            galleryPermissionLauncher?.launch(READ_MEDIA_IMAGES)
+        } else {
+            galleryPermissionLauncher?.launch(READ_EXTERNAL_STORAGE)
+        }
     }
 
     private fun openCameraForImage() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, REQUEST_CODE_CAMERA)
+        cameraPermissionLauncher?.launch(CAMERA)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

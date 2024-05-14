@@ -13,7 +13,7 @@ interface ApiService {
     suspend fun getOffices(): List<Office>
 
     @GET("users")
-    suspend fun getUsers(@Query("id") id: String): List<User>
+    suspend fun getUsers(@Query("officeId") id: String, @Query("name") name: String): List<User>
 
     @GET("users/{id}")
     suspend fun getUser(@Path("id") id: String): User

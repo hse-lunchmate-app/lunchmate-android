@@ -240,18 +240,6 @@ class ScheduleFragment: Fragment(R.layout.fragment_schedule) {
         ))
     }
 
-    private fun timeToInt(time: String): Int{
-        return Integer.parseInt(time[0].toString()+time[1]+time[3]+time[4])
-    }
-
-    private fun timeToHour(time: String): Int{
-        return Integer.parseInt(time[0].toString()+time[1])
-    }
-
-    private fun timeToMinute(time: String): Int{
-        return Integer.parseInt(time[3].toString()+time[4])
-    }
-
     private fun checkSlotsCount(){
         if (slotsList.size >= 2){
             binding.addSlotBtn.visibility = View.GONE

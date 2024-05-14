@@ -1,7 +1,7 @@
 package com.example.lunchmate.domain.model
 
 data class User(
-    val id: Int,
+    val id: String,
     val login: String,
     var name: String,
     var messenger: String,
