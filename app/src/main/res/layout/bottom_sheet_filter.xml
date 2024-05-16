@@ -48,7 +48,8 @@
             android:layout_height="match_parent"
             android:iconifiedByDefault="false"
             android:paddingStart="15dp"
-            android:paddingEnd="15dp" />
+            android:paddingEnd="15dp"
+            android:spinnerMode="dialog"/>
     </LinearLayout>
 
     <TextView

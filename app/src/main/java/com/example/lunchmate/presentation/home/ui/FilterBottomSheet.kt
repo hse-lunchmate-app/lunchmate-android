@@ -5,17 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.BottomSheetFilterBinding
 import com.example.lunchmate.databinding.BottomSheetFreeSlotBinding
+import com.example.lunchmate.domain.model.Office
 import com.example.lunchmatelocal.Slot
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlin.collections.ArrayList
 
 class FilterBottomSheet(
-    val position: Int,
-    val filterSearch: (Int) -> Unit,
+    val office: Office,
+    val filterSearch: (Office) -> Unit,
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetFilterBinding
@@ -32,6 +35,18 @@ class FilterBottomSheet(
             )
         )
 
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            (activity as MainActivity).officeNames
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerOffice.adapter = adapter
+        binding.spinnerOffice.setSelection((activity as MainActivity).offices.indexOf(office))
+
+        binding.clearBtn.setOnClickListener {
+            binding.spinnerOffice.setSelection((activity as MainActivity).offices.indexOf((activity as MainActivity).currentUser.office))
+        }
 
         return binding.root
     }
@@ -44,22 +59,10 @@ class FilterBottomSheet(
         bottomSheetDialog.setOnShowListener {
             binding.searchBtn.setOnClickListener {
                 bottomSheetDialog.dismiss()
-                filterSearch(position)
+                filterSearch((activity as MainActivity).offices[binding.spinnerOffice.selectedItemPosition])
             }
         }
 
         return bottomSheetDialog
-    }
-
-    private fun timeToInt(time: String): Int {
-        return Integer.parseInt(time[0].toString() + time[1] + time[3] + time[4])
-    }
-
-    private fun timeToHour(time: String): Int {
-        return Integer.parseInt(time[0].toString() + time[1])
-    }
-
-    private fun timeToMinute(time: String): Int {
-        return Integer.parseInt(time[3].toString() + time[4])
     }
 }

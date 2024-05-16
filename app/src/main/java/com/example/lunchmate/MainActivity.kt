@@ -13,6 +13,7 @@ import com.example.lunchmate.presentation.notifications.ui.NotificationsFragment
 import com.example.lunchmate.domain.model.Office
 import com.example.lunchmate.domain.model.User
 import com.example.lunchmate.domain.api.Status
+import com.example.lunchmate.domain.model.City
 import com.example.lunchmate.viewModel.MainViewModel
 import com.example.lunchmate.viewModel.ViewModelFactory
 import com.example.lunchmate.presentation.account.ui.AccountFragment
@@ -22,7 +23,7 @@ import com.example.lunchmatelocal.ScheduleFragment
 
 class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
-    lateinit var currentUser: User
+    var currentUser: User = User("id1", "v.utkin", "Ваня Ваня", "t.me/testing", "Тестинг", "Тестинг", Office(1, "Tinkoff Space", City(1, "Москва")))
     //var sampleAccount: Account = Account(0, "Иван Иванов", 1, "Котлетка с пюрешкой", "Я обычный Иван", "", "ivan12345", "", R.drawable.photo)
     lateinit var offices: List<Office>
     var officeNames: ArrayList<String> = ArrayList<String>()
@@ -80,6 +81,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+
     }
 
     private fun setCurrentFragment(fragment: Fragment)=
