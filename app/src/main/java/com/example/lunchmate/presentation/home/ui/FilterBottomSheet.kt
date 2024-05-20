@@ -9,12 +9,9 @@ import android.widget.ArrayAdapter
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.BottomSheetFilterBinding
-import com.example.lunchmate.databinding.BottomSheetFreeSlotBinding
 import com.example.lunchmate.domain.model.Office
-import com.example.lunchmatelocal.Slot
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlin.collections.ArrayList
 
 class FilterBottomSheet(
     val office: Office,
@@ -48,21 +45,13 @@ class FilterBottomSheet(
             binding.spinnerOffice.setSelection((activity as MainActivity).offices.indexOf((activity as MainActivity).currentUser.office))
         }
 
+        binding.searchBtn.setOnClickListener {
+            filterSearch((activity as MainActivity).offices[binding.spinnerOffice.selectedItemPosition])
+            dismiss()
+        }
+
         return binding.root
     }
 
     override fun getTheme() = R.style.SheetDialog
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-
-        bottomSheetDialog.setOnShowListener {
-            binding.searchBtn.setOnClickListener {
-                bottomSheetDialog.dismiss()
-                filterSearch((activity as MainActivity).offices[binding.spinnerOffice.selectedItemPosition])
-            }
-        }
-
-        return bottomSheetDialog
-    }
 }

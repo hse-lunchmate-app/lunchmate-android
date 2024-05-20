@@ -1,37 +1,24 @@
 package com.example.lunchmate.presentation.home.ui
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
-import com.example.lunchmate.databinding.BottomSheetProfileBinding
 import com.example.lunchmate.databinding.FragmentHomeBinding
 import com.example.lunchmate.domain.api.ApiHelper
 import com.example.lunchmate.domain.api.LoadingState
 import com.example.lunchmate.domain.api.RetrofitBuilder
 import com.example.lunchmate.domain.model.User
-import com.example.lunchmate.presentation.availableSlots.AvailableSlotsAdapter
-import com.example.lunchmate.domain.api.Status
 import com.example.lunchmate.domain.model.City
 import com.example.lunchmate.domain.model.Office
 import com.example.lunchmate.presentation.home.viewModel.HomeViewModel
 import com.example.lunchmate.presentation.home.viewModel.HomeViewModelFactory
-import com.example.lunchmate.presentation.profile.ProfileBottomSheet
-import com.example.lunchmate.presentation.schedule.ui.ReservedSlotBottomSheet
-import com.example.lunchmate.viewModel.ViewModelFactory
-import com.example.lunchmatelocal.Slot
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
+import com.example.lunchmate.presentation.profile.ui.ProfileBottomSheet
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -54,6 +41,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
+
         initialiseObservers()
         initialiseUIElements()
     }
@@ -62,7 +50,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         homeViewModel.getUsers(current_office.id.toString(), binding.searchView.query.toString())
 
         homeViewModel.userData.observe(viewLifecycleOwner) {
-            setUpRv(it)
+            setUpRV(it)
         }
 
         homeViewModel.loadingStateLiveData.observe(viewLifecycleOwner) {
@@ -96,7 +84,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun setUpRv(usersList: List<User>) {
+    private fun setUpRV(usersList: List<User>) {
         val accountAdapter = ProfilesAdapter(::onProfileClick, usersList)
         val linearLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

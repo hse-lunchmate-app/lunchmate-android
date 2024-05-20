@@ -4,18 +4,17 @@
     android:id="@+id/itemParent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="7dp"
+    android:layout_margin="10dp"
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:padding="5dp"
     app:cardCornerRadius="15dp">
 
     <TextView
         android:id="@+id/timeLimits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="22dp"
         android:background="@color/grey_100" />
 
 </androidx.cardview.widget.CardView>

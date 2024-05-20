@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/itemTitle"
@@ -25,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/background"
         android:src="@drawable/arrow_left"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/itemTitle"
@@ -51,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/background"
         android:src="@drawable/arrow_right"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/itemTitle"
@@ -360,6 +361,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Пока у Вас нет слотов на этот день"
+        android:textColor="@color/grey_600"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -373,13 +375,14 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="Создайте новый слот по кнопке ниже!"
+        android:textColor="@color/grey_600"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emptyTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/slotsRV"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -388,6 +391,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weekLine"
         tools:listitem="@layout/item_slot" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weekLine"
+        android:animateLayoutChanges="true"
+        android:animationCache="true"
+        app:shimmer_repeat_mode="restart"
+        app:shimmer_shape="linear">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/shimmer_slot" />
+
+            <include layout="@layout/shimmer_slot" />
+
+            <include layout="@layout/shimmer_slot" />
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addSlotBtn"
@@ -398,7 +431,7 @@
         android:background="@drawable/rounded_yellow"
         android:text="Добавить слот"
         android:textAllCaps="false"
-        android:textColor="@color/black"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

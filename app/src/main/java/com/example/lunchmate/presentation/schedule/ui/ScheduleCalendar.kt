@@ -5,8 +5,7 @@ import java.util.*
 
 class ScheduleCalendar {
     val weekdaysNames = arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
-    val monthNames = arrayOf("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь")
-    val calendar: Calendar = Calendar.getInstance()
+    var calendar: Calendar = Calendar.getInstance()
     var week_num = calendar.get(Calendar.WEEK_OF_YEAR)
     var day_num = calendar.get(Calendar.DAY_OF_WEEK)
 
@@ -20,7 +19,18 @@ class ScheduleCalendar {
         return weekdaysNames[calendar.get(Calendar.DAY_OF_WEEK)-1]+ SimpleDateFormat(", dd MMM yyyyг.").format(calendar.time)
     }
 
-    fun isCurrentWeek(): Boolean{
+    fun isCurrentWeek(): Boolean {
         return week_num <= Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
     }
+
+    fun getCurrentDate(): String {
+        return SimpleDateFormat("yyyy-MM-dd").format(calendar.time)
+    }
+
+    fun setToday(){
+        calendar = Calendar.getInstance()
+        week_num = calendar.get(Calendar.WEEK_OF_YEAR)
+        day_num = calendar.get(Calendar.DAY_OF_WEEK)
+    }
+
 }

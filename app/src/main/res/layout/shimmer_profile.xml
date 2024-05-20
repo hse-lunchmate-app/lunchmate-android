@@ -22,7 +22,8 @@
             android:layout_height="60dp"
             android:layout_centerVertical="true"
             android:layout_marginHorizontal="5dp"
-            android:src="@drawable/photo" />
+            android:src="@drawable/photo"
+            app:tint="@color/grey_100" />
 
         <TextView
             android:id="@+id/itemTitle"

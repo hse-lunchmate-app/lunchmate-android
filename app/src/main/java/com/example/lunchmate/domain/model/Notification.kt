@@ -1,7 +1,6 @@
 package com.example.lunchmate.domain.model
 
 import com.example.lunchmatelocal.Account
-import com.example.lunchmatelocal.Slot
 
 class Notification (private val id: Int,
                     private var title: String,

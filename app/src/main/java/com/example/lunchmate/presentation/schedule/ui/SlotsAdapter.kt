@@ -13,8 +13,8 @@ import com.example.lunchmate.databinding.ItemSlotBinding
 import com.example.lunchmatelocal.Slot
 
 class SlotsAdapter(
-    val openFreeSlot: (Int) -> Unit,
-    val openReservedSlot: (Int) -> Unit,
+    val openFreeSlot: (Slot) -> Unit,
+    val openReservedSlot: (Slot) -> Unit,
     private val slotsList: ArrayList<Slot>
 ) :
     RecyclerView.Adapter<SlotsAdapter.ViewHolder>() {
@@ -34,20 +34,20 @@ class SlotsAdapter(
         }
 
         fun bind(model: Slot) {
-            time.text = model.getStart() + " - " + model.getFinish()
-            repeatingIndicator.isVisible = model.getIsRepeating()
-            if (model.getLunchMate() != null) {
+            time.text = getFormatedTime(model.data.startTime) + " - " + getFormatedTime(model.data.endTime)
+            repeatingIndicator.isVisible = model.data.permanent
+            if (model.lunchMate != null) {
                 lunchMate.visibility = View.VISIBLE
-                lunchMate.text = model.getLunchMate()!!.getName()
+                lunchMate.text = model.lunchMate!!.name
             } else {
                 lunchMate.visibility = View.GONE
             }
 
             parent.setOnClickListener {
                 if (lunchMate.isVisible) {
-                    openReservedSlot(position)
+                    openReservedSlot(model)
                 } else {
-                    openFreeSlot(position)
+                    openFreeSlot(model)
                 }
             }
         }
@@ -66,5 +66,9 @@ class SlotsAdapter(
 
     override fun getItemCount(): Int {
         return slotsList.size
+    }
+
+    private fun getFormatedTime(time: String): String {
+        return time.substring(0, 5)
     }
 }

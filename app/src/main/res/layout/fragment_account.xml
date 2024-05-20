@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/itemTitle"
@@ -15,40 +16,58 @@
         android:text="Мой профиль"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/themeButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/themeButton"
-        app:layout_constraintBottom_toBottomOf="@id/themeButton"/>
+        app:layout_constraintTop_toTopOf="@id/themeButton" />
 
     <ImageButton
         android:id="@+id/themeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="@color/white"
-        android:src="@drawable/edit"
+        android:layout_marginEnd="12dp"
+        android:backgroundTint="@color/background"
+        android:src="@drawable/theme_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/itemTitle">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/themeButton">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerPhoto"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:animateLayoutChanges="true"
+                android:animationCache="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shimmer_repeat_mode="restart"
+                app:shimmer_shape="linear">
+
+                <include layout="@layout/shimmer_photo" />
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <ImageView
                 android:id="@+id/photo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                android:src="@drawable/photo" />
+                android:src="@drawable/photo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/profileName"
@@ -58,7 +77,10 @@
                 android:layout_marginBottom="4dp"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/photo"/>
 
             <TextView
                 android:id="@+id/profileNickname"
@@ -68,7 +90,10 @@
                 android:layout_marginBottom="16dp"
                 android:maxLines="1"
                 android:textColor="@color/grey_600"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profileName"/>
 
             <TextView
                 android:id="@+id/telegram"
@@ -82,7 +107,10 @@
                 android:padding="16dp"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                app:drawableStartCompat="@drawable/telegram" />
+                app:drawableStartCompat="@drawable/telegram"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profileNickname"/>
 
             <TextView
                 android:id="@+id/office"
@@ -96,7 +124,10 @@
                 android:padding="16dp"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                app:drawableStartCompat="@drawable/location" />
+                app:drawableStartCompat="@drawable/location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/telegram"/>
 
             <TextView
                 android:id="@+id/taste"
@@ -110,18 +141,24 @@
                 android:padding="16dp"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                app:drawableStartCompat="@drawable/taste" />
+                app:drawableStartCompat="@drawable/taste"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/office"/>
 
             <LinearLayout
                 android:id="@+id/info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="4dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/rounded_grey"
+                android:orientation="vertical"
                 android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp">
+                android:paddingVertical="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/taste">
 
                 <TextView
                     android:id="@+id/infoIcon"
@@ -150,7 +187,15 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
-        </LinearLayout>
+            <Space
+                android:id="@+id/space"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/info"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 
@@ -158,11 +203,11 @@
         android:id="@+id/editButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:backgroundTint="@color/blue_700"
-        android:src="@drawable/edit"
-        app:tint="@android:color/white"
+        android:src="@drawable/edit_filled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="20dp"/>
+        app:tint="@android:color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

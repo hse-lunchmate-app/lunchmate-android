@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.BottomSheetAddPhotoBinding
-import com.example.lunchmate.databinding.BottomSheetAddSlotBinding
-import com.example.lunchmatelocal.Slot
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

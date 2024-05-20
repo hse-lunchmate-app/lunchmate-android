@@ -1,11 +1,7 @@
 package com.example.lunchmate.presentation.notifications.ui
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -13,19 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
-import com.example.lunchmate.databinding.BottomSheetProfileBinding
 import com.example.lunchmate.databinding.FragmentNotificationsBinding
 import com.example.lunchmate.domain.model.Notification
 import com.example.lunchmate.domain.model.User
-import com.example.lunchmate.presentation.availableSlots.AvailableSlotsAdapter
-import com.example.lunchmate.presentation.profile.ProfileBottomSheet
-import com.example.lunchmatelocal.Slot
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
+import com.example.lunchmate.presentation.profile.ui.ProfileBottomSheet
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
@@ -106,7 +95,7 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
             }
         }).attachToRecyclerView(binding.recyclerView)
 
-        binding.clearBtn.setOnClickListener {
+        /*binding.clearBtn.setOnClickListener {
             var i = 0;
             while (i < notificationsList.size){
                 if (notificationsList[i].getTitle() != "Новое приглашение"){
@@ -117,7 +106,7 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
                 i++
             }
             checkEmptyState()
-        }
+        }*/
 
         checkEmptyState()
     }

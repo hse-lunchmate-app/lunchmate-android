@@ -91,7 +91,7 @@
             android:background="@drawable/rounded_light_yellow"
             android:text="Отклонить"
             android:textAllCaps="false"
-            android:textColor="@color/yellow_700" />
+            android:textColor="#FFFDAB1A" />
 
         <Space
             android:layout_width="0dp"

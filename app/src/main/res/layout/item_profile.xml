@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="7dp"
-    android:background="@color/white"
+    android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
     android:padding="5dp"
@@ -55,10 +55,10 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Котлетка с пюрешкой"
-                android:textColor="@color/grey_500"
+                android:textColor="@color/label"
                 android:textSize="16sp"
-                app:drawableStartCompat="@drawable/taste"
-                app:drawableTint="@color/grey_500" />
+                app:drawableStartCompat="@drawable/account_filled"
+                app:drawableTint="@color/label" />
 
         </LinearLayout>
 

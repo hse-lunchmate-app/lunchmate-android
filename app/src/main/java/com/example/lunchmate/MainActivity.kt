@@ -1,5 +1,6 @@
 package com.example.lunchmate
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -45,19 +46,16 @@ class MainActivity : AppCompatActivity() {
             Log.d("TAG", "Error")
         }
 
-        val homeFragment = HomeFragment()
-        val accountFragment = AccountFragment()
-        val scheduleFragment = ScheduleFragment()
-        val notificationsFragment = NotificationsFragment()
-        setCurrentFragment(homeFragment)
-
+        if (savedInstanceState == null) {
+            setCurrentFragment(HomeFragment())
+        }
         updateBadge()
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.home->setCurrentFragment(homeFragment)
-                R.id.profile->setCurrentFragment(accountFragment)
-                R.id.notifications->setCurrentFragment(notificationsFragment)
-                R.id.schedule-> setCurrentFragment(scheduleFragment)
+                R.id.home->setCurrentFragment(HomeFragment())
+                R.id.profile->setCurrentFragment(AccountFragment())
+                R.id.notifications->setCurrentFragment(NotificationsFragment())
+                R.id.schedule-> setCurrentFragment(ScheduleFragment())
             }
             true
         }
@@ -100,8 +98,8 @@ class MainActivity : AppCompatActivity() {
             binding.bottomNavigationView.getOrCreateBadge(R.id.notifications).apply{
                 isVisible = true
                 number = badge_counter
-                backgroundColor = getResources().getColor(R.color.yellow_600)
-                badgeTextColor = getResources().getColor(R.color.black)
+                backgroundColor = resources.getColor(R.color.yellow_600)
+                badgeTextColor = Color.parseColor("#FF000000")
                 maxCharacterCount = 3
             }
         }

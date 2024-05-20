@@ -1,4 +1,4 @@
-package com.example.lunchmate.presentation.availableSlots
+package com.example.lunchmate.presentation.profile.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,10 @@ import com.example.lunchmate.databinding.ItemAvailableSlotBinding
 import com.example.lunchmatelocal.Slot
 
 
-class AvailableSlotsAdapter(private val slotsList: ArrayList<Slot>) :
+class AvailableSlotsAdapter(
+    private val slotsList: ArrayList<Slot>,
+    val inviteForLunch: (Int) -> Unit
+) :
     RecyclerView.Adapter<AvailableSlotsAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -25,9 +28,10 @@ class AvailableSlotsAdapter(private val slotsList: ArrayList<Slot>) :
         }
 
         fun bind(model: Slot) {
-            time.text = model.getStart() + " - " + model.getFinish()
+            time.text = getFormatedTime(model.data.startTime) + " - " + getFormatedTime(model.data.endTime)
 
             parent.setOnClickListener {
+                inviteForLunch(model.data.id)
             }
         }
     }
@@ -48,5 +52,9 @@ class AvailableSlotsAdapter(private val slotsList: ArrayList<Slot>) :
 
     override fun getItemCount(): Int {
         return slotsList.size
+    }
+
+    fun getFormatedTime(time: String): String {
+        return time.substring(0, 5)
     }
 }

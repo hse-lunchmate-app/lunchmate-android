@@ -15,15 +15,24 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.BottomSheetAddPhotoBinding
 import com.example.lunchmate.databinding.FragmentAccountEditBinding
+import com.example.lunchmate.domain.api.ApiHelper
+import com.example.lunchmate.domain.api.LoadingState
+import com.example.lunchmate.domain.api.RetrofitBuilder
 import com.example.lunchmate.domain.model.User
 import com.example.lunchmate.domain.model.UserPatch
 import com.example.lunchmate.domain.api.Status
 import com.example.lunchmate.presentation.account.ui.AccountFragment
+import com.example.lunchmate.presentation.account.viewModel.AccountViewModel
+import com.example.lunchmate.presentation.account.viewModel.AccountViewModelFactory
+import com.example.lunchmate.presentation.accountEdit.viewModel.AccountEditViewModel
+import com.example.lunchmate.presentation.accountEdit.viewModel.AccountEditViewModelFactory
 import com.example.lunchmate.presentation.schedule.ui.ReservedSlotBottomSheet
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -37,9 +46,19 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
     private val REQUEST_CODE_CAMERA = 2
     private var galleryPermissionLauncher: ActivityResultLauncher<String>? = null
     private var cameraPermissionLauncher: ActivityResultLauncher<String>? = null
+    private lateinit var accountEditViewModel: AccountEditViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        accountEditViewModel = ViewModelProvider(
+            requireActivity(), AccountEditViewModelFactory(
+                ApiHelper(
+                    RetrofitBuilder.apiService
+                )
+            )
+        )[AccountEditViewModel::class.java]
+
         galleryPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 val intent = Intent(Intent.ACTION_PICK)
@@ -62,15 +81,18 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAccountEditBinding.bind(view)
-        val accountFragment = AccountFragment()
+        initialiseObservers()
+        initialiseUIElements()
+    }
+
+    private fun initialiseUIElements() {
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.visibility = View.GONE
 
         val activity = activity as MainActivity
-        setUpObserver()
 
         binding.backButton.setOnClickListener {
-            setCurrentFragment(accountFragment)
+            setCurrentFragment(AccountFragment())
         }
 
         binding.changePhotoButton.setOnClickListener {
@@ -80,7 +102,7 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
 
         binding.saveButton.setOnClickListener {
             if (emptyFieldsCheck()) {
-                activity.viewModel.patchUser(
+                accountEditViewModel.patchUser(
                     "id1", UserPatch(
                         binding.edittextName.text.toString(),
                         binding.edittextTg.text.toString(),
@@ -88,47 +110,21 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
                         binding.edittextInfo.text.toString(),
                         activity.offices[binding.spinnerOffice.selectedItemPosition].id
                     )
-                ).observe(viewLifecycleOwner) {
-                    it?.let { resource ->
-                        when (resource.status) {
-                            Status.SUCCESS -> {
-                                resource.data?.let { user ->
-                                    activity.currentUser = user
-                                }
-                            }
-                            Status.ERROR -> {
-                                Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG)
-                                    .show()
-                            }
-                            Status.LOADING -> {
-
-                            }
-                        }
-                    }
-                }
-                setCurrentFragment(accountFragment)
+                )
+                setCurrentFragment(AccountFragment())
             }
         }
     }
 
-    private fun setUpObserver() {
-        val activity = activity as MainActivity
-        activity.viewModel.getUser("id1").observe(viewLifecycleOwner) {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        resource.data?.let { user ->
-                            activity.currentUser = user
-                            setUpCurrentUser(activity.currentUser) }
-                    }
-                    Status.ERROR -> {
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                    }
-                    Status.LOADING -> {
+    private fun initialiseObservers() {
+        accountEditViewModel.getUser("id1")
 
-                    }
-                }
-            }
+        accountEditViewModel.accountData.observe(viewLifecycleOwner) {
+            setUpCurrentUser(it)
+        }
+
+        accountEditViewModel.loadingStateLiveData.observe(viewLifecycleOwner) {
+            onLoadingStateChanged(it)
         }
     }
 
@@ -165,9 +161,6 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
             if (resultCode == RESULT_OK && data != null) {
                 try {
                     val imageUri: Uri = data.data!!
-                    //val imageStream: InputStream? = (activity as MainActivity).contentResolver?.openInputStream(imageUri)
-                    //val selectedImage = BitmapFactory.decodeStream(imageStream)
-                    //binding.photo.setImageBitmap(selectedImage)
                     Picasso.with(context).load(imageUri).into(binding.photo)
                 } catch (e: FileNotFoundException) {
                     e.printStackTrace()
@@ -219,7 +212,7 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
             binding.labelTg.setTextColor(resources.getColor(R.color.red_700))
             flag = false
         }
-        else if (!binding.edittextTg.text.toString().trim().matches(Regex("""[A-Za-z0-9_]"""))){
+        else if (!binding.edittextTg.text.toString().trim().matches(Regex("""[a-zA-Z0-9_]+"""))){
             binding.edittextTg.setBackgroundResource(R.drawable.rounded_et_error)
             binding.errorMsgTg.visibility = View.VISIBLE
             binding.errorMsgTg.text = "Телеграм должен иметь допустимое значение"
@@ -234,4 +227,21 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
         return flag
     }
 
+    private fun onLoadingStateChanged(state: LoadingState) {
+        when (state) {
+            LoadingState.SUCCESS -> {
+                binding.shimmerPhoto.visibility = View.GONE
+                binding.photo.visibility = View.VISIBLE
+            }
+            LoadingState.LOADING -> {
+                binding.shimmerPhoto.visibility = View.VISIBLE
+                binding.photo.visibility = View.INVISIBLE
+            }
+            LoadingState.ERROR -> {
+                binding.shimmerPhoto.visibility = View.GONE
+                binding.photo.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), "Error Occurred!", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 }

@@ -57,9 +57,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="-8dp"
-        android:background="@color/white"
+        android:background="@color/background"
         android:labelFor="@id/edittextOffice"
-        android:textColor="@color/grey_500"
+        android:textColor="@color/label"
         android:text="Офис"
         app:layout_constraintStart_toStartOf="@id/edittextOffice"
         app:layout_constraintTop_toTopOf="@id/edittextOffice" />
@@ -82,7 +82,7 @@
             android:background="@drawable/rounded_light_yellow"
             android:text="Очистить"
             android:textAllCaps="false"
-            android:textColor="@color/yellow_800" />
+            android:textColor="#FFFDAB1A" />
 
         <Space
             android:layout_width="0dp"
@@ -97,7 +97,7 @@
             android:background="@drawable/rounded_yellow"
             android:text="Искать"
             android:textAllCaps="false"
-            android:textColor="@color/black" />
+            android:textColor="#FF000000" />
 
     </LinearLayout>
 
