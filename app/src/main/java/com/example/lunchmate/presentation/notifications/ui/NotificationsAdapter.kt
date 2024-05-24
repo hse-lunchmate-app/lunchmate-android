@@ -1,23 +1,29 @@
 package com.example.lunchmate.presentation.notifications.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.ItemNotificationBinding
-import com.example.lunchmate.domain.model.Notification
+import com.example.lunchmate.domain.model.Lunch
 import com.example.lunchmate.domain.model.User
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NotificationsAdapter(
+    private val notificationsList: ArrayList<Lunch>,
     val onProfileClick: (User) -> Unit,
-    val denyRequest: (Int) -> Unit,
-    private val notificationsList: ArrayList<Notification>
+    val declineInvitation: (Lunch) -> Unit,
+    val acceptInvitation: (Lunch) -> Unit,
+    val revokeInvitation: (Lunch) -> Unit,
 ) :
     RecyclerView.Adapter<NotificationsAdapter.ViewHolder>() {
 
@@ -31,6 +37,8 @@ class NotificationsAdapter(
         val btnsPart: LinearLayout
         val denyBtn: AppCompatButton
         val acceptBtn: AppCompatButton
+        val progressBar: ProgressBar
+        val revokeBtn: AppCompatButton
 
         init {
             parent = binding.parent
@@ -41,25 +49,56 @@ class NotificationsAdapter(
             btnsPart = binding.btnsPart
             denyBtn = binding.denyBtn
             acceptBtn = binding.acceptBtn
+            progressBar = binding.progressBar
+            revokeBtn = binding.revokeBtn
         }
 
-        fun bind(model: Notification) {
-            title.text = model.getTitle()
-            content.text = model.getContent()
-            time.text = model.getTime()
-
-            if (model.getTitle() == "Новое приглашение") {
+        @SuppressLint("SetTextI18n")
+        fun bind(model: Lunch) {
+            if (!model.accepted && model.invitee.id == "id1") {
+                title.text = "Новое приглашение"
+                content.text = model.master.name + " хочет пойти на ланч"
+                time.text = getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
                 btnsPart.visibility = View.VISIBLE
                 denyBtn.setOnClickListener {
-                    denyRequest(position)
+                    declineInvitation(model)
                 }
                 acceptBtn.setOnClickListener {
-
+                    acceptBtn.text = ""
+                    progressBar.visibility = View.VISIBLE
+                    acceptInvitation(model)
+                }
+                parent.setOnClickListener {
+                    onProfileClick(model.master)
                 }
             }
-
-            parent.setOnClickListener {
-                //onProfileClick(TODO)
+            else if (!model.accepted && model.master.id == "id1") {
+                title.text = "Ожидание ответа"
+                content.text = "Вы ждете ответ от пользователя: " + model.invitee.name
+                time.text = getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
+                revokeBtn.visibility = View.VISIBLE
+                revokeBtn.setOnClickListener {
+                    revokeInvitation(model)
+                }
+                parent.setOnClickListener {
+                    onProfileClick(model.invitee)
+                }
+            }
+            else if (model.accepted && model.master.id == "id1"){
+                title.text = "Ваше приглашение приняли"
+                content.text = model.invitee.name + " будет ждать Вас на ланче"
+                time.text = getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
+                parent.setOnClickListener {
+                    onProfileClick(model.invitee)
+                }
+            }
+            else if (model.accepted && model.invitee.id == "id1"){
+                title.text = "Вы приняли приглашение"
+                content.text = model.master.name + " будет ждать Вас на ланче"
+                time.text = getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
+                parent.setOnClickListener {
+                    onProfileClick(model.master)
+                }
             }
         }
     }
@@ -74,11 +113,23 @@ class NotificationsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val model: Notification = notificationsList[position]
+        val model: Lunch = notificationsList[position]
         holder.bind(model)
     }
 
     override fun getItemCount(): Int {
         return notificationsList.size
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getTime(date: String, start:String, finish: String): String{
+        val OLD_FORMAT = "yyyy-MM-dd"
+        val NEW_FORMAT = "dd MMMM"
+
+        val sdf = SimpleDateFormat(OLD_FORMAT)
+        val d: Date = sdf.parse(date) as Date
+        sdf.applyPattern(NEW_FORMAT)
+
+        return "Дата: " + sdf.format(d) + ", c " + start.substring(0, 5) + " до " + finish.substring(0, 5)
     }
 }

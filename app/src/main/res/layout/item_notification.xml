@@ -8,8 +8,8 @@
     android:background="@drawable/rounded_yellow_stroke"
     android:clickable="true"
     android:focusable="true"
-    android:padding="12dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="12dp">
 
     <LinearLayout
         android:id="@+id/contentPart"
@@ -36,7 +36,7 @@
                 android:layout_marginEnd="4dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Новое приглашение"
+                android:text="Ваше приглашение приняли"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -47,9 +47,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="5dp"
-                android:text="Иван Иванов позвал Вас на ланч"
+                android:text="Иван Иванов будет ждать Вас на ланче"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/itemDate"
@@ -71,6 +71,20 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/revokeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="4dp"
+        android:layout_weight="1"
+        android:background="@drawable/rounded_light_yellow"
+        android:text="Отозвать приглашение"
+        android:textAllCaps="false"
+        android:textColor="#FFFDAB1A"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/btnsPart"
@@ -98,17 +112,41 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acceptBtn"
-            android:layout_width="0dp"
-            android:layout_height="40sp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_yellow"
-            android:text="Принять"
-            android:textAllCaps="false"
-            android:textColor="@color/black" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acceptBtn"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/rounded_yellow"
+                android:text="Принять"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:indeterminate="true"
+                android:indeterminateTint="#000000"
+                android:indeterminateTintMode="src_atop"
+                android:elevation="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

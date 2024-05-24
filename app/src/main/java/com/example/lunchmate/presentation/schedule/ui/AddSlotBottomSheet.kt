@@ -41,7 +41,7 @@ class AddSlotBottomSheet(
         binding.finish.addTextChangedListener(timeWatcher)
 
         binding.addBtn.setOnClickListener {
-            if (binding.start.text.isEmpty() || binding.finish.text.isEmpty()) {
+            if (binding.start.text.length < 5 || binding.finish.text.length < 5) {
                 binding.start.setBackgroundResource(R.drawable.rounded_dark_grey_error)
                 binding.finish.setBackgroundResource(R.drawable.rounded_dark_grey_error)
                 binding.errorMsg.visibility = View.VISIBLE

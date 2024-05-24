@@ -4,7 +4,7 @@
     android:id="@+id/itemParent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="11dp"
     android:background="@color/white"
     android:padding="5dp"
     app:cardCornerRadius="15dp">
@@ -25,30 +25,37 @@
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
             android:layout_toEndOf="@id/itemPhoto"
-            android:background="@color/grey_100"
-            android:ellipsize="end"
-            android:textSize="20sp" />
+            android:textSize="18sp"
+            android:background="@color/grey_100"/>
 
         <TextView
             android:id="@+id/itemContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/itemTitle"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/itemPhoto"
-            android:background="@color/grey_100"
-            android:drawablePadding="4dp"
-            android:ellipsize="end"
-            android:textSize="16sp" />
+            android:layout_below="@id/itemTitle"
+            android:textSize="16sp"
+            android:background="@color/grey_100"/>
+
+        <TextView
+            android:id="@+id/itemDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/itemPhoto"
+            android:layout_below="@id/itemContent"
+            android:textSize="14sp"
+            android:background="@color/grey_100"/>
 
     </RelativeLayout>
 

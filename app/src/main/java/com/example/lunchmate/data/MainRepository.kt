@@ -26,7 +26,7 @@ class MainRepository(private val apiHelper: ApiHelper) {
 
     suspend fun deleteSlot(id: String) = apiHelper.deleteSlot(id)
 
-    suspend fun getLunches(id: String) = apiHelper.getLunches(id)
+    suspend fun getLunches(id: String, accepted: Boolean) = apiHelper.getLunches(id, accepted)
 
     suspend fun inviteForLunch(lunchInvitation: LunchInvitation) = apiHelper.inviteForLunch(lunchInvitation)
 

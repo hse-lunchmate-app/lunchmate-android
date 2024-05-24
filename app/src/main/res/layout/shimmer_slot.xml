@@ -6,8 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:background="@color/white"
-    android:clickable="true"
-    android:focusable="true"
     app:cardCornerRadius="15dp">
 
     <TextView

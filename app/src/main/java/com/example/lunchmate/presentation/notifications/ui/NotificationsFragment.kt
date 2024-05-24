@@ -2,44 +2,87 @@ package com.example.lunchmate.presentation.notifications.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.FragmentNotificationsBinding
+import com.example.lunchmate.domain.api.ApiHelper
+import com.example.lunchmate.domain.api.LoadingState
+import com.example.lunchmate.domain.api.RetrofitBuilder
+import com.example.lunchmate.domain.model.Lunch
 import com.example.lunchmate.domain.model.Notification
 import com.example.lunchmate.domain.model.User
+import com.example.lunchmate.presentation.notifications.viewModel.NotificationsViewModel
+import com.example.lunchmate.presentation.notifications.viewModel.NotificationsViewModelFactory
 import com.example.lunchmate.presentation.profile.ui.ProfileBottomSheet
+import com.example.lunchmate.presentation.schedule.viewModel.ScheduleViewModel
+import com.example.lunchmate.presentation.schedule.viewModel.ScheduleViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlin.collections.ArrayList
 
-class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
+class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     private lateinit var binding: FragmentNotificationsBinding
-    private lateinit var notificationsList: ArrayList<Notification>
-    private lateinit var notificationsAdapter: NotificationsAdapter
+    private lateinit var notificationsViewModel: NotificationsViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        notificationsViewModel = ViewModelProvider(
+            requireActivity(), NotificationsViewModelFactory(
+                ApiHelper(
+                    RetrofitBuilder.apiService
+                )
+            )
+        )[NotificationsViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentNotificationsBinding.bind(view)
-        val activity = activity as MainActivity
-        activity.badge_counter = 0
-        activity.updateBadge()
 
-        notificationsList = ArrayList<Notification>()
-        //notificationsList.add(Notification(0, "Новое приглашение", "1 марта, 13:00 - 14:00", activity.currentUser))
-        //notificationsList.add(Notification(0, "Отказ", "1 марта, 13:00 - 14:00", activity.currentUser))
-        //notificationsList.add(Notification(0, "Согласие", "1 марта, 13:00 - 14:00", activity.currentUser))
-        //notificationsList.add(Notification(0, "Напоминание", "1 марта, 13:00 - 14:00", activity.currentUser))
+        initialiseObservers()
+        initialiseUIElements()
+    }
 
-        setUpRV(notificationsList)
+    private fun initialiseUIElements() {
+        binding.tabMenu.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab == binding.tabMenu.getTabAt(1)) {
+                    notificationsViewModel.getHistory("id1")
+                } else {
+                    notificationsViewModel.getInvitations("id1")
+                }
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+        })
+    }
+
+    private fun initialiseObservers() {
+        notificationsViewModel.getInvitations("id1")
+
+        notificationsViewModel.notificationsData.observe(viewLifecycleOwner) {
+            setUpRV(it)
+        }
+
+        notificationsViewModel.loadingStateLiveData.observe(viewLifecycleOwner) {
+            onLoadingStateChanged(it)
+        }
+
+        notificationsViewModel.toastMsg.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun onProfileClick(user: User) {
@@ -47,71 +90,35 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
         dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
-    private fun denyRequest(position: Int){
-        notificationsList.removeAt(position)
-        notificationsAdapter.notifyItemRemoved(position)
-        checkEmptyState()
+    private fun declineInvitation(lunch: Lunch) {
+        notificationsViewModel.declineInvitation(lunch)
     }
 
-    private fun setUpRV(notificationsList: ArrayList<Notification>){
-        notificationsAdapter = NotificationsAdapter(::onProfileClick, ::denyRequest, notificationsList)
-        val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    private fun acceptInvitation(lunch: Lunch) {
+        notificationsViewModel.acceptInvitation(lunch)
+    }
+
+    private fun revokeInvitation(lunch: Lunch) {
+        notificationsViewModel.revokeInvitation(lunch)
+    }
+
+    private fun setUpRV(notificationsList: ArrayList<Lunch>) {
+        val notificationsAdapter = NotificationsAdapter(
+            notificationsList,
+            ::onProfileClick,
+            ::declineInvitation,
+            ::acceptInvitation,
+            ::revokeInvitation
+        )
+        val linearLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = notificationsAdapter
         binding.recyclerView.itemAnimator = SlideInLeftAnimator()
-
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val notification: Notification =
-                    notificationsList.get(position)
-                notificationsList.removeAt(position)
-                notificationsAdapter.notifyItemRemoved(position)
-                checkEmptyState()
-
-                val snackBar = Snackbar.make(requireView(), "Уведомление удалено", Snackbar.LENGTH_LONG)
-                    .setTextColor(ContextCompat.getColor(
-                        requireContext(), R.color.white
-                    ))
-                    .setActionTextColor(
-                        ContextCompat.getColor(
-                            requireContext(), R.color.yellow_600
-                        ))
-                    .setAction(
-                        "Отменить",
-                        View.OnClickListener {
-                            notificationsList.add(position, notification)
-                            notificationsAdapter.notifyItemInserted(position)
-                            checkEmptyState()
-                        }).show()
-            }
-        }).attachToRecyclerView(binding.recyclerView)
-
-        /*binding.clearBtn.setOnClickListener {
-            var i = 0;
-            while (i < notificationsList.size){
-                if (notificationsList[i].getTitle() != "Новое приглашение"){
-                    notificationsList.removeAt(i)
-                    notificationsAdapter.notifyItemRemoved(i)
-                    i--
-                }
-                i++
-            }
-            checkEmptyState()
-        }*/
-
-        checkEmptyState()
+        checkEmptyState(notificationsList)
     }
 
-    private fun checkEmptyState() {
+    private fun checkEmptyState(notificationsList: ArrayList<Lunch>) {
         if (notificationsList.size == 0) {
             binding.emptyIcon.visibility = View.VISIBLE
             binding.emptyTitle.visibility = View.VISIBLE
@@ -120,6 +127,24 @@ class NotificationsFragment: Fragment(R.layout.fragment_notifications) {
             binding.emptyIcon.visibility = View.GONE
             binding.emptyTitle.visibility = View.GONE
             binding.emptyContent.visibility = View.GONE
+        }
+    }
+
+    private fun onLoadingStateChanged(state: LoadingState) {
+        when (state) {
+            LoadingState.SUCCESS -> {
+                binding.shimmerLayout.visibility = View.GONE
+                binding.recyclerView.visibility = View.VISIBLE
+            }
+            LoadingState.LOADING -> {
+                binding.recyclerView.visibility = View.INVISIBLE
+                binding.shimmerLayout.visibility = View.VISIBLE
+            }
+            LoadingState.ERROR -> {
+                binding.shimmerLayout.visibility = View.GONE
+                binding.recyclerView.visibility = View.GONE
+                Toast.makeText(requireContext(), "Error Occurred!", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }

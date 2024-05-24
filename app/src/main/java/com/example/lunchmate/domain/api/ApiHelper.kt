@@ -27,7 +27,7 @@ class ApiHelper(private val apiService: ApiService) {
 
     suspend fun deleteSlot(id: String) = apiService.deleteSlot(id)
 
-    suspend fun getLunches(id: String) = apiService.getLunches(id)
+    suspend fun getLunches(id: String, accepted: Boolean) = apiService.getLunches(id, accepted)
 
     suspend fun inviteForLunch(lunchInvitation: LunchInvitation) = apiService.inviteForLunch(lunchInvitation)
 

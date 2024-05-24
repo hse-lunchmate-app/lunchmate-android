@@ -25,7 +25,6 @@ import com.example.lunchmatelocal.ScheduleFragment
 class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
     var currentUser: User = User("id1", "v.utkin", "Ваня Ваня", "t.me/testing", "Тестинг", "Тестинг", Office(1, "Tinkoff Space", City(1, "Москва")))
-    //var sampleAccount: Account = Account(0, "Иван Иванов", 1, "Котлетка с пюрешкой", "Я обычный Иван", "", "ivan12345", "", R.drawable.photo)
     lateinit var offices: List<Office>
     var officeNames: ArrayList<String> = ArrayList<String>()
     var badge_counter = 13
@@ -79,8 +78,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-
     }
 
     private fun setCurrentFragment(fragment: Fragment)=

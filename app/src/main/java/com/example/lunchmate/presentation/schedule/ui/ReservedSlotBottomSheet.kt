@@ -22,6 +22,7 @@ import com.example.lunchmate.domain.api.LoadingState
 import com.example.lunchmate.domain.api.RetrofitBuilder
 import com.example.lunchmate.domain.api.Status
 import com.example.lunchmate.domain.model.LunchInvitation
+import com.example.lunchmate.domain.model.User
 import com.example.lunchmate.presentation.profile.ui.AvailableSlotsAdapter
 import com.example.lunchmate.presentation.profile.ui.ProfileCalendar
 import com.example.lunchmate.presentation.profile.viewModel.ProfileViewModel
@@ -32,16 +33,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class ReservedSlotBottomSheet(
     val date: String,
-    val currentDate: String,
     val slot: Slot,
     val cancelReservation: (Slot) -> Unit
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetReservedSlotBinding
     private lateinit var profileViewModel: ProfileViewModel
-    val weekdaysNames =
-        arrayOf("Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
-    val calendar = ProfileCalendar(::updateScheduleData)
+    private val calendar = ProfileCalendar(::updateScheduleData)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,9 +73,9 @@ class ReservedSlotBottomSheet(
     private fun initialiseUIElements() {
         binding.date.text = date
 
-        binding.start.text = slot.data.startTime
+        binding.start.text = slot.data.startTime.substring(0, 5)
 
-        binding.finish.text = slot.data.endTime
+        binding.finish.text = slot.data.endTime.substring(0, 5)
 
         binding.lunchMate.text = slot.lunchMate?.name
 
@@ -104,7 +102,7 @@ class ReservedSlotBottomSheet(
         binding.rightButton.setOnClickListener{
             binding.leftButton.isEnabled = true
             calendar.increase()
-            binding.date.text = calendar.getDateStr()
+            binding.dateSchedule.text = calendar.getDateStr()
             if (!calendar.isToday()){
                 binding.leftButton.setColorFilter(resources.getColor(R.color.blue_700))
                 binding.leftButton.isClickable = true
@@ -113,7 +111,7 @@ class ReservedSlotBottomSheet(
         binding.leftButton.isEnabled = false
         binding.leftButton.setOnClickListener{
             calendar.decrease()
-            binding.date.text = calendar.getDateStr()
+            binding.dateSchedule.text = calendar.getDateStr()
             if (calendar.isToday()){
                 binding.leftButton.setColorFilter(resources.getColor(R.color.grey_400))
                 binding.leftButton.isClickable = false
@@ -144,6 +142,13 @@ class ReservedSlotBottomSheet(
         profileViewModel.loadingStateLiveData.observe(viewLifecycleOwner) {
             onLoadingStateChanged(it)
         }
+
+        profileViewModel.toastMsg.observe(viewLifecycleOwner) {
+            if (it != null) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                profileViewModel.toastMsg.postValue(null)
+            }
+        }
     }
 
     private fun setUpRV(slotsList: java.util.ArrayList<Slot>) {
@@ -167,15 +172,15 @@ class ReservedSlotBottomSheet(
     private fun onLoadingStateChanged(state: LoadingState) {
         when (state) {
             LoadingState.SUCCESS -> {
-                binding.shimmerLayout.visibility = View.GONE
                 binding.availableSlots.visibility = View.VISIBLE
+                binding.shimmerLayout.visibility = View.GONE
             }
             LoadingState.LOADING -> {
-                binding.availableSlots.visibility = View.GONE
                 binding.shimmerLayout.visibility = View.VISIBLE
+                binding.availableSlots.visibility = View.INVISIBLE
             }
             LoadingState.ERROR -> {
-                binding.shimmerLayout.visibility = View.GONE
+                binding.shimmerLayout.visibility = View.INVISIBLE
                 binding.availableSlots.visibility = View.INVISIBLE
                 Toast.makeText(requireContext(), "Error Occurred!", Toast.LENGTH_LONG).show()
             }
@@ -183,30 +188,7 @@ class ReservedSlotBottomSheet(
     }
 
     private fun inviteForLunch(timeslotId: Int){
-        profileViewModel.inviteForLunch(LunchInvitation("id1", slot.lunchMate!!.id, timeslotId, calendar.getCurrentDate())).observe(viewLifecycleOwner) {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        binding.shimmerLayout.visibility = View.GONE
-                        binding.availableSlots.visibility = View.VISIBLE
-                        Toast.makeText(
-                            requireContext(),
-                            "Ваше приглашение было отправлено!",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    Status.ERROR -> {
-                        binding.shimmerLayout.visibility = View.GONE
-                        binding.availableSlots.visibility = View.INVISIBLE
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                    }
-                    Status.LOADING -> {
-                        binding.availableSlots.visibility = View.GONE
-                        binding.shimmerLayout.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
+        profileViewModel.inviteForLunch(LunchInvitation("id1", slot.lunchMate!!.id, timeslotId, calendar.getCurrentDate()))
     }
 
     private fun updateScheduleData(){

@@ -106,8 +106,8 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
                     "id1", UserPatch(
                         binding.edittextName.text.toString(),
                         binding.edittextTg.text.toString(),
-                        binding.edittextTaste.text.toString(),
-                        binding.edittextInfo.text.toString(),
+                        binding.edittextTaste.text.toString().ifEmpty { "Без предпочтений" },
+                        binding.edittextInfo.text.toString().ifEmpty { "Без информации" },
                         activity.offices[binding.spinnerOffice.selectedItemPosition].id
                     )
                 )

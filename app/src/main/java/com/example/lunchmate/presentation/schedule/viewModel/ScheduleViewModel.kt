@@ -20,24 +20,27 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val slotsTimetable = mainRepository.getSlotsByDate(userId, date, false)
-                val userLunches = mainRepository.getLunches(userId)
+                val userLunches = mainRepository.getLunches(userId, true)
                 val slots: ArrayList<Slot> = ArrayList<Slot>()
                 for (slot in slotsTimetable){
                     if (slot.weekDay == weekday) {
                         var lunchMate: User? = null
+                        var lunchId: String? = null
                         for (lunch in userLunches){
                             if (lunch.timeslot == slot){
                                 if (lunch.master.id == userId){
                                     lunchMate = lunch.invitee
+                                    lunchId = lunch.id
                                     break
                                 }
                                 else if (lunch.invitee.id == userId){
                                     lunchMate = lunch.master
+                                    lunchId = lunch.id
                                     break
                                 }
                             }
                         }
-                        slots.add(Slot(slot, lunchMate))
+                        slots.add(Slot(slot, lunchMate, lunchId))
                     }
                 }
                 _scheduleData.postValue(slots)
@@ -54,7 +57,7 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
             try {
                 val slotTimetable = mainRepository.postSlot(slot)
                 val slots: ArrayList<Slot> = ArrayList<Slot>(_scheduleData.value)
-                slots.add(Slot(slotTimetable, null))
+                slots.add(Slot(slotTimetable, null, null))
                 slots.sortBy { it.data.startTime }
                 _scheduleData.postValue(slots)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
@@ -83,7 +86,7 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newSlot = mainRepository.patchSlot(slot.data.id.toString(), slotPatch)
-                _scheduleData.value!![_scheduleData.value!!.indexOf(slot)] = Slot(newSlot, null)
+                _scheduleData.value!![_scheduleData.value!!.indexOf(slot)] = Slot(newSlot, null, null)
                 _scheduleData.postValue(_scheduleData.value)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
@@ -96,8 +99,9 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mainRepository.revokeReservation(slot.data.id.toString())
+                mainRepository.revokeReservation(slot.lunchId!!)
                 _scheduleData.value!![_scheduleData.value!!.indexOf(slot)].lunchMate = null
+                _scheduleData.value!![_scheduleData.value!!.indexOf(slot)].lunchId = null
                 _scheduleData.postValue(_scheduleData.value)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {

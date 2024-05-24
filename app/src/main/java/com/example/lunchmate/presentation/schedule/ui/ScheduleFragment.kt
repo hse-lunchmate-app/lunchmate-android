@@ -160,7 +160,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     }
 
     private fun openReservedSlot(slot: Slot) {
-        val dialog = ReservedSlotBottomSheet(calendar.getDateStr(), calendar.getCurrentDate(), slot, ::cancelReservation)
+        val dialog = ReservedSlotBottomSheet(calendar.getDateStr(), slot, ::cancelReservation)
         dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
@@ -276,7 +276,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     }
 
     private fun checkSlotsCount(slotsList: ArrayList<Slot>) {
-        if (slotsList.size >= 3) {
+        if (slotsList.size >= 2) {
             binding.addSlotBtn.visibility = View.GONE
         } else {
             binding.addSlotBtn.visibility = View.VISIBLE

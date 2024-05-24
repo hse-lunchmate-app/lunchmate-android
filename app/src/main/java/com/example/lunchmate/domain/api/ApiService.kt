@@ -34,8 +34,8 @@ interface ApiService {
     @DELETE("timetable/slot/{id}")
     suspend fun deleteSlot(@Path("id") id: String): Response<Unit>
 
-    @GET("lunches/accepted/{userId}")
-    suspend fun getLunches(@Path("userId") id: String): List<Lunch>
+    @GET("lunches/{userId}")
+    suspend fun getLunches(@Path("userId") id: String, @Query("accepted") accepted: Boolean): List<Lunch>
 
     @POST("lunches/invite")
     suspend fun inviteForLunch(@Body lunchInvitation: LunchInvitation): Lunch

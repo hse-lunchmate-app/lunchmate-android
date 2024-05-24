@@ -30,7 +30,7 @@ class ProfileBottomSheet(
 
     private lateinit var profileViewModel: ProfileViewModel
     lateinit var binding: BottomSheetProfileBinding
-    val calendar = ProfileCalendar(::updateScheduleData)
+    private val calendar = ProfileCalendar(::updateScheduleData)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +115,13 @@ class ProfileBottomSheet(
         profileViewModel.loadingStateLiveData.observe(viewLifecycleOwner) {
             onLoadingStateChanged(it)
         }
+
+        profileViewModel.toastMsg.observe(viewLifecycleOwner) {
+            if (it != null) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                profileViewModel.toastMsg.postValue(null)
+            }
+        }
     }
 
     private fun setUpRV(slotsList: ArrayList<Slot>) {
@@ -156,29 +163,6 @@ class ProfileBottomSheet(
     }
 
     private fun inviteForLunch(timeslotId: Int){
-        profileViewModel.inviteForLunch(LunchInvitation("id1", user.id, timeslotId, calendar.getCurrentDate())).observe(viewLifecycleOwner) {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        binding.shimmerLayout.visibility = View.GONE
-                        binding.availableSlots.visibility = View.VISIBLE
-                        Toast.makeText(
-                            requireContext(),
-                            "Ваше приглашение было отправлено!",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    Status.ERROR -> {
-                        binding.shimmerLayout.visibility = View.GONE
-                        binding.availableSlots.visibility = View.INVISIBLE
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                    }
-                    Status.LOADING -> {
-                        binding.availableSlots.visibility = View.GONE
-                        binding.shimmerLayout.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
+        profileViewModel.inviteForLunch(LunchInvitation("id3", user.id, timeslotId, calendar.getCurrentDate()))
     }
 }

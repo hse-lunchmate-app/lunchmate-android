@@ -22,7 +22,7 @@ class FreeSlotBottomSheet(
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetFreeSlotBinding
-    val timeWatcher = MaskWatcher("##:##")
+    private val timeWatcher = MaskWatcher("##:##")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +52,7 @@ class FreeSlotBottomSheet(
         }
 
         binding.saveBtn.setOnClickListener {
-            if (binding.start.text.isEmpty() || binding.finish.text.isEmpty()) {
+            if (binding.start.text.length < 5 || binding.finish.text.length < 5) {
                 binding.start.setBackgroundResource(R.drawable.rounded_dark_grey_error)
                 binding.finish.setBackgroundResource(R.drawable.rounded_dark_grey_error)
                 binding.errorMsg.visibility = View.VISIBLE

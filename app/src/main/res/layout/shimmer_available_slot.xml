@@ -6,7 +6,5 @@
     android:layout_height="55dp"
     android:layout_margin="7dp"
     android:backgroundTint="@color/grey_100"
-    android:clickable="true"
-    android:focusable="true"
     android:padding="5dp"
     app:cardCornerRadius="15dp" />
