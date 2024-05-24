@@ -1,6 +1,7 @@
 package com.example.lunchmate.presentation.notifications.viewModel
 
 import androidx.lifecycle.*
+import com.example.lunchmate.MainActivity
 import com.example.lunchmate.data.MainRepository
 import com.example.lunchmate.domain.api.LoadingState
 import com.example.lunchmate.domain.model.*

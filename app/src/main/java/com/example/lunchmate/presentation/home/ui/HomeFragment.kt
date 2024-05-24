@@ -13,6 +13,7 @@ import com.example.lunchmate.databinding.FragmentHomeBinding
 import com.example.lunchmate.domain.api.ApiHelper
 import com.example.lunchmate.domain.api.LoadingState
 import com.example.lunchmate.domain.api.RetrofitBuilder
+import com.example.lunchmate.domain.api.Status
 import com.example.lunchmate.domain.model.User
 import com.example.lunchmate.domain.model.City
 import com.example.lunchmate.domain.model.Office
@@ -99,8 +100,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun openFilter(){
-        val dialog = FilterBottomSheet(current_office, ::filterSearch)
-        dialog.show((activity as MainActivity).supportFragmentManager, "")
+        homeViewModel.getOffices().observe(viewLifecycleOwner) {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { officeList ->
+                            val officeNames = ArrayList<String>()
+                            for (office in officeList)
+                                officeNames.add(office.name)
+                            val dialog = FilterBottomSheet(current_office, officeList, officeNames, ::filterSearch)
+                            dialog.show((activity as MainActivity).supportFragmentManager, "")
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {}
+                }
+            }
+        }
     }
 
     private fun filterSearch(current_office: Office){

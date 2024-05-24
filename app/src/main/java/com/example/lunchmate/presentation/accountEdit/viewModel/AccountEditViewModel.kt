@@ -3,6 +3,7 @@ package com.example.lunchmate.presentation.accountEdit.viewModel
 import androidx.lifecycle.*
 import com.example.lunchmate.data.MainRepository
 import com.example.lunchmate.domain.api.LoadingState
+import com.example.lunchmate.domain.api.Resource
 import com.example.lunchmate.domain.model.*
 import com.example.lunchmatelocal.Slot
 import kotlinx.coroutines.*
@@ -35,6 +36,15 @@ class AccountEditViewModel(private val mainRepository: MainRepository) : ViewMod
             } catch (e: Exception) {
                 loadingStateLiveData.postValue(LoadingState.ERROR)
             }
+        }
+    }
+
+    fun getOffices() = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = mainRepository.getOffices()))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
     }
 }

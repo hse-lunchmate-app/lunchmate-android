@@ -28,11 +28,13 @@ import com.example.lunchmate.domain.api.RetrofitBuilder
 import com.example.lunchmate.domain.model.User
 import com.example.lunchmate.domain.model.UserPatch
 import com.example.lunchmate.domain.api.Status
+import com.example.lunchmate.domain.model.Office
 import com.example.lunchmate.presentation.account.ui.AccountFragment
 import com.example.lunchmate.presentation.account.viewModel.AccountViewModel
 import com.example.lunchmate.presentation.account.viewModel.AccountViewModelFactory
 import com.example.lunchmate.presentation.accountEdit.viewModel.AccountEditViewModel
 import com.example.lunchmate.presentation.accountEdit.viewModel.AccountEditViewModelFactory
+import com.example.lunchmate.presentation.home.ui.FilterBottomSheet
 import com.example.lunchmate.presentation.schedule.ui.ReservedSlotBottomSheet
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -47,6 +49,7 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
     private var galleryPermissionLauncher: ActivityResultLauncher<String>? = null
     private var cameraPermissionLauncher: ActivityResultLauncher<String>? = null
     private lateinit var accountEditViewModel: AccountEditViewModel
+    private lateinit var offices: List<Office>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,8 +92,6 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.visibility = View.GONE
 
-        val activity = activity as MainActivity
-
         binding.backButton.setOnClickListener {
             setCurrentFragment(AccountFragment())
         }
@@ -108,7 +109,7 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
                         binding.edittextTg.text.toString(),
                         binding.edittextTaste.text.toString().ifEmpty { "Без предпочтений" },
                         binding.edittextInfo.text.toString().ifEmpty { "Без информации" },
-                        activity.offices[binding.spinnerOffice.selectedItemPosition].id
+                        offices[binding.spinnerOffice.selectedItemPosition].id
                     )
                 )
                 setCurrentFragment(AccountFragment())
@@ -135,10 +136,29 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
         binding.edittextTg.setText(currentUser.messenger)
         binding.edittextTaste.setText(currentUser.tastes)
         binding.edittextInfo.setText(currentUser.aboutMe)
-        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, (activity as MainActivity).officeNames)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerOffice.adapter = adapter
-        binding.spinnerOffice.setSelection((activity as MainActivity).offices.indexOf(currentUser.office))
+
+        accountEditViewModel.getOffices().observe(viewLifecycleOwner) {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { officeList ->
+                            offices = officeList
+                            val officeNames = ArrayList<String>()
+                            for (office in officeList)
+                                officeNames.add(office.name)
+                            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, officeNames)
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            binding.spinnerOffice.adapter = adapter
+                            binding.spinnerOffice.setSelection(offices.indexOf(currentUser.office))
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {}
+                }
+            }
+        }
     }
 
     private fun openGalleryForImage() {
@@ -223,6 +243,10 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
             binding.edittextTg.setBackgroundResource(R.drawable.rounded_et)
             binding.errorMsgTg.visibility = View.GONE
             binding.labelTg.setTextColor(resources.getColor(R.color.grey_500))
+        }
+        if (offices.isEmpty()){
+            Toast.makeText(requireContext(), "Не удалось получить данные об офисах", Toast.LENGTH_LONG).show()
+            flag = false
         }
         return flag
     }

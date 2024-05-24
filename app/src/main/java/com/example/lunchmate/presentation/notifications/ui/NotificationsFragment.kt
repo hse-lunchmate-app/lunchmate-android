@@ -114,8 +114,8 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = notificationsAdapter
-        binding.recyclerView.itemAnimator = SlideInLeftAnimator()
         checkEmptyState(notificationsList)
+        (activity as MainActivity).updateBadge()
     }
 
     private fun checkEmptyState(notificationsList: ArrayList<Lunch>) {

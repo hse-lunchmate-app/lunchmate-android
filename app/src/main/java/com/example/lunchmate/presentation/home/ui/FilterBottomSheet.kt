@@ -15,6 +15,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class FilterBottomSheet(
     val office: Office,
+    val offices: List<Office>,
+    val officeNames: List<String>,
     val filterSearch: (Office) -> Unit,
 ) : BottomSheetDialogFragment() {
 
@@ -35,18 +37,18 @@ class FilterBottomSheet(
         val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
             requireContext(),
             android.R.layout.simple_spinner_item,
-            (activity as MainActivity).officeNames
+            officeNames
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerOffice.adapter = adapter
-        binding.spinnerOffice.setSelection((activity as MainActivity).offices.indexOf(office))
+        binding.spinnerOffice.setSelection(offices.indexOf(office))
 
         binding.clearBtn.setOnClickListener {
-            binding.spinnerOffice.setSelection((activity as MainActivity).offices.indexOf((activity as MainActivity).currentUser.office))
+            binding.spinnerOffice.setSelection(offices.indexOf((activity as MainActivity).currentUser.office))
         }
 
         binding.searchBtn.setOnClickListener {
-            filterSearch((activity as MainActivity).offices[binding.spinnerOffice.selectedItemPosition])
+            filterSearch(offices[binding.spinnerOffice.selectedItemPosition])
             dismiss()
         }
 

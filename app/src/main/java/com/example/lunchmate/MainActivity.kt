@@ -25,9 +25,6 @@ import com.example.lunchmatelocal.ScheduleFragment
 class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
     var currentUser: User = User("id1", "v.utkin", "Ваня Ваня", "t.me/testing", "Тестинг", "Тестинг", Office(1, "Tinkoff Space", City(1, "Москва")))
-    lateinit var offices: List<Office>
-    var officeNames: ArrayList<String> = ArrayList<String>()
-    var badge_counter = 13
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,26 +55,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-        viewModel.getOffices().observe(this) {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        resource.data?.let { officeList ->
-                            offices = officeList
-                            for (office in offices)
-                                officeNames.add(office.name)
-                        }
-                    }
-                    Status.ERROR -> {
-                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                    }
-                    Status.LOADING -> {
-
-                    }
-                }
-            }
-        }
     }
 
     private fun setCurrentFragment(fragment: Fragment)=
@@ -87,17 +64,31 @@ class MainActivity : AppCompatActivity() {
         }
 
     fun updateBadge(){
-        if (badge_counter == 0){
-            binding.bottomNavigationView.getBadge(R.id.notifications)?.isVisible = false
-            binding.bottomNavigationView.removeBadge(R.id.notifications)
-        }
-        else {
-            binding.bottomNavigationView.getOrCreateBadge(R.id.notifications).apply{
-                isVisible = true
-                number = badge_counter
-                backgroundColor = resources.getColor(R.color.yellow_600)
-                badgeTextColor = Color.parseColor("#FF000000")
-                maxCharacterCount = 3
+        viewModel.getInvitationsCount("id1").observe(this) {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { count ->
+                            if (count == 0){
+                                binding.bottomNavigationView.getBadge(R.id.notifications)?.isVisible = false
+                                binding.bottomNavigationView.removeBadge(R.id.notifications)
+                            }
+                            else {
+                                binding.bottomNavigationView.getOrCreateBadge(R.id.notifications).apply{
+                                    isVisible = true
+                                    number = count
+                                    backgroundColor = resources.getColor(R.color.yellow_600)
+                                    badgeTextColor = Color.parseColor("#FF000000")
+                                    maxCharacterCount = 3
+                                }
+                            }
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {}
+                }
             }
         }
     }
