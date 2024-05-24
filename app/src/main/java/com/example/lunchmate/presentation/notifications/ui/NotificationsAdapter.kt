@@ -37,7 +37,6 @@ class NotificationsAdapter(
         val btnsPart: LinearLayout
         val denyBtn: AppCompatButton
         val acceptBtn: AppCompatButton
-        val progressBar: ProgressBar
         val revokeBtn: AppCompatButton
 
         init {
@@ -49,7 +48,6 @@ class NotificationsAdapter(
             btnsPart = binding.btnsPart
             denyBtn = binding.denyBtn
             acceptBtn = binding.acceptBtn
-            progressBar = binding.progressBar
             revokeBtn = binding.revokeBtn
         }
 
@@ -64,8 +62,6 @@ class NotificationsAdapter(
                     declineInvitation(model)
                 }
                 acceptBtn.setOnClickListener {
-                    acceptBtn.text = ""
-                    progressBar.visibility = View.VISIBLE
                     acceptInvitation(model)
                 }
                 parent.setOnClickListener {
