@@ -24,4 +24,9 @@
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
     </style>
+
+    <style name="Theme.LunchMate.Launcher">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:text="Добавить фото с помощью:"
-        android:textColor="@color/white"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +40,7 @@
             android:clickable="true"
             android:focusable="true"
             android:text="Галерея"
+            android:textColor="@color/black"
             android:textAlignment="center"
             android:textSize="16sp"
             app:drawableTopCompat="@drawable/gallery" />
@@ -52,6 +53,7 @@
             android:clickable="true"
             android:focusable="true"
             android:text="Камера"
+            android:textColor="@color/black"
             android:textAlignment="center"
             android:textSize="16sp"
             app:drawableTopCompat="@drawable/camera" />

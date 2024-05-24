@@ -71,6 +71,7 @@
 
             </com.facebook.shimmer.ShimmerFrameLayout>
 
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/photo"
                 android:layout_width="100dp"
@@ -348,7 +349,8 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
                 app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"                app:layout_constraintEnd_toEndOf="parent"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edittextLogin"
                 app:passwordToggleEnabled="true">

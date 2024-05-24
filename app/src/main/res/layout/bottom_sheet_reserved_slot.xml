@@ -110,7 +110,7 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:backgroundTint="@color/white"
+        app:backgroundTint="@color/background"
         app:icon="@drawable/arrow_right"
         app:iconTint="@color/blue_700" />
 
@@ -153,13 +153,14 @@
                 android:layout_below="@id/profileNickname"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:drawableTint="@color/white"
-                android:paddingStart="10dp"
+                android:drawableLeft="@drawable/telegram"
+                android:drawableTint="#FFFFFFFF"
+                android:textColor="#FFFFFFFF"
+                android:fontFamily="@font/roboto_regular"
                 android:text="Связаться в телеграм"
                 android:textAllCaps="false"
                 app:backgroundTint="@color/tg"
-                app:cornerRadius="16dp"
-                app:icon="@drawable/telegram" />
+                app:cornerRadius="16dp" />
 
             <TextView
                 android:id="@+id/office"
@@ -259,7 +260,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/background"
                     android:clickable="false"
                     android:src="@drawable/arrow_left"
                     app:tint="@color/grey_400" />
@@ -282,7 +283,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/background"
                     android:src="@drawable/arrow_right"
                     app:tint="@color/blue_700" />
 

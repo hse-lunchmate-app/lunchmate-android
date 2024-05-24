@@ -45,12 +45,14 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
     }
 
     fun acceptInvitation(lunch: Lunch) {
+        loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 mainRepository.acceptInvitation(lunch.id)
                 _notificationsData.value?.remove(lunch)
                 _notificationsData.postValue(_notificationsData.value)
                 _toastMsg.postValue("Приглашение было принято!")
+                loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
                 _toastMsg.postValue("Не удалось принять приглашение")
             }
