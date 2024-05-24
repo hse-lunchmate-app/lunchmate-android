@@ -25,6 +25,7 @@ import java.util.*
 
 
 class ProfileBottomSheet(
+    private val currentUserId: String,
     val user: User
 ) : BottomSheetDialogFragment() {
 
@@ -83,28 +84,32 @@ class ProfileBottomSheet(
         binding.date.text = calendar.getDateStr()
         updateScheduleData()
 
-        binding.rightButton.setOnClickListener{
+        binding.rightButton.setOnClickListener {
             binding.leftButton.isEnabled = true
             calendar.increase()
             binding.date.text = calendar.getDateStr()
-            if (!calendar.isToday()){
+            if (!calendar.isToday()) {
                 binding.leftButton.setColorFilter(resources.getColor(R.color.blue_700))
                 binding.leftButton.isClickable = true
             }
         }
         binding.leftButton.isEnabled = false
-        binding.leftButton.setOnClickListener{
+        binding.leftButton.setOnClickListener {
             calendar.decrease()
             binding.date.text = calendar.getDateStr()
-            if (calendar.isToday()){
+            if (calendar.isToday()) {
                 binding.leftButton.setColorFilter(resources.getColor(R.color.grey_400))
                 binding.leftButton.isClickable = false
             }
         }
     }
 
-    private fun updateScheduleData(){
-        profileViewModel.getFreeSlots(user.id, calendar.getCurrentDate(), calendar.getCurrentWeekday())
+    private fun updateScheduleData() {
+        profileViewModel.getFreeSlots(
+            user.id,
+            calendar.getCurrentDate(),
+            calendar.getCurrentWeekday()
+        )
     }
 
     private fun initialiseObservers() {
@@ -126,7 +131,8 @@ class ProfileBottomSheet(
 
     private fun setUpRV(slotsList: ArrayList<Slot>) {
         val slotsAdapter = AvailableSlotsAdapter(slotsList, ::inviteForLunch)
-        val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val linearLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.availableSlots.layoutManager = linearLayoutManager
         binding.availableSlots.adapter = slotsAdapter
         checkEmptyState(slotsList)
@@ -162,7 +168,14 @@ class ProfileBottomSheet(
         }
     }
 
-    private fun inviteForLunch(timeslotId: Int){
-        profileViewModel.inviteForLunch(LunchInvitation("id3", user.id, timeslotId, calendar.getCurrentDate()))
+    private fun inviteForLunch(timeslotId: Int) {
+        profileViewModel.inviteForLunch(
+            LunchInvitation(
+                currentUserId,
+                user.id,
+                timeslotId,
+                calendar.getCurrentDate()
+            )
+        )
     }
 }

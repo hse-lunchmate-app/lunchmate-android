@@ -1,13 +1,11 @@
 package com.example.lunchmatelocal
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,10 +54,12 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private val calendar: ScheduleCalendar = ScheduleCalendar()
     private lateinit var scheduleViewModel: ScheduleViewModel
     private lateinit var weekdayButtons: List<CurrentDay>
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        userId = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("userId", "")!!
         scheduleViewModel = ViewModelProvider(
             requireActivity(), ScheduleViewModelFactory(
                 ApiHelper(
@@ -108,7 +108,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         currentDay = setUpCurrentWeek()
 
-        for (i in weekdayButtons.indices){
+        for (i in weekdayButtons.indices) {
             weekdayButtons[i].btn.setOnClickListener {
                 onWeekdayClick(i)
             }
@@ -120,7 +120,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         binding.rightButton.setOnClickListener {
             binding.leftButton.isEnabled = true
-            setUpWeek(++calendar.week_num)
+            setUpWeek(++calendar.weekNum)
             if (!calendar.isCurrentWeek()) {
                 binding.leftButton.setColorFilter(resources.getColor(R.color.black))
                 binding.leftButton.isClickable = true
@@ -128,14 +128,13 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
         binding.leftButton.isEnabled = false
         binding.leftButton.setOnClickListener {
-            calendar.week_num--
+            calendar.weekNum--
             if (calendar.isCurrentWeek()) {
                 binding.leftButton.setColorFilter(resources.getColor(R.color.grey_400))
                 binding.leftButton.isClickable = false
                 setUpCurrentWeek()
-            }
-            else{
-                setUpWeek(calendar.week_num)
+            } else {
+                setUpWeek(calendar.weekNum)
             }
         }
     }
@@ -150,17 +149,33 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     }
 
     private fun openAddSlot() {
-        val dialog = AddSlotBottomSheet("id1", calendar.getDateStr(), calendar.getCurrentDate(), ::addSlot)
+        val dialog = AddSlotBottomSheet(
+            userId,
+            calendar.getDateStr(),
+            calendar.getCurrentDate(),
+            ::addSlot
+        )
         dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
     private fun openFreeSlot(slot: Slot) {
-        val dialog = FreeSlotBottomSheet(calendar.getDateStr(), calendar.getCurrentDate(), slot, ::updateSlot, ::deleteSlot)
+        val dialog = FreeSlotBottomSheet(
+            calendar.getDateStr(),
+            calendar.getCurrentDate(),
+            slot,
+            ::updateSlot,
+            ::deleteSlot
+        )
         dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
     private fun openReservedSlot(slot: Slot) {
-        val dialog = ReservedSlotBottomSheet(calendar.getDateStr(), slot, ::cancelReservation)
+        val dialog = ReservedSlotBottomSheet(
+            userId,
+            calendar.getDateStr(),
+            slot,
+            ::cancelReservation
+        )
         dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
@@ -188,9 +203,14 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
 
         selectButton(weekdayButtons[i])
-        scheduleViewModel.getAllSlots("id1", calendar.getCurrentDate(), currentDay!!.weekday)
+        scheduleViewModel.getAllSlots(
+            userId,
+            calendar.getCurrentDate(),
+            currentDay!!.weekday
+        )
     }
 
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun setUpCurrentWeek(): CurrentDay? {
         calendar.setToday()
         val setUpCalendar = Calendar.getInstance()
@@ -217,8 +237,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             binding.month.text = monthNames[months[0]]
         }
 
-        for (i in weekdayButtons.indices){
-            if (calendar.day_num == weekdays[i]) {
+        for (i in weekdayButtons.indices) {
+            if (calendar.dayNum == weekdays[i]) {
                 onWeekdayClick(i)
                 return weekdayButtons[i]
             }
@@ -243,6 +263,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         day.slotsIndicator.setColorFilter(Color.parseColor("#FF000000"))
     }
 
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun setUpWeek(week_num: Int) {
         calendar.setCurrentDay(Calendar.MONDAY)
         val setUpCalendar = Calendar.getInstance()

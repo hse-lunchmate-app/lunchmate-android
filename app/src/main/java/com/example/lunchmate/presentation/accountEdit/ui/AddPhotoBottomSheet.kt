@@ -51,16 +51,4 @@ class AddPhotoBottomSheet(
 
         return bottomSheetDialog
     }
-
-    private fun timeToInt(time: String): Int {
-        return Integer.parseInt(time[0].toString() + time[1] + time[3] + time[4])
-    }
-
-    private fun timeToHour(time: String): Int {
-        return Integer.parseInt(time[0].toString() + time[1])
-    }
-
-    private fun timeToMinute(time: String): Int {
-        return Integer.parseInt(time[3].toString() + time[4])
-    }
 }

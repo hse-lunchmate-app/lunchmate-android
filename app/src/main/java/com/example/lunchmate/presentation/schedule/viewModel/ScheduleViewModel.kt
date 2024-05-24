@@ -22,18 +22,17 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
                 val slotsTimetable = mainRepository.getSlotsByDate(userId, date, false)
                 val userLunches = mainRepository.getLunches(userId, true)
                 val slots: ArrayList<Slot> = ArrayList<Slot>()
-                for (slot in slotsTimetable){
+                for (slot in slotsTimetable) {
                     if (slot.weekDay == weekday) {
                         var lunchMate: User? = null
                         var lunchId: String? = null
-                        for (lunch in userLunches){
-                            if (lunch.timeslot == slot){
-                                if (lunch.master.id == userId){
+                        for (lunch in userLunches) {
+                            if (lunch.timeslot == slot) {
+                                if (lunch.master.id == userId) {
                                     lunchMate = lunch.invitee
                                     lunchId = lunch.id
                                     break
-                                }
-                                else if (lunch.invitee.id == userId){
+                                } else if (lunch.invitee.id == userId) {
                                     lunchMate = lunch.master
                                     lunchId = lunch.id
                                     break
@@ -86,7 +85,8 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newSlot = mainRepository.patchSlot(slot.data.id.toString(), slotPatch)
-                _scheduleData.value!![_scheduleData.value!!.indexOf(slot)] = Slot(newSlot, null, null)
+                _scheduleData.value!![_scheduleData.value!!.indexOf(slot)] =
+                    Slot(newSlot, null, null)
                 _scheduleData.postValue(_scheduleData.value)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {

@@ -1,5 +1,6 @@
 package com.example.lunchmate.presentation.schedule.ui
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
@@ -32,6 +33,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class ReservedSlotBottomSheet(
+    private val currentUserId: String,
     val date: String,
     val slot: Slot,
     val cancelReservation: (Slot) -> Unit
@@ -70,6 +72,7 @@ class ReservedSlotBottomSheet(
         return binding.root
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initialiseUIElements() {
         binding.date.text = date
 
@@ -99,20 +102,20 @@ class ReservedSlotBottomSheet(
         binding.dateSchedule.text = calendar.getDateStr()
         updateScheduleData()
 
-        binding.rightButton.setOnClickListener{
+        binding.rightButton.setOnClickListener {
             binding.leftButton.isEnabled = true
             calendar.increase()
             binding.dateSchedule.text = calendar.getDateStr()
-            if (!calendar.isToday()){
+            if (!calendar.isToday()) {
                 binding.leftButton.setColorFilter(resources.getColor(R.color.blue_700))
                 binding.leftButton.isClickable = true
             }
         }
         binding.leftButton.isEnabled = false
-        binding.leftButton.setOnClickListener{
+        binding.leftButton.setOnClickListener {
             calendar.decrease()
             binding.dateSchedule.text = calendar.getDateStr()
-            if (calendar.isToday()){
+            if (calendar.isToday()) {
                 binding.leftButton.setColorFilter(resources.getColor(R.color.grey_400))
                 binding.leftButton.isClickable = false
             }
@@ -153,7 +156,8 @@ class ReservedSlotBottomSheet(
 
     private fun setUpRV(slotsList: java.util.ArrayList<Slot>) {
         val slotsAdapter = AvailableSlotsAdapter(slotsList, ::inviteForLunch)
-        val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val linearLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.availableSlots.layoutManager = linearLayoutManager
         binding.availableSlots.adapter = slotsAdapter
         checkEmptyState(slotsList)
@@ -187,16 +191,28 @@ class ReservedSlotBottomSheet(
         }
     }
 
-    private fun inviteForLunch(timeslotId: Int){
-        profileViewModel.inviteForLunch(LunchInvitation("id1", slot.lunchMate!!.id, timeslotId, calendar.getCurrentDate()))
+    private fun inviteForLunch(timeslotId: Int) {
+        profileViewModel.inviteForLunch(
+            LunchInvitation(
+                currentUserId,
+                slot.lunchMate!!.id,
+                timeslotId,
+                calendar.getCurrentDate()
+            )
+        )
     }
 
-    private fun updateScheduleData(){
-        profileViewModel.getFreeSlots(slot.lunchMate!!.id, calendar.getCurrentDate(), calendar.getCurrentWeekday())
+    private fun updateScheduleData() {
+        profileViewModel.getFreeSlots(
+            slot.lunchMate!!.id,
+            calendar.getCurrentDate(),
+            calendar.getCurrentWeekday()
+        )
     }
 
     override fun getTheme() = R.style.SheetDialog
 
+    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
 

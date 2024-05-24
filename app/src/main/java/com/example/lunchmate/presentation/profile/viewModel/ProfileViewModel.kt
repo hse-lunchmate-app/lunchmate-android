@@ -21,7 +21,7 @@ class ProfileViewModel(private val mainRepository: MainRepository) : ViewModel()
             try {
                 val slotsTimetable = mainRepository.getSlotsByDate(userId, date, true)
                 val slots: ArrayList<Slot> = ArrayList<Slot>()
-                for (slot in slotsTimetable){
+                for (slot in slotsTimetable) {
                     if (slot.weekDay == weekday)
                         slots.add(Slot(slot, null, null))
                 }

@@ -19,6 +19,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class NotificationsAdapter(
+    val currentUserId: String,
     private val notificationsList: ArrayList<Lunch>,
     val onProfileClick: (User) -> Unit,
     val declineInvitation: (Lunch) -> Unit,
@@ -31,13 +32,13 @@ class NotificationsAdapter(
         private val binding = ItemNotificationBinding.bind(itemView)
         val parent: LinearLayout
         val photo: ImageView
-        val title: TextView
+        private val title: TextView
         val content: TextView
         val time: TextView
-        val btnsPart: LinearLayout
-        val denyBtn: AppCompatButton
-        val acceptBtn: AppCompatButton
-        val revokeBtn: AppCompatButton
+        private val btnsPart: LinearLayout
+        private val denyBtn: AppCompatButton
+        private val acceptBtn: AppCompatButton
+        private val revokeBtn: AppCompatButton
 
         init {
             parent = binding.parent
@@ -53,10 +54,11 @@ class NotificationsAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bind(model: Lunch) {
-            if (!model.accepted && model.invitee.id == "id1") {
+            if (!model.accepted && model.invitee.id == currentUserId) {
                 title.text = "Новое приглашение"
                 content.text = model.master.name + " хочет пойти на ланч"
-                time.text = getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
+                time.text =
+                    getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
                 btnsPart.visibility = View.VISIBLE
                 denyBtn.setOnClickListener {
                     declineInvitation(model)
@@ -67,11 +69,11 @@ class NotificationsAdapter(
                 parent.setOnClickListener {
                     onProfileClick(model.master)
                 }
-            }
-            else if (!model.accepted && model.master.id == "id1") {
+            } else if (!model.accepted && model.master.id == currentUserId) {
                 title.text = "Ожидание ответа"
                 content.text = "Вы ждете ответ от пользователя: " + model.invitee.name
-                time.text = getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
+                time.text =
+                    getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
                 revokeBtn.visibility = View.VISIBLE
                 revokeBtn.setOnClickListener {
                     revokeInvitation(model)
@@ -79,19 +81,19 @@ class NotificationsAdapter(
                 parent.setOnClickListener {
                     onProfileClick(model.invitee)
                 }
-            }
-            else if (model.accepted && model.master.id == "id1"){
+            } else if (model.accepted && model.master.id == currentUserId) {
                 title.text = "Ваше приглашение приняли"
                 content.text = model.invitee.name + " будет ждать Вас на ланче"
-                time.text = getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
+                time.text =
+                    getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
                 parent.setOnClickListener {
                     onProfileClick(model.invitee)
                 }
-            }
-            else if (model.accepted && model.invitee.id == "id1"){
+            } else if (model.accepted && model.invitee.id == currentUserId) {
                 title.text = "Вы приняли приглашение"
                 content.text = model.master.name + " будет ждать Вас на ланче"
-                time.text = getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
+                time.text =
+                    getTime(model.lunchDate, model.timeslot.startTime, model.timeslot.endTime)
                 parent.setOnClickListener {
                     onProfileClick(model.master)
                 }
@@ -118,7 +120,7 @@ class NotificationsAdapter(
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun getTime(date: String, start:String, finish: String): String{
+    private fun getTime(date: String, start: String, finish: String): String {
         val OLD_FORMAT = "yyyy-MM-dd"
         val NEW_FORMAT = "dd MMMM"
 
@@ -126,6 +128,9 @@ class NotificationsAdapter(
         val d: Date = sdf.parse(date) as Date
         sdf.applyPattern(NEW_FORMAT)
 
-        return "Дата: " + sdf.format(d) + ", c " + start.substring(0, 5) + " до " + finish.substring(0, 5)
+        return "Дата: " + sdf.format(d) + ", c " + start.substring(
+            0,
+            5
+        ) + " до " + finish.substring(0, 5)
     }
 }

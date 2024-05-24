@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -42,7 +43,7 @@ import com.squareup.picasso.Picasso
 import java.io.FileNotFoundException
 
 
-class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
+class AccountEditFragment : Fragment(R.layout.fragment_account_edit) {
     private lateinit var binding: FragmentAccountEditBinding
     private val REQUEST_CODE_GALLERY = 1
     private val REQUEST_CODE_CAMERA = 2
@@ -50,10 +51,12 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
     private var cameraPermissionLauncher: ActivityResultLauncher<String>? = null
     private lateinit var accountEditViewModel: AccountEditViewModel
     private lateinit var offices: List<Office>
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        userId = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("userId", "")!!
         accountEditViewModel = ViewModelProvider(
             requireActivity(), AccountEditViewModelFactory(
                 ApiHelper(
@@ -62,23 +65,27 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
             )
         )[AccountEditViewModel::class.java]
 
-        galleryPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.type = "image/*"
-                startActivityForResult(intent, REQUEST_CODE_GALLERY)
-            } else {
-                Toast.makeText(requireContext(), "Please grant permission", Toast.LENGTH_LONG).show()
+        galleryPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    val intent = Intent(Intent.ACTION_PICK)
+                    intent.type = "image/*"
+                    startActivityForResult(intent, REQUEST_CODE_GALLERY)
+                } else {
+                    Toast.makeText(requireContext(), "Please grant permission", Toast.LENGTH_LONG)
+                        .show()
+                }
             }
-        }
-        cameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(intent, REQUEST_CODE_CAMERA)
-            } else {
-                Toast.makeText(requireContext(), "Please grant permission", Toast.LENGTH_LONG).show()
+        cameraPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(intent, REQUEST_CODE_CAMERA)
+                } else {
+                    Toast.makeText(requireContext(), "Please grant permission", Toast.LENGTH_LONG)
+                        .show()
+                }
             }
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,7 +96,8 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
     }
 
     private fun initialiseUIElements() {
-        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val bottomNav =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.visibility = View.GONE
 
         binding.backButton.setOnClickListener {
@@ -129,10 +137,11 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setUpCurrentUser(currentUser: User) {
         //binding.photo.setImageResource(currentUser.getPhoto())
         binding.edittextName.setText(currentUser.name)
-        binding.edittextLogin.setText("@"+currentUser.login)
+        binding.edittextLogin.setText("@" + currentUser.login)
         binding.edittextTg.setText(currentUser.messenger)
         binding.edittextTaste.setText(currentUser.tastes)
         binding.edittextInfo.setText(currentUser.aboutMe)
@@ -146,7 +155,11 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
                             val officeNames = ArrayList<String>()
                             for (office in officeList)
                                 officeNames.add(office.name)
-                            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, officeNames)
+                            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+                                requireContext(),
+                                android.R.layout.simple_spinner_item,
+                                officeNames
+                            )
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             binding.spinnerOffice.adapter = adapter
                             binding.spinnerOffice.setSelection(offices.indexOf(currentUser.office))
@@ -173,6 +186,7 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
         cameraPermissionLauncher?.launch(CAMERA)
     }
 
+    @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -184,7 +198,8 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
                     Picasso.with(context).load(imageUri).into(binding.photo)
                 } catch (e: FileNotFoundException) {
                     e.printStackTrace()
-                    Toast.makeText(requireContext(), "Что-то пошло не так...", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Что-то пошло не так...", Toast.LENGTH_LONG)
+                        .show()
                 }
             } else {
                 Toast.makeText(requireContext(), "Вы не выбрали фото", Toast.LENGTH_LONG).show()
@@ -197,7 +212,8 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
                     binding.photo.setImageBitmap(photo)
                 } catch (e: FileNotFoundException) {
                     e.printStackTrace()
-                    Toast.makeText(requireContext(), "Что-то пошло не так...", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Что-то пошло не так...", Toast.LENGTH_LONG)
+                        .show()
                 }
             } else {
                 Toast.makeText(requireContext(), "Вы не сделали фото", Toast.LENGTH_LONG).show()
@@ -213,39 +229,40 @@ class AccountEditFragment: Fragment(R.layout.fragment_account_edit) {
 
     private fun emptyFieldsCheck(): Boolean {
         var flag = true
-        if (binding.edittextName.text.toString().trim().isEmpty()){
+        if (binding.edittextName.text.toString().trim().isEmpty()) {
             binding.edittextName.setBackgroundResource(R.drawable.rounded_et_error)
             binding.errorMsgName.visibility = View.VISIBLE
             binding.errorMsgName.text = "Поле имени должно быть заполнено"
             binding.labelName.setTextColor(resources.getColor(R.color.red_700))
             flag = false
-        }
-        else{
+        } else {
             binding.edittextName.setBackgroundResource(R.drawable.rounded_et)
             binding.errorMsgName.visibility = View.GONE
             binding.labelName.setTextColor(resources.getColor(R.color.grey_500))
         }
-        if (binding.edittextTg.text.toString().trim().isEmpty()){
+        if (binding.edittextTg.text.toString().trim().isEmpty()) {
             binding.edittextTg.setBackgroundResource(R.drawable.rounded_et_error)
             binding.errorMsgTg.visibility = View.VISIBLE
             binding.errorMsgTg.text = "Поле телеграма должно быть заполнено"
             binding.labelTg.setTextColor(resources.getColor(R.color.red_700))
             flag = false
-        }
-        else if (!binding.edittextTg.text.toString().trim().matches(Regex("""[a-zA-Z0-9_]+"""))){
+        } else if (!binding.edittextTg.text.toString().trim().matches(Regex("""[a-zA-Z0-9_]+"""))) {
             binding.edittextTg.setBackgroundResource(R.drawable.rounded_et_error)
             binding.errorMsgTg.visibility = View.VISIBLE
             binding.errorMsgTg.text = "Телеграм должен иметь допустимое значение"
             binding.labelTg.setTextColor(resources.getColor(R.color.red_700))
             flag = false
-        }
-        else{
+        } else {
             binding.edittextTg.setBackgroundResource(R.drawable.rounded_et)
             binding.errorMsgTg.visibility = View.GONE
             binding.labelTg.setTextColor(resources.getColor(R.color.grey_500))
         }
-        if (offices.isEmpty()){
-            Toast.makeText(requireContext(), "Не удалось получить данные об офисах", Toast.LENGTH_LONG).show()
+        if (offices.isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                "Не удалось получить данные об офисах",
+                Toast.LENGTH_LONG
+            ).show()
             flag = false
         }
         return flag

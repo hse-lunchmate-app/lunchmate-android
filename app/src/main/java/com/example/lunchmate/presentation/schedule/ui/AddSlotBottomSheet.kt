@@ -13,14 +13,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class AddSlotBottomSheet(
-    val userId: String,
+    private val userId: String,
     val date: String,
-    val currentDate: String,
+    private val currentDate: String,
     val addSlot: (SlotPost) -> Unit,
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomSheetAddSlotBinding
-    val timeWatcher = MaskWatcher("##:##")
+    private val timeWatcher = MaskWatcher("##:##")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,12 +60,15 @@ class AddSlotBottomSheet(
                 binding.errorMsg.visibility = View.VISIBLE
                 binding.errorMsg.text = "Начало должно быть раньше, чем конец"
             } else {
-                addSlot(SlotPost(
-                    userId,
-                    currentDate,
-                    binding.start.text.toString(),
-                    binding.finish.text.toString(),
-                    binding.switchIsRepeating.isChecked))
+                addSlot(
+                    SlotPost(
+                        userId,
+                        currentDate,
+                        binding.start.text.toString(),
+                        binding.finish.text.toString(),
+                        binding.switchIsRepeating.isChecked
+                    )
+                )
                 dismiss()
             }
         }

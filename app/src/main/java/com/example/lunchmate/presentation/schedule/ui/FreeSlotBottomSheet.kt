@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
 
 class FreeSlotBottomSheet(
     val date: String,
-    val currentDate: String,
+    private val currentDate: String,
     val slot: Slot,
     val updateSlot: (Slot, SlotPatch) -> Unit,
     val deleteSlot: (Slot) -> Unit,

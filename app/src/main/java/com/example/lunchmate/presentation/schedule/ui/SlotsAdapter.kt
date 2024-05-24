@@ -1,5 +1,6 @@
 package com.example.lunchmate.presentation.schedule.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,7 @@ class SlotsAdapter(
         private val binding = ItemSlotBinding.bind(itemView)
         val parent: CardView
         val time: TextView
-        val repeatingIndicator: ImageView
+        private val repeatingIndicator: ImageView
         val lunchMate: TextView
 
         init {
@@ -33,8 +34,10 @@ class SlotsAdapter(
             lunchMate = binding.lunchMate
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind(model: Slot) {
-            time.text = getFormatedTime(model.data.startTime) + " - " + getFormatedTime(model.data.endTime)
+            time.text =
+                getFormatedTime(model.data.startTime) + " - " + getFormatedTime(model.data.endTime)
             repeatingIndicator.isVisible = model.data.permanent
             if (model.lunchMate != null) {
                 lunchMate.visibility = View.VISIBLE

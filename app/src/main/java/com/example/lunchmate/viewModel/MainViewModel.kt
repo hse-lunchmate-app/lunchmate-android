@@ -13,15 +13,6 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
-    fun getOffices() = liveData(Dispatchers.IO) {
-        emit(Resource.loading(data = null))
-        try {
-            emit(Resource.success(data = mainRepository.getOffices()))
-        } catch (exception: Exception) {
-            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
-        }
-    }
-
     fun getInvitationsCount(userId: String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {

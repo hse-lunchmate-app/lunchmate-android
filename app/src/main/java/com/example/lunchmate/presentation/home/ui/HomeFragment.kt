@@ -1,8 +1,10 @@
 package com.example.lunchmate.presentation.home.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -25,11 +27,14 @@ import com.example.lunchmate.presentation.profile.ui.ProfileBottomSheet
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
-    private var current_office: Office = Office(1, "Tinkoff Space", City(1, "Москва"))//(activity as MainActivity).currentUser.office
+    private lateinit var userOffice: Office
+    private lateinit var currentOffice: Office
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        userId = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("userId", "")!!
         homeViewModel = ViewModelProvider(
             requireActivity(), HomeViewModelFactory(
                 ApiHelper(
@@ -43,12 +48,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
 
-        initialiseObservers()
-        initialiseUIElements()
+        homeViewModel.getUserOffice(userId).observe(viewLifecycleOwner) {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        resource.data?.let { office ->
+                            userOffice = office
+                            currentOffice = office
+                            initialiseObservers()
+                            initialiseUIElements()
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {}
+                }
+            }
+        }
     }
 
     private fun initialiseObservers() {
-        homeViewModel.getUsers(current_office.id.toString(), binding.searchView.query.toString())
+        homeViewModel.getUsers(
+            userId,
+            currentOffice.id.toString(),
+            binding.searchView.query.toString()
+        )
 
         homeViewModel.userData.observe(viewLifecycleOwner) {
             setUpRV(it)
@@ -60,10 +85,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initialiseUIElements() {
-        if (current_office.id == (activity as MainActivity).currentUser.office.id){
+        if (currentOffice.id == userOffice.id) {
             binding.filterBtn.setColorFilter(resources.getColor(R.color.black))
-        }
-        else{
+        } else {
             binding.filterBtn.setColorFilter(resources.getColor(R.color.yellow_700))
         }
 
@@ -71,7 +95,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             android.widget.SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(qString: String): Boolean {
-                homeViewModel.onSearchQuery(current_office.id.toString(), qString)
+                homeViewModel.onSearchQuery(
+                    userId,
+                    currentOffice.id.toString(),
+                    qString
+                )
                 return true
             }
 
@@ -95,11 +123,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onProfileClick(user: User) {
-        val dialog = ProfileBottomSheet(user)
+        val dialog = ProfileBottomSheet(userId, user)
         dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
-    private fun openFilter(){
+    private fun openFilter() {
         homeViewModel.getOffices().observe(viewLifecycleOwner) {
             it?.let { resource ->
                 when (resource.status) {
@@ -108,7 +136,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             val officeNames = ArrayList<String>()
                             for (office in officeList)
                                 officeNames.add(office.name)
-                            val dialog = FilterBottomSheet(current_office, officeList, officeNames, ::filterSearch)
+                            val dialog = FilterBottomSheet(
+                                currentOffice,
+                                officeList,
+                                officeNames,
+                                ::filterSearch
+                            )
                             dialog.show((activity as MainActivity).supportFragmentManager, "")
                         }
                     }
@@ -121,15 +154,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun filterSearch(current_office: Office){
-        this.current_office = current_office
-        if (current_office.id == (activity as MainActivity).currentUser.office.id){
+    private fun filterSearch(current_office: Office) {
+        currentOffice = current_office
+        if (currentOffice.id == userOffice.id) {
             binding.filterBtn.setColorFilter(resources.getColor(R.color.black))
-        }
-        else{
+        } else {
             binding.filterBtn.setColorFilter(resources.getColor(R.color.yellow_700))
         }
-        homeViewModel.getUsers(current_office.id.toString(), binding.searchView.query.toString())
+        homeViewModel.getUsers(userId, currentOffice.id.toString(), binding.searchView.query.toString())
     }
 
     private fun checkEmptyState(list: List<User>): Boolean {

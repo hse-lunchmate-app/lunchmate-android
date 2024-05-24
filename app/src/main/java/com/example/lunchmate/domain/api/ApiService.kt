@@ -23,7 +23,11 @@ interface ApiService {
     suspend fun getSlots(@Path("userId") id: String): List<SlotTimetable>
 
     @GET("timetable/{userId}")
-    suspend fun getSlotsByDate(@Path("userId") id: String, @Query("date") date: String, @Query("free") free: Boolean): List<SlotTimetable>
+    suspend fun getSlotsByDate(
+        @Path("userId") id: String,
+        @Query("date") date: String,
+        @Query("free") free: Boolean
+    ): List<SlotTimetable>
 
     @POST("timetable/slot")
     suspend fun postSlot(@Body slot: SlotPost): SlotTimetable
@@ -35,7 +39,10 @@ interface ApiService {
     suspend fun deleteSlot(@Path("id") id: String): Response<Unit>
 
     @GET("lunches/{userId}")
-    suspend fun getLunches(@Path("userId") id: String, @Query("accepted") accepted: Boolean): List<Lunch>
+    suspend fun getLunches(
+        @Path("userId") id: String,
+        @Query("accepted") accepted: Boolean
+    ): List<Lunch>
 
     @POST("lunches/invite")
     suspend fun inviteForLunch(@Body lunchInvitation: LunchInvitation): Lunch

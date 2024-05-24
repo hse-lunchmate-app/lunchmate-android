@@ -19,7 +19,8 @@ class ApiHelper(private val apiService: ApiService) {
 
     suspend fun getSlots(id: String) = apiService.getSlots(id)
 
-    suspend fun getSlotsByDate(id: String, date: String, free: Boolean) = apiService.getSlotsByDate(id, date, free)
+    suspend fun getSlotsByDate(id: String, date: String, free: Boolean) =
+        apiService.getSlotsByDate(id, date, free)
 
     suspend fun postSlot(slot: SlotPost) = apiService.postSlot(slot)
 
@@ -29,7 +30,8 @@ class ApiHelper(private val apiService: ApiService) {
 
     suspend fun getLunches(id: String, accepted: Boolean) = apiService.getLunches(id, accepted)
 
-    suspend fun inviteForLunch(lunchInvitation: LunchInvitation) = apiService.inviteForLunch(lunchInvitation)
+    suspend fun inviteForLunch(lunchInvitation: LunchInvitation) =
+        apiService.inviteForLunch(lunchInvitation)
 
     suspend fun revokeReservation(id: String) = apiService.revokeReservation(id)
 

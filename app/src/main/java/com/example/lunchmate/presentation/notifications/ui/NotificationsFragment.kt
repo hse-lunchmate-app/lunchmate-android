@@ -3,12 +3,10 @@ package com.example.lunchmate.presentation.notifications.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchmate.MainActivity
 import com.example.lunchmate.R
 import com.example.lunchmate.databinding.FragmentNotificationsBinding
@@ -16,25 +14,22 @@ import com.example.lunchmate.domain.api.ApiHelper
 import com.example.lunchmate.domain.api.LoadingState
 import com.example.lunchmate.domain.api.RetrofitBuilder
 import com.example.lunchmate.domain.model.Lunch
-import com.example.lunchmate.domain.model.Notification
 import com.example.lunchmate.domain.model.User
 import com.example.lunchmate.presentation.notifications.viewModel.NotificationsViewModel
 import com.example.lunchmate.presentation.notifications.viewModel.NotificationsViewModelFactory
 import com.example.lunchmate.presentation.profile.ui.ProfileBottomSheet
-import com.example.lunchmate.presentation.schedule.viewModel.ScheduleViewModel
-import com.example.lunchmate.presentation.schedule.viewModel.ScheduleViewModelFactory
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlin.collections.ArrayList
 
 class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     private lateinit var binding: FragmentNotificationsBinding
     private lateinit var notificationsViewModel: NotificationsViewModel
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        userId = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("userId", "")!!
         notificationsViewModel = ViewModelProvider(
             requireActivity(), NotificationsViewModelFactory(
                 ApiHelper(
@@ -57,9 +52,9 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab == binding.tabMenu.getTabAt(1)) {
-                    notificationsViewModel.getHistory("id1")
+                    notificationsViewModel.getHistory(userId)
                 } else {
-                    notificationsViewModel.getInvitations("id1")
+                    notificationsViewModel.getInvitations(userId)
                 }
             }
 
@@ -70,7 +65,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     }
 
     private fun initialiseObservers() {
-        notificationsViewModel.getInvitations("id1")
+        notificationsViewModel.getInvitations(userId)
 
         notificationsViewModel.notificationsData.observe(viewLifecycleOwner) {
             setUpRV(it)
@@ -86,7 +81,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     }
 
     private fun onProfileClick(user: User) {
-        val dialog = ProfileBottomSheet(user)
+        val dialog = ProfileBottomSheet(userId, user)
         dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
@@ -104,6 +99,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
 
     private fun setUpRV(notificationsList: ArrayList<Lunch>) {
         val notificationsAdapter = NotificationsAdapter(
+            userId,
             notificationsList,
             ::onProfileClick,
             ::declineInvitation,

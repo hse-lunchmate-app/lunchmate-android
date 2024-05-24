@@ -1,5 +1,6 @@
 package com.example.lunchmate.presentation.profile.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,8 +28,10 @@ class AvailableSlotsAdapter(
             time = binding.itemTime
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind(model: Slot) {
-            time.text = getFormatedTime(model.data.startTime) + " - " + getFormatedTime(model.data.endTime)
+            time.text =
+                getFormatedTime(model.data.startTime) + " - " + getFormatedTime(model.data.endTime)
 
             parent.setOnClickListener {
                 inviteForLunch(model.data.id)

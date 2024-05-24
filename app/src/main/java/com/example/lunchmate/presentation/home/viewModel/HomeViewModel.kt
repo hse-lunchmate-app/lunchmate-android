@@ -1,5 +1,6 @@
 package com.example.lunchmate.presentation.home.viewModel
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.example.lunchmate.domain.model.UserPatch
 import com.example.lunchmate.data.MainRepository
@@ -16,20 +17,21 @@ class HomeViewModel(private val mainRepository: MainRepository) : ViewModel() {
     private var debouncePeriod: Long = 500
     private var searchJob: Job? = null
 
-    fun onSearchQuery(officeId: String, name: String) {
+    fun onSearchQuery(userId: String, officeId: String, name: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(debouncePeriod)
-            getUsers(officeId, name)
+            getUsers(userId, officeId, name)
         }
     }
 
-    fun getUsers(officeId: String, name: String) {
+    fun getUsers(userId: String, officeId: String, name: String) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val movies = mainRepository.getUsers(officeId, name)
-                _userData.postValue(movies)
+                val users = mainRepository.getUsers(officeId, name) as ArrayList<User>
+                users.removeAll { x -> x.id == userId }
+                _userData.postValue(users)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
                 loadingStateLiveData.postValue(LoadingState.ERROR)
@@ -41,6 +43,15 @@ class HomeViewModel(private val mainRepository: MainRepository) : ViewModel() {
         emit(Resource.loading(data = null))
         try {
             emit(Resource.success(data = mainRepository.getOffices()))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun getUserOffice(userId: String) = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = mainRepository.getUser(userId).office))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
