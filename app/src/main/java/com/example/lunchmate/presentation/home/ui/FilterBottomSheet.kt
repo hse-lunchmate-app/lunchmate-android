@@ -14,7 +14,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class FilterBottomSheet(
-    val office: Office,
+    val userOffice: Office,
+    val currentOffice: Office,
     private val offices: List<Office>,
     private val officeNames: List<String>,
     val filterSearch: (Office) -> Unit,
@@ -41,10 +42,10 @@ class FilterBottomSheet(
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerOffice.adapter = adapter
-        binding.spinnerOffice.setSelection(offices.indexOf(office))
+        binding.spinnerOffice.setSelection(offices.indexOf(currentOffice))
 
         binding.clearBtn.setOnClickListener {
-            binding.spinnerOffice.setSelection(offices.indexOf(office))
+            binding.spinnerOffice.setSelection(offices.indexOf(userOffice))
         }
 
         binding.searchBtn.setOnClickListener {

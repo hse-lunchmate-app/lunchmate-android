@@ -137,6 +137,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             for (office in officeList)
                                 officeNames.add(office.name)
                             val dialog = FilterBottomSheet(
+                                userOffice,
                                 currentOffice,
                                 officeList,
                                 officeNames,
