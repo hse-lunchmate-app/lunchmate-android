@@ -6,5 +6,6 @@ import com.example.lunchmate.domain.model.User
 data class Slot(
     var data: SlotTimetable,
     var lunchMate: User?,
-    var lunchId: String?
+    var lunchId: String?,
+    var master: Boolean?
 )

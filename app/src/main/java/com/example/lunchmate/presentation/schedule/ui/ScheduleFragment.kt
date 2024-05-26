@@ -59,7 +59,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        userId = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("userId", "")!!
+        userId = requireActivity().getSharedPreferences(
+            "CurrentUserInfo",
+            AppCompatActivity.MODE_PRIVATE
+        ).getString("userId", "")!!
         scheduleViewModel = ViewModelProvider(
             requireActivity(), ScheduleViewModelFactory(
                 ApiHelper(
@@ -83,6 +86,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         scheduleViewModel.loadingStateLiveData.observe(viewLifecycleOwner) {
             onLoadingStateChanged(it)
+        }
+
+        scheduleViewModel.indicatorsData.observe(viewLifecycleOwner) {
+            updateIndicators(it)
         }
     }
 
@@ -139,6 +146,15 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
     }
 
+    private fun updateIndicators(indicators: List<Boolean>) {
+        for (i in indicators.indices) {
+            if (indicators[i])
+                weekdayButtons[i].slotsIndicator.visibility = View.VISIBLE
+            else
+                weekdayButtons[i].slotsIndicator.visibility = View.GONE
+        }
+    }
+
     private fun setUpRV(slotsList: ArrayList<Slot>) {
         slotsAdapter = SlotsAdapter(::openFreeSlot, ::openReservedSlot, slotsList)
         val linearLayoutManager =
@@ -180,7 +196,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     }
 
     private fun cancelReservation(slot: Slot) {
-        scheduleViewModel.cancelReservation(slot)
+        scheduleViewModel.cancelReservation(
+            slot, userId, calendar.getWeekStart(), calendar.getWeekFinish()
+        )
     }
 
     private fun addSlot(slotPost: SlotPost) {
@@ -210,9 +228,18 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         )
     }
 
+    private fun updateIndicators() {
+        scheduleViewModel.getLunchIndicators(
+            userId,
+            calendar.getWeekStart(),
+            calendar.getWeekFinish()
+        )
+    }
+
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
-    private fun setUpCurrentWeek(): CurrentDay? {
+    private fun setUpCurrentWeek(): CurrentDay {
         calendar.setToday()
+        updateIndicators()
         val setUpCalendar = Calendar.getInstance()
 
         val dates = arrayOf(
@@ -266,6 +293,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun setUpWeek(week_num: Int) {
         calendar.setCurrentDay(Calendar.MONDAY)
+        updateIndicators()
         val setUpCalendar = Calendar.getInstance()
         setUpCalendar.set(Calendar.WEEK_OF_YEAR, week_num)
 

@@ -14,6 +14,8 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
     private val _scheduleData = MutableLiveData<ArrayList<Slot>>()
     val scheduleData: LiveData<ArrayList<Slot>> = _scheduleData
     val loadingStateLiveData = MutableLiveData<LoadingState>()
+    private val _indicatorsData = MutableLiveData<MutableList<Boolean>>()
+    val indicatorsData: LiveData<MutableList<Boolean>> = _indicatorsData
 
     fun getAllSlots(userId: String, date: String, weekday: Int) {
         loadingStateLiveData.value = LoadingState.LOADING
@@ -26,23 +28,44 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
                     if (slot.weekDay == weekday) {
                         var lunchMate: User? = null
                         var lunchId: String? = null
+                        var master: Boolean? = null
                         for (lunch in userLunches) {
-                            if (lunch.timeslot == slot) {
-                                if (lunch.master.id == userId) {
-                                    lunchMate = lunch.invitee
-                                    lunchId = lunch.id
-                                    break
-                                } else if (lunch.invitee.id == userId) {
-                                    lunchMate = lunch.master
-                                    lunchId = lunch.id
-                                    break
-                                }
+                            if (lunch.lunchDate == date && lunch.timeslot == slot && lunch.invitee.id == userId) {
+                                lunchMate = lunch.master
+                                lunchId = lunch.id
+                                master = false
+                                break
                             }
                         }
-                        slots.add(Slot(slot, lunchMate, lunchId))
+                        slots.add(Slot(slot, lunchMate, lunchId, master))
                     }
                 }
+                for (lunch in userLunches) {
+                    if (lunch.lunchDate == date && lunch.master.id == userId) {
+                        slots.add(Slot(lunch.timeslot, lunch.invitee, lunch.id, true))
+                    }
+                }
+                slots.sortBy { it.data.startTime }
                 _scheduleData.postValue(slots)
+                loadingStateLiveData.postValue(LoadingState.SUCCESS)
+            } catch (e: Exception) {
+                loadingStateLiveData.postValue(LoadingState.ERROR)
+            }
+        }
+    }
+
+    fun getLunchIndicators(userId: String, start: String, finish: String) {
+        loadingStateLiveData.value = LoadingState.LOADING
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val userLunches = mainRepository.getLunches(userId, true)
+                val indicators = mutableListOf<Boolean>(false, false, false, false, false)
+                for (lunch in userLunches) {
+                    if (lunch.lunchDate in start..finish) {
+                        indicators[lunch.timeslot.weekDay - 1] = true
+                    }
+                }
+                _indicatorsData.postValue(indicators)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
                 loadingStateLiveData.postValue(LoadingState.ERROR)
@@ -56,7 +79,7 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
             try {
                 val slotTimetable = mainRepository.postSlot(slot)
                 val slots: ArrayList<Slot> = ArrayList<Slot>(_scheduleData.value)
-                slots.add(Slot(slotTimetable, null, null))
+                slots.add(Slot(slotTimetable, null, null, null))
                 slots.sortBy { it.data.startTime }
                 _scheduleData.postValue(slots)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
@@ -86,7 +109,7 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
             try {
                 val newSlot = mainRepository.patchSlot(slot.data.id.toString(), slotPatch)
                 _scheduleData.value!![_scheduleData.value!!.indexOf(slot)] =
-                    Slot(newSlot, null, null)
+                    Slot(newSlot, null, null, null)
                 _scheduleData.postValue(_scheduleData.value)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
@@ -95,16 +118,35 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         }
     }
 
-    fun cancelReservation(slot: Slot) {
+    fun cancelReservation(slot: Slot, userId: String, start: String, finish: String) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 mainRepository.revokeReservation(slot.lunchId!!)
-                _scheduleData.value!![_scheduleData.value!!.indexOf(slot)].lunchMate = null
-                _scheduleData.value!![_scheduleData.value!!.indexOf(slot)].lunchId = null
+                if (slot.master == true){
+                    _scheduleData.value!!.remove(slot)
+                }
+                else {
+                    _scheduleData.value!![_scheduleData.value!!.indexOf(slot)].lunchMate = null
+                    _scheduleData.value!![_scheduleData.value!!.indexOf(slot)].lunchId = null
+                    _scheduleData.value!![_scheduleData.value!!.indexOf(slot)].master = null
+                }
                 _scheduleData.postValue(_scheduleData.value)
+
+                var noLunches = true
+                for (scheduleSlot in _scheduleData.value!!){
+                    if (scheduleSlot.lunchMate != null) {
+                        noLunches = false
+                        break
+                    }
+                }
+                if (noLunches)
+                    _indicatorsData.value!![slot.data.weekDay - 1] = false
+                _indicatorsData.postValue(_indicatorsData.value)
+
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
+
                 loadingStateLiveData.postValue(LoadingState.ERROR)
             }
         }

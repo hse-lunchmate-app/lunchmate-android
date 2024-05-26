@@ -39,4 +39,19 @@ class ScheduleCalendar {
         dayNum = calendar.get(Calendar.DAY_OF_WEEK)
     }
 
+    @SuppressLint("SimpleDateFormat")
+    fun getWeekStart(): String {
+        val calendarTemp = Calendar.getInstance()
+        calendarTemp.set(Calendar.WEEK_OF_YEAR, weekNum)
+        calendarTemp.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        return SimpleDateFormat("yyyy-MM-dd").format(calendarTemp.time)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getWeekFinish(): String {
+        val calendarTemp = Calendar.getInstance()
+        calendarTemp.set(Calendar.WEEK_OF_YEAR, weekNum)
+        calendarTemp.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
+        return SimpleDateFormat("yyyy-MM-dd").format(calendarTemp.time)
+    }
 }
