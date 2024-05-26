@@ -113,10 +113,10 @@ class AccountEditFragment : Fragment(R.layout.fragment_account_edit) {
             if (emptyFieldsCheck()) {
                 accountEditViewModel.patchUser(
                     "id1", UserPatch(
-                        binding.edittextName.text.toString(),
-                        binding.edittextTg.text.toString(),
-                        binding.edittextTaste.text.toString().ifEmpty { "Без предпочтений" },
-                        binding.edittextInfo.text.toString().ifEmpty { "Без информации" },
+                        binding.edittextName.text.toString().trim(),
+                        binding.edittextTg.text.toString().trim(),
+                        binding.edittextTaste.text.toString().trim().ifEmpty { "Без предпочтений" },
+                        binding.edittextInfo.text.toString().trim().ifEmpty { "Без информации" },
                         offices[binding.spinnerOffice.selectedItemPosition].id
                     )
                 )
