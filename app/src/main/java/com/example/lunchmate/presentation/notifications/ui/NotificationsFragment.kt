@@ -76,7 +76,10 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
         }
 
         notificationsViewModel.toastMsg.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            if (it != null) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                notificationsViewModel.toastMsg.postValue(null)
+            }
         }
     }
 
@@ -139,7 +142,6 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
             LoadingState.ERROR -> {
                 binding.shimmerLayout.visibility = View.GONE
                 binding.recyclerView.visibility = View.GONE
-                Toast.makeText(requireContext(), "Error Occurred!", Toast.LENGTH_LONG).show()
             }
         }
     }

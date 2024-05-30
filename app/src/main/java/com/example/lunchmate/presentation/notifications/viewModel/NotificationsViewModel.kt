@@ -13,8 +13,7 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
     private val _notificationsData = MutableLiveData<ArrayList<Lunch>>()
     val notificationsData: LiveData<ArrayList<Lunch>> = _notificationsData
     val loadingStateLiveData = MutableLiveData<LoadingState>()
-    private val _toastMsg = MutableLiveData<String>()
-    val toastMsg: LiveData<String> = _toastMsg
+    val toastMsg = MutableLiveData<String>()
 
     fun getInvitations(userId: String) {
         loadingStateLiveData.value = LoadingState.LOADING
@@ -26,6 +25,7 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
                 loadingStateLiveData.postValue(LoadingState.ERROR)
+                toastMsg.postValue("Error Occurred!")
             }
         }
     }
@@ -40,6 +40,7 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
                 loadingStateLiveData.postValue(LoadingState.ERROR)
+                toastMsg.postValue("Error Occurred!")
             }
         }
     }
@@ -51,10 +52,11 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
                 mainRepository.acceptInvitation(lunch.id)
                 _notificationsData.value?.remove(lunch)
                 _notificationsData.postValue(_notificationsData.value)
-                _toastMsg.postValue("Приглашение было принято!")
+                toastMsg.postValue("Приглашение было принято!")
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
-                _toastMsg.postValue("Не удалось принять приглашение")
+                loadingStateLiveData.postValue(LoadingState.ERROR)
+                toastMsg.postValue("Не удалось принять приглашение")
             }
         }
     }
@@ -69,6 +71,7 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
                 loadingStateLiveData.postValue(LoadingState.ERROR)
+                toastMsg.postValue("Error Occurred!")
             }
         }
     }
@@ -83,6 +86,7 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
                 loadingStateLiveData.postValue(LoadingState.ERROR)
+                toastMsg.postValue("Error Occurred!")
             }
         }
     }
