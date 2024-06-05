@@ -14,7 +14,6 @@ import com.example.lunchmate.databinding.BottomSheetProfileBinding
 import com.example.lunchmate.domain.api.ApiHelper
 import com.example.lunchmate.domain.api.LoadingState
 import com.example.lunchmate.domain.api.RetrofitBuilder
-import com.example.lunchmate.domain.api.Status
 import com.example.lunchmate.domain.model.LunchInvitation
 import com.example.lunchmate.domain.model.User
 import com.example.lunchmate.presentation.profile.viewModel.ProfileViewModel
@@ -26,7 +25,8 @@ import java.util.*
 
 class ProfileBottomSheet(
     private val currentUserId: String,
-    val user: User
+    val user: User,
+    private val authToken: String
 ) : BottomSheetDialogFragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
@@ -48,7 +48,7 @@ class ProfileBottomSheet(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = BottomSheetProfileBinding.bind(
             inflater.inflate(
                 R.layout.bottom_sheet_profile,
@@ -106,6 +106,7 @@ class ProfileBottomSheet(
 
     private fun updateScheduleData() {
         profileViewModel.getFreeSlots(
+            authToken,
             user.id,
             calendar.getCurrentDate(),
             calendar.getCurrentWeekday()
@@ -170,6 +171,7 @@ class ProfileBottomSheet(
 
     private fun inviteForLunch(timeslotId: Int) {
         profileViewModel.inviteForLunch(
+            authToken,
             LunchInvitation(
                 currentUserId,
                 user.id,

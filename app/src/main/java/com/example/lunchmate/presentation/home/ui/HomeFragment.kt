@@ -1,6 +1,5 @@
 package com.example.lunchmate.presentation.home.ui
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -17,7 +16,6 @@ import com.example.lunchmate.domain.api.LoadingState
 import com.example.lunchmate.domain.api.RetrofitBuilder
 import com.example.lunchmate.domain.api.Status
 import com.example.lunchmate.domain.model.User
-import com.example.lunchmate.domain.model.City
 import com.example.lunchmate.domain.model.Office
 import com.example.lunchmate.presentation.home.viewModel.HomeViewModel
 import com.example.lunchmate.presentation.home.viewModel.HomeViewModelFactory
@@ -30,11 +28,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var userOffice: Office
     private lateinit var currentOffice: Office
     private lateinit var userId: String
+    private lateinit var authToken: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         userId = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("userId", "")!!
+        authToken = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("authToken", "")!!
         homeViewModel = ViewModelProvider(
             requireActivity(), HomeViewModelFactory(
                 ApiHelper(
@@ -48,7 +48,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
 
-        homeViewModel.getUserOffice(userId).observe(viewLifecycleOwner) {
+        homeViewModel.getUserOffice(authToken, userId).observe(viewLifecycleOwner) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -70,6 +70,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun initialiseObservers() {
         homeViewModel.getUsers(
+            authToken,
             userId,
             currentOffice.id.toString(),
             binding.searchView.query.toString()
@@ -96,6 +97,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             override fun onQueryTextChange(qString: String): Boolean {
                 homeViewModel.onSearchQuery(
+                    authToken,
                     userId,
                     currentOffice.id.toString(),
                     qString
@@ -123,12 +125,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onProfileClick(user: User) {
-        val dialog = ProfileBottomSheet(userId, user)
+        val dialog = ProfileBottomSheet(userId, user, authToken)
         dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
     private fun openFilter() {
-        homeViewModel.getOffices().observe(viewLifecycleOwner) {
+        homeViewModel.getOffices(authToken).observe(viewLifecycleOwner) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -162,7 +164,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         } else {
             binding.filterBtn.setColorFilter(resources.getColor(R.color.yellow_700))
         }
-        homeViewModel.getUsers(userId, currentOffice.id.toString(), binding.searchView.query.toString())
+        homeViewModel.getUsers(authToken, userId, currentOffice.id.toString(), binding.searchView.query.toString())
     }
 
     private fun checkEmptyState(list: List<User>): Boolean {

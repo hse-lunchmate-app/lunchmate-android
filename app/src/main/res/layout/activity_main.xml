@@ -30,4 +30,142 @@
         app:menu="@menu/bottom_nav_menu"
         android:visibility="gone"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo"
+            app:layout_constraintBottom_toTopOf="@+id/edittextLogin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/edittextLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/rounded_et"
+            android:iconifiedByDefault="false"
+            android:importantForAutofill="no"
+            android:maxLines="1"
+            android:paddingVertical="12dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            app:layout_constraintBottom_toTopOf="@id/layoutPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/errorMsgLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:text="Поле логина должно быть заполнено"
+            android:textColor="@color/red_700"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/edittextLogin"
+            app:layout_constraintTop_toBottomOf="@+id/edittextLogin" />
+
+        <TextView
+            android:id="@+id/labelLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:labelFor="@id/edittextLogin"
+            android:text="Логин"
+            android:textColor="@color/label"
+            app:layout_constraintBottom_toTopOf="@id/edittextLogin"
+            app:layout_constraintStart_toStartOf="@id/edittextLogin" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edittextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_et"
+                android:iconifiedByDefault="false"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:paddingVertical="12dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/errorMsgPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:text="Поле пароля должно быть заполнено"
+            android:textColor="@color/red_700"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/layoutPassword"
+            app:layout_constraintTop_toBottomOf="@+id/layoutPassword" />
+
+        <TextView
+            android:id="@+id/labelPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:labelFor="@id/edittextPassword"
+            android:text="Пароль"
+            android:textColor="@color/label"
+            app:layout_constraintBottom_toTopOf="@id/layoutPassword"
+            app:layout_constraintStart_toStartOf="@id/layoutPassword" />
+
+        <TextView
+            android:id="@+id/wrongLoginOrPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="28dp"
+            android:text="Введен неверный логин или пароль"
+            android:textColor="@color/red_700"
+            android:textSize="14sp"
+            android:background="@drawable/squared_error"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="20dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/loginBtn"
+            app:layout_constraintStart_toStartOf="@id/layoutPassword"
+            app:layout_constraintTop_toBottomOf="@+id/layoutPassword" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/loginBtn"
+            android:layout_width="150dp"
+            android:layout_height="40sp"
+            android:background="@drawable/rounded_yellow"
+            android:text="Войти"
+            android:textAllCaps="false"
+            android:textColor="#FF000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutPassword" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

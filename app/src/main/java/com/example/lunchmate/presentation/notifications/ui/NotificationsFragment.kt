@@ -25,11 +25,13 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     private lateinit var binding: FragmentNotificationsBinding
     private lateinit var notificationsViewModel: NotificationsViewModel
     private lateinit var userId: String
+    private lateinit var authToken: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         userId = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("userId", "")!!
+        authToken = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("authToken", "")!!
         notificationsViewModel = ViewModelProvider(
             requireActivity(), NotificationsViewModelFactory(
                 ApiHelper(
@@ -52,9 +54,9 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab == binding.tabMenu.getTabAt(1)) {
-                    notificationsViewModel.getHistory(userId)
+                    notificationsViewModel.getHistory(authToken, userId)
                 } else {
-                    notificationsViewModel.getInvitations(userId)
+                    notificationsViewModel.getInvitations(authToken, userId)
                 }
             }
 
@@ -65,7 +67,7 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     }
 
     private fun initialiseObservers() {
-        notificationsViewModel.getInvitations(userId)
+        notificationsViewModel.getInvitations(authToken, userId)
 
         notificationsViewModel.notificationsData.observe(viewLifecycleOwner) {
             setUpRV(it)
@@ -84,20 +86,20 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
     }
 
     private fun onProfileClick(user: User) {
-        val dialog = ProfileBottomSheet(userId, user)
+        val dialog = ProfileBottomSheet(userId, user, authToken)
         dialog.show((activity as MainActivity).supportFragmentManager, "")
     }
 
     private fun declineInvitation(lunch: Lunch) {
-        notificationsViewModel.declineInvitation(lunch)
+        notificationsViewModel.declineInvitation(authToken, lunch)
     }
 
     private fun acceptInvitation(lunch: Lunch) {
-        notificationsViewModel.acceptInvitation(lunch)
+        notificationsViewModel.acceptInvitation(authToken, lunch)
     }
 
     private fun revokeInvitation(lunch: Lunch) {
-        notificationsViewModel.revokeInvitation(lunch)
+        notificationsViewModel.revokeInvitation(authToken, lunch)
     }
 
     private fun setUpRV(notificationsList: ArrayList<Lunch>) {

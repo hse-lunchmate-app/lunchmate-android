@@ -33,6 +33,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class ReservedSlotBottomSheet(
+    private val authToken: String,
     private val currentUserId: String,
     val date: String,
     val slot: Slot,
@@ -193,6 +194,7 @@ class ReservedSlotBottomSheet(
 
     private fun inviteForLunch(timeslotId: Int) {
         profileViewModel.inviteForLunch(
+            authToken,
             LunchInvitation(
                 currentUserId,
                 slot.lunchMate!!.id,
@@ -204,6 +206,7 @@ class ReservedSlotBottomSheet(
 
     private fun updateScheduleData() {
         profileViewModel.getFreeSlots(
+            authToken,
             slot.lunchMate!!.id,
             calendar.getCurrentDate(),
             calendar.getCurrentWeekday()

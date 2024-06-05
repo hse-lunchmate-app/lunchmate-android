@@ -17,12 +17,12 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
     private val _indicatorsData = MutableLiveData<MutableList<Boolean>>()
     val indicatorsData: LiveData<MutableList<Boolean>> = _indicatorsData
 
-    fun getAllSlots(userId: String, date: String, weekday: Int) {
+    fun getAllSlots(token: String, userId: String, date: String, weekday: Int) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val slotsTimetable = mainRepository.getSlotsByDate(userId, date, false)
-                val userLunches = mainRepository.getLunches(userId, true)
+                val slotsTimetable = mainRepository.getSlotsByDate(token, userId, date, false)
+                val userLunches = mainRepository.getLunches(token, userId, true)
                 val slots: ArrayList<Slot> = ArrayList<Slot>()
                 for (slot in slotsTimetable) {
                     if (slot.weekDay == weekday) {
@@ -54,11 +54,11 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         }
     }
 
-    fun getLunchIndicators(userId: String, start: String, finish: String) {
+    fun getLunchIndicators(token: String, userId: String, start: String, finish: String) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val userLunches = mainRepository.getLunches(userId, true)
+                val userLunches = mainRepository.getLunches(token, userId, true)
                 val indicators = mutableListOf<Boolean>(false, false, false, false, false)
                 for (lunch in userLunches) {
                     if (lunch.lunchDate in start..finish) {
@@ -73,11 +73,11 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         }
     }
 
-    fun postSlot(slot: SlotPost) {
+    fun postSlot(token: String, slot: SlotPost) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val slotTimetable = mainRepository.postSlot(slot)
+                val slotTimetable = mainRepository.postSlot(token, slot)
                 val slots: ArrayList<Slot> = ArrayList<Slot>(_scheduleData.value)
                 slots.add(Slot(slotTimetable, null, null, null))
                 slots.sortBy { it.data.startTime }
@@ -89,11 +89,11 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         }
     }
 
-    fun deleteSlot(slot: Slot) {
+    fun deleteSlot(token: String, slot: Slot) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mainRepository.deleteSlot(slot.data.id.toString())
+                mainRepository.deleteSlot(token, slot.data.id.toString())
                 _scheduleData.value!!.remove(slot)
                 _scheduleData.postValue(_scheduleData.value)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
@@ -103,11 +103,11 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         }
     }
 
-    fun patchSlot(slot: Slot, slotPatch: SlotPatch) {
+    fun patchSlot(token: String, slot: Slot, slotPatch: SlotPatch) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val newSlot = mainRepository.patchSlot(slot.data.id.toString(), slotPatch)
+                val newSlot = mainRepository.patchSlot(token, slot.data.id.toString(), slotPatch)
                 _scheduleData.value!![_scheduleData.value!!.indexOf(slot)] =
                     Slot(newSlot, null, null, null)
                 _scheduleData.postValue(_scheduleData.value)
@@ -118,11 +118,11 @@ class ScheduleViewModel(private val mainRepository: MainRepository) : ViewModel(
         }
     }
 
-    fun cancelReservation(slot: Slot, userId: String, start: String, finish: String) {
+    fun cancelReservation(token: String, slot: Slot, userId: String, start: String, finish: String) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mainRepository.revokeReservation(slot.lunchId!!)
+                mainRepository.revokeReservation(token, slot.lunchId!!)
                 if (slot.master == true){
                     _scheduleData.value!!.remove(slot)
                 }

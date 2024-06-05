@@ -13,12 +13,30 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
-    fun getInvitationsCount(userId: String) = liveData(Dispatchers.IO) {
+    fun getInvitationsCount(token: String, userId: String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            val notifications = mainRepository.getLunches(userId, false) as ArrayList<Lunch>
+            val notifications = mainRepository.getLunches(token, userId, false) as ArrayList<Lunch>
             notifications.removeAll { x -> x.accepted || x.master.id == userId }
             emit(Resource.success(data = notifications.size))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun getOffices(token: String) = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = mainRepository.getOffices(token)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun getUserId(token: String) = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = mainRepository.getUserId(token)))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
@@ -24,11 +25,13 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
     private lateinit var binding: FragmentAccountBinding
     private lateinit var accountViewModel: AccountViewModel
     private lateinit var userId: String
+    private lateinit var authToken: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         userId = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("userId", "")!!
+        authToken = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("authToken", "")!!
         accountViewModel = ViewModelProvider(
             requireActivity(), AccountViewModelFactory(
                 ApiHelper(
@@ -79,10 +82,25 @@ class AccountFragment : Fragment(R.layout.fragment_account) {
                 }
             }
         })
+
+        binding.logoutButton.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            builder
+                .setMessage("Вы уверены, что хотите выйти из системы?")
+                .setPositiveButton("Выйти") { dialog, _ ->
+                    dialog.dismiss()
+                    (activity as MainActivity).setUpLoginScreen()
+                }
+                .setNegativeButton("Отменить") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
     }
 
     private fun initialiseObservers() {
-        accountViewModel.getUser(userId)
+        accountViewModel.getUser(authToken, userId)
 
         accountViewModel.accountData.observe(viewLifecycleOwner) {
             setUpCurrentUser(it)

@@ -15,11 +15,11 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
     val loadingStateLiveData = MutableLiveData<LoadingState>()
     val toastMsg = MutableLiveData<String>()
 
-    fun getInvitations(userId: String) {
+    fun getInvitations(token: String, userId: String) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val notifications = mainRepository.getLunches(userId, false) as ArrayList<Lunch>
+                val notifications = mainRepository.getLunches(token, userId, false) as ArrayList<Lunch>
                 notifications.removeAll { x -> x.accepted || x.master.id == userId }
                 _notificationsData.postValue(notifications)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
@@ -30,11 +30,11 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
         }
     }
 
-    fun getHistory(userId: String) {
+    fun getHistory(token: String, userId: String) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val notifications = mainRepository.getLunches(userId, false) as ArrayList<Lunch>
+                val notifications = mainRepository.getLunches(token, userId, false) as ArrayList<Lunch>
                 notifications.removeAll { x -> !x.accepted && x.master.id != userId }
                 _notificationsData.postValue(notifications)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
@@ -45,11 +45,11 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
         }
     }
 
-    fun acceptInvitation(lunch: Lunch) {
+    fun acceptInvitation(token: String, lunch: Lunch) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mainRepository.acceptInvitation(lunch.id)
+                mainRepository.acceptInvitation(token, lunch.id)
                 _notificationsData.value?.remove(lunch)
                 _notificationsData.postValue(_notificationsData.value)
                 toastMsg.postValue("Приглашение было принято!")
@@ -61,11 +61,11 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
         }
     }
 
-    fun declineInvitation(lunch: Lunch) {
+    fun declineInvitation(token: String, lunch: Lunch) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mainRepository.declineInvitation(lunch.id)
+                mainRepository.declineInvitation(token, lunch.id)
                 _notificationsData.value?.remove(lunch)
                 _notificationsData.postValue(_notificationsData.value)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
@@ -76,11 +76,11 @@ class NotificationsViewModel(private val mainRepository: MainRepository) : ViewM
         }
     }
 
-    fun revokeInvitation(lunch: Lunch) {
+    fun revokeInvitation(token: String, lunch: Lunch) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mainRepository.revokeReservation(lunch.id)
+                mainRepository.revokeReservation(token, lunch.id)
                 _notificationsData.value?.remove(lunch)
                 _notificationsData.postValue(_notificationsData.value)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)

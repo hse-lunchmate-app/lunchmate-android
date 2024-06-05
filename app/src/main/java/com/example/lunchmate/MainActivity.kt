@@ -1,6 +1,5 @@
 package com.example.lunchmate
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -14,16 +13,13 @@ import com.example.lunchmate.databinding.ActivityMainBinding
 import com.example.lunchmate.domain.api.ApiHelper
 import com.example.lunchmate.domain.api.RetrofitBuilder
 import com.example.lunchmate.domain.api.Status
-import com.example.lunchmate.domain.model.City
-import com.example.lunchmate.domain.model.Office
-import com.example.lunchmate.domain.model.User
 import com.example.lunchmate.presentation.account.ui.AccountFragment
 import com.example.lunchmate.presentation.home.ui.HomeFragment
 import com.example.lunchmate.presentation.notifications.ui.NotificationsFragment
 import com.example.lunchmate.viewModel.MainViewModel
 import com.example.lunchmate.viewModel.ViewModelFactory
 import com.example.lunchmatelocal.ScheduleFragment
-
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -44,38 +40,140 @@ class MainActivity : AppCompatActivity() {
             Log.d("TAG", "Error")
         }
 
-        if (getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).getString("userId", "") == "") {
-            with(getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).edit()) {
-                putString("userId", "id1")
-                putBoolean("darkTheme", false)
-                apply()
-            }
+        if (getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).getString(
+                "authToken",
+                ""
+            ) == "" || getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).getString(
+                "userId",
+                ""
+            ) == ""
+        ) {
+            setUpLoginScreen()
         } else {
-            if (getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).getBoolean(
-                    "darkTheme",
-                    false
-                )
-            )
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-            if (savedInstanceState == null) {
-                setCurrentFragment(HomeFragment())
-            }
-
-            binding.bottomNavigationView.visibility = View.VISIBLE
-            binding.bottomNavigationView.setOnItemSelectedListener {
-                when (it.itemId) {
-                    R.id.home -> setCurrentFragment(HomeFragment())
-                    R.id.profile -> setCurrentFragment(AccountFragment())
-                    R.id.notifications -> setCurrentFragment(NotificationsFragment())
-                    R.id.schedule -> setCurrentFragment(ScheduleFragment())
-                }
-                true
-            }
-            updateBadge()
+            setUpHomeScreen(savedInstanceState)
         }
+    }
+
+    fun setUpLoginScreen() {
+        with(getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).edit()) {
+            putString("authToken", "")
+            putString("userId", "")
+            putBoolean("darkTheme", false)
+            apply()
+        }
+
+        binding.bottomNavigationView.visibility = View.GONE
+        binding.loginLayout.visibility = View.VISIBLE
+        binding.loginBtn.setOnClickListener {
+            if (emptyFieldsCheck()) {
+                clearErrors()
+                val encodedString = encode(
+                    binding.edittextLogin.text.toString(),
+                    binding.edittextPassword.text.toString()
+                )
+
+                with(getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).edit()) {
+                    putString("authToken", "Basic $encodedString")
+                    apply()
+                }
+
+                viewModel.getUserId(
+                    getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).getString(
+                        "authToken",
+                        ""
+                    )!!
+                ).observe(this) {
+                    it?.let { resource ->
+                        when (resource.status) {
+                            Status.SUCCESS -> {
+                                resource.data?.let { userId ->
+                                    with(
+                                        getSharedPreferences(
+                                            "CurrentUserInfo",
+                                            MODE_PRIVATE
+                                        ).edit()
+                                    ) {
+                                        putString("userId", userId.id)
+                                        putBoolean("darkTheme", false)
+                                        apply()
+                                    }
+                                    setUpHomeScreen(null)
+                                }
+                            }
+                            Status.ERROR -> {
+                                if (it.message == "HTTP 403 Forbidden")
+                                    binding.wrongLoginOrPassword.visibility = View.VISIBLE
+                                else
+                                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                            }
+                            Status.LOADING -> {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun encode(login: String, password: String): String {
+        val originalString = login.trim() + ":" + password.trim()
+        return Base64.getEncoder().encodeToString(originalString.toByteArray())
+    }
+
+    private fun clearErrors() {
+        binding.edittextLogin.setBackgroundResource(R.drawable.rounded_et)
+        binding.errorMsgLogin.visibility = View.GONE
+        binding.labelLogin.setTextColor(resources.getColor(R.color.label))
+        binding.edittextPassword.setBackgroundResource(R.drawable.rounded_et)
+        binding.errorMsgPassword.visibility = View.GONE
+        binding.labelPassword.setTextColor(resources.getColor(R.color.label))
+        binding.wrongLoginOrPassword.visibility = View.GONE
+    }
+
+    private fun emptyFieldsCheck(): Boolean {
+        var flag = true
+        if (binding.edittextLogin.text.toString().trim().isEmpty()) {
+            binding.edittextLogin.setBackgroundResource(R.drawable.rounded_et_error)
+            binding.errorMsgLogin.visibility = View.VISIBLE
+            binding.labelLogin.setTextColor(resources.getColor(R.color.red_700))
+            flag = false
+        }
+        if (binding.edittextPassword.text.toString().trim().isEmpty()) {
+            binding.edittextPassword.setBackgroundResource(R.drawable.rounded_et_error)
+            binding.errorMsgPassword.visibility = View.VISIBLE
+            binding.labelPassword.setTextColor(resources.getColor(R.color.red_700))
+            flag = false
+        }
+        return flag
+    }
+
+    private fun setUpHomeScreen(savedInstanceState: Bundle?) {
+        if (getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).getBoolean(
+                "darkTheme",
+                false
+            )
+        )
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        if (savedInstanceState == null) {
+            binding.bottomNavigationView.selectedItemId = R.id.home
+            setCurrentFragment(HomeFragment())
+        }
+
+        binding.bottomNavigationView.visibility = View.VISIBLE
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> setCurrentFragment(HomeFragment())
+                R.id.profile -> setCurrentFragment(AccountFragment())
+                R.id.notifications -> setCurrentFragment(NotificationsFragment())
+                R.id.schedule -> setCurrentFragment(ScheduleFragment())
+            }
+            true
+        }
+        updateBadge()
+
+        binding.loginLayout.visibility = View.GONE
     }
 
     private fun setCurrentFragment(fragment: Fragment) =
@@ -86,6 +184,10 @@ class MainActivity : AppCompatActivity() {
 
     fun updateBadge() {
         viewModel.getInvitationsCount(
+            getSharedPreferences(
+                "CurrentUserInfo",
+                MODE_PRIVATE
+            ).getString("authToken", "")!!,
             getSharedPreferences(
                 "CurrentUserInfo",
                 MODE_PRIVATE

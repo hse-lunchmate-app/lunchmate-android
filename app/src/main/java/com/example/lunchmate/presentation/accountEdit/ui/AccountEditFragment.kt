@@ -41,6 +41,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import java.io.FileNotFoundException
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class AccountEditFragment : Fragment(R.layout.fragment_account_edit) {
@@ -52,11 +54,19 @@ class AccountEditFragment : Fragment(R.layout.fragment_account_edit) {
     private lateinit var accountEditViewModel: AccountEditViewModel
     private lateinit var offices: List<Office>
     private lateinit var userId: String
+    private lateinit var authToken: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        userId = requireActivity().getSharedPreferences("CurrentUserInfo",AppCompatActivity.MODE_PRIVATE).getString("userId", "")!!
+        userId = requireActivity().getSharedPreferences(
+            "CurrentUserInfo",
+            AppCompatActivity.MODE_PRIVATE
+        ).getString("userId", "")!!
+        authToken = requireActivity().getSharedPreferences(
+            "CurrentUserInfo",
+            AppCompatActivity.MODE_PRIVATE
+        ).getString("authToken", "")!!
         accountEditViewModel = ViewModelProvider(
             requireActivity(), AccountEditViewModelFactory(
                 ApiHelper(
@@ -112,7 +122,7 @@ class AccountEditFragment : Fragment(R.layout.fragment_account_edit) {
         binding.saveButton.setOnClickListener {
             if (emptyFieldsCheck()) {
                 accountEditViewModel.patchUser(
-                    "id1", UserPatch(
+                    authToken, userId, UserPatch(
                         binding.edittextName.text.toString().trim(),
                         binding.edittextTg.text.toString().trim(),
                         binding.edittextTaste.text.toString().trim().ifEmpty { "Без предпочтений" },
@@ -126,7 +136,7 @@ class AccountEditFragment : Fragment(R.layout.fragment_account_edit) {
     }
 
     private fun initialiseObservers() {
-        accountEditViewModel.getUser("id1")
+        accountEditViewModel.getUser(authToken, userId)
 
         accountEditViewModel.accountData.observe(viewLifecycleOwner) {
             setUpCurrentUser(it)
@@ -141,12 +151,12 @@ class AccountEditFragment : Fragment(R.layout.fragment_account_edit) {
     private fun setUpCurrentUser(currentUser: User) {
         //binding.photo.setImageResource(currentUser.getPhoto())
         binding.edittextName.setText(currentUser.name)
-        binding.edittextLogin.setText("@" + currentUser.login)
         binding.edittextTg.setText(currentUser.messenger)
         binding.edittextTaste.setText(currentUser.tastes)
         binding.edittextInfo.setText(currentUser.aboutMe)
+        decode()
 
-        accountEditViewModel.getOffices().observe(viewLifecycleOwner) {
+        accountEditViewModel.getOffices(authToken).observe(viewLifecycleOwner) {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -172,6 +182,20 @@ class AccountEditFragment : Fragment(R.layout.fragment_account_edit) {
                 }
             }
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun decode() {
+        val originalString = (activity as MainActivity).getSharedPreferences(
+            "CurrentUserInfo",
+            AppCompatActivity.MODE_PRIVATE
+        ).getString(
+            "authToken",
+            ""
+        )
+        val decodedString = String(Base64.getDecoder().decode(originalString?.substringAfter(" ")))
+        binding.edittextLogin.setText(decodedString.substringBefore(":"))
+        binding.edittextPassword.setText(decodedString.substringAfter(":"))
     }
 
     private fun openGalleryForImage() {

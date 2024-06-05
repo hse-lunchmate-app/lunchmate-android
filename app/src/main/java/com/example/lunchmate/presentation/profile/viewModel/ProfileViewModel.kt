@@ -15,11 +15,11 @@ class ProfileViewModel(private val mainRepository: MainRepository) : ViewModel()
     val loadingStateLiveData = MutableLiveData<LoadingState>()
     val toastMsg = MutableLiveData<String>()
 
-    fun getFreeSlots(userId: String, date: String, weekday: Int) {
+    fun getFreeSlots(token: String, userId: String, date: String, weekday: Int) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val slotsTimetable = mainRepository.getSlotsByDate(userId, date, true)
+                val slotsTimetable = mainRepository.getSlotsByDate(token, userId, date, true)
                 val slots: ArrayList<Slot> = ArrayList<Slot>()
                 for (slot in slotsTimetable) {
                     if (slot.weekDay == weekday)
@@ -33,11 +33,11 @@ class ProfileViewModel(private val mainRepository: MainRepository) : ViewModel()
         }
     }
 
-    fun inviteForLunch(lunchInvitation: LunchInvitation) {
+    fun inviteForLunch(token: String, lunchInvitation: LunchInvitation) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mainRepository.inviteForLunch(lunchInvitation)
+                mainRepository.inviteForLunch(token, lunchInvitation)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
                 toastMsg.postValue("Ваше приглашение было отправлено!")
             } catch (e: Exception) {

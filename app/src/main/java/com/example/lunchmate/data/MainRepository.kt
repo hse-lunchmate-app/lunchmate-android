@@ -8,31 +8,33 @@ import com.example.lunchmate.domain.model.UserPatch
 
 class MainRepository(private val apiHelper: ApiHelper) {
 
-    suspend fun getOffices() = apiHelper.getOffices()
+    suspend fun getUserId(token: String) = apiHelper.getUserId(token)
 
-    suspend fun getUsers(officeId: String, name: String) = apiHelper.getUsers(officeId, name)
+    suspend fun getOffices(token: String) = apiHelper.getOffices(token)
 
-    suspend fun getUser(id: String) = apiHelper.getUser(id)
+    suspend fun getUsers(token: String, officeId: String, name: String) = apiHelper.getUsers(token, officeId, name)
 
-    suspend fun patchUser(id: String, info: UserPatch) = apiHelper.patchUser(id, info)
+    suspend fun getUser(token: String, id: String) = apiHelper.getUser(token, id)
 
-    suspend fun getSlots(id: String) = apiHelper.getSlots(id)
+    suspend fun patchUser(token: String, id: String, info: UserPatch) = apiHelper.patchUser(token, id, info)
 
-    suspend fun getSlotsByDate(id: String, date: String, free: Boolean) = apiHelper.getSlotsByDate(id, date, free)
+    suspend fun getSlots(token: String, id: String) = apiHelper.getSlots(token, id)
 
-    suspend fun postSlot(slot: SlotPost) = apiHelper.postSlot(slot)
+    suspend fun getSlotsByDate(token: String, id: String, date: String, free: Boolean) = apiHelper.getSlotsByDate(token, id, date, free)
 
-    suspend fun patchSlot(id: String, slot: SlotPatch) = apiHelper.patchSlot(id, slot)
+    suspend fun postSlot(token: String, slot: SlotPost) = apiHelper.postSlot(token, slot)
 
-    suspend fun deleteSlot(id: String) = apiHelper.deleteSlot(id)
+    suspend fun patchSlot(token: String, id: String, slot: SlotPatch) = apiHelper.patchSlot(token, id, slot)
 
-    suspend fun getLunches(id: String, accepted: Boolean) = apiHelper.getLunches(id, accepted)
+    suspend fun deleteSlot(token: String, id: String) = apiHelper.deleteSlot(token, id)
 
-    suspend fun inviteForLunch(lunchInvitation: LunchInvitation) = apiHelper.inviteForLunch(lunchInvitation)
+    suspend fun getLunches(token: String, id: String, accepted: Boolean) = apiHelper.getLunches(token, id, accepted)
 
-    suspend fun revokeReservation(id: String) = apiHelper.revokeReservation(id)
+    suspend fun inviteForLunch(token: String, lunchInvitation: LunchInvitation) = apiHelper.inviteForLunch(token, lunchInvitation)
 
-    suspend fun acceptInvitation(id: String) = apiHelper.acceptInvitation(id)
+    suspend fun revokeReservation(token: String, id: String) = apiHelper.revokeReservation(token, id)
 
-    suspend fun declineInvitation(id: String) = apiHelper.declineInvitation(id)
+    suspend fun acceptInvitation(token: String, id: String) = apiHelper.acceptInvitation(token, id)
+
+    suspend fun declineInvitation(token: String, id: String) = apiHelper.declineInvitation(token, id)
 }

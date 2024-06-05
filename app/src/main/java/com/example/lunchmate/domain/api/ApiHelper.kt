@@ -9,33 +9,35 @@ import retrofit2.http.Path
 
 class ApiHelper(private val apiService: ApiService) {
 
-    suspend fun getOffices() = apiService.getOffices()
+    suspend fun getUserId(token: String) = apiService.getUserId(token)
 
-    suspend fun getUsers(officeId: String, name: String) = apiService.getUsers(officeId, name)
+    suspend fun getOffices(token: String) = apiService.getOffices(token)
 
-    suspend fun getUser(id: String) = apiService.getUser(id)
+    suspend fun getUsers(token: String, officeId: String, name: String) = apiService.getUsers(token, officeId, name)
 
-    suspend fun patchUser(id: String, info: UserPatch) = apiService.patchUser(id, info)
+    suspend fun getUser(token: String, id: String) = apiService.getUser(token, id)
 
-    suspend fun getSlots(id: String) = apiService.getSlots(id)
+    suspend fun patchUser(token: String, id: String, info: UserPatch) = apiService.patchUser(token, id, info)
 
-    suspend fun getSlotsByDate(id: String, date: String, free: Boolean) =
-        apiService.getSlotsByDate(id, date, free)
+    suspend fun getSlots(token: String, id: String) = apiService.getSlots(token, id)
 
-    suspend fun postSlot(slot: SlotPost) = apiService.postSlot(slot)
+    suspend fun getSlotsByDate(token: String, id: String, date: String, free: Boolean) =
+        apiService.getSlotsByDate(token, id, date, free)
 
-    suspend fun patchSlot(id: String, slot: SlotPatch) = apiService.patchSlot(id, slot)
+    suspend fun postSlot(token: String, slot: SlotPost) = apiService.postSlot(token, slot)
 
-    suspend fun deleteSlot(id: String) = apiService.deleteSlot(id)
+    suspend fun patchSlot(token: String, id: String, slot: SlotPatch) = apiService.patchSlot(token, id, slot)
 
-    suspend fun getLunches(id: String, accepted: Boolean) = apiService.getLunches(id, accepted)
+    suspend fun deleteSlot(token: String, id: String) = apiService.deleteSlot(token, id)
 
-    suspend fun inviteForLunch(lunchInvitation: LunchInvitation) =
-        apiService.inviteForLunch(lunchInvitation)
+    suspend fun getLunches(token: String, id: String, accepted: Boolean) = apiService.getLunches(token, id, accepted)
 
-    suspend fun revokeReservation(id: String) = apiService.revokeReservation(id)
+    suspend fun inviteForLunch(token: String, lunchInvitation: LunchInvitation) =
+        apiService.inviteForLunch(token, lunchInvitation)
 
-    suspend fun acceptInvitation(id: String) = apiService.acceptInvitation(id)
+    suspend fun revokeReservation(token: String, id: String) = apiService.revokeReservation(token, id)
 
-    suspend fun declineInvitation(id: String) = apiService.declineInvitation(id)
+    suspend fun acceptInvitation(token: String, id: String) = apiService.acceptInvitation(token, id)
+
+    suspend fun declineInvitation(token: String, id: String) = apiService.declineInvitation(token, id)
 }

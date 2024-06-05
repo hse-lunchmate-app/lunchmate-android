@@ -55,6 +55,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private lateinit var scheduleViewModel: ScheduleViewModel
     private lateinit var weekdayButtons: List<CurrentDay>
     private lateinit var userId: String
+    private lateinit var authToken: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +64,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             "CurrentUserInfo",
             AppCompatActivity.MODE_PRIVATE
         ).getString("userId", "")!!
+        authToken = requireActivity().getSharedPreferences(
+            "CurrentUserInfo",
+            AppCompatActivity.MODE_PRIVATE
+        ).getString("authToken", "")!!
         scheduleViewModel = ViewModelProvider(
             requireActivity(), ScheduleViewModelFactory(
                 ApiHelper(
@@ -187,6 +192,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     private fun openReservedSlot(slot: Slot) {
         val dialog = ReservedSlotBottomSheet(
+            authToken,
             userId,
             calendar.getDateStr(),
             slot,
@@ -197,20 +203,20 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     private fun cancelReservation(slot: Slot) {
         scheduleViewModel.cancelReservation(
-            slot, userId, calendar.getWeekStart(), calendar.getWeekFinish()
+            authToken, slot, userId, calendar.getWeekStart(), calendar.getWeekFinish()
         )
     }
 
     private fun addSlot(slotPost: SlotPost) {
-        scheduleViewModel.postSlot(slotPost)
+        scheduleViewModel.postSlot(authToken, slotPost)
     }
 
     private fun deleteSlot(slot: Slot) {
-        scheduleViewModel.deleteSlot(slot)
+        scheduleViewModel.deleteSlot(authToken, slot)
     }
 
     private fun updateSlot(slot: Slot, slotPatch: SlotPatch) {
-        scheduleViewModel.patchSlot(slot, slotPatch)
+        scheduleViewModel.patchSlot(authToken, slot, slotPatch)
     }
 
     private fun onWeekdayClick(i: Int) {
@@ -222,6 +228,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         selectButton(weekdayButtons[i])
         scheduleViewModel.getAllSlots(
+            authToken,
             userId,
             calendar.getCurrentDate(),
             currentDay!!.weekday
@@ -230,6 +237,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     private fun updateIndicators() {
         scheduleViewModel.getLunchIndicators(
+            authToken,
             userId,
             calendar.getWeekStart(),
             calendar.getWeekFinish()

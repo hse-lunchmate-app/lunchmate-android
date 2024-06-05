@@ -14,11 +14,11 @@ class AccountEditViewModel(private val mainRepository: MainRepository) : ViewMod
     val accountData: LiveData<User> = _accountData
     val loadingStateLiveData = MutableLiveData<LoadingState>()
 
-    fun getUser(id: String) {
+    fun getUser(token: String, id: String) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val user = mainRepository.getUser(id)
+                val user = mainRepository.getUser(token, id)
                 _accountData.postValue(user)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
@@ -27,11 +27,11 @@ class AccountEditViewModel(private val mainRepository: MainRepository) : ViewMod
         }
     }
 
-    fun patchUser(id: String, info: UserPatch) {
+    fun patchUser(token: String, id: String, info: UserPatch) {
         loadingStateLiveData.value = LoadingState.LOADING
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mainRepository.patchUser(id, info)
+                mainRepository.patchUser(token, id, info)
                 loadingStateLiveData.postValue(LoadingState.SUCCESS)
             } catch (e: Exception) {
                 loadingStateLiveData.postValue(LoadingState.ERROR)
@@ -39,10 +39,10 @@ class AccountEditViewModel(private val mainRepository: MainRepository) : ViewMod
         }
     }
 
-    fun getOffices() = liveData(Dispatchers.IO) {
+    fun getOffices(token: String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = mainRepository.getOffices()))
+            emit(Resource.success(data = mainRepository.getOffices(token)))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
