@@ -58,10 +58,11 @@ class MainActivity : AppCompatActivity() {
         with(getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).edit()) {
             putString("authToken", "")
             putString("userId", "")
-            putBoolean("darkTheme", false)
             apply()
         }
 
+        binding.edittextLogin.setText("")
+        binding.edittextPassword.setText("")
         binding.bottomNavigationView.visibility = View.GONE
         binding.loginLayout.visibility = View.VISIBLE
         binding.loginBtn.setOnClickListener {
@@ -94,7 +95,6 @@ class MainActivity : AppCompatActivity() {
                                         ).edit()
                                     ) {
                                         putString("userId", userId.id)
-                                        putBoolean("darkTheme", false)
                                         apply()
                                     }
                                     setUpHomeScreen(null)
@@ -147,14 +147,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpHomeScreen(savedInstanceState: Bundle?) {
-        if (getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).getBoolean(
-                "darkTheme",
-                false
-            )
-        )
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        else
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        setTheme()
 
         if (savedInstanceState == null) {
             binding.bottomNavigationView.selectedItemId = R.id.home
@@ -174,6 +167,17 @@ class MainActivity : AppCompatActivity() {
         updateBadge()
 
         binding.loginLayout.visibility = View.GONE
+    }
+
+    private fun setTheme() {
+        if (getSharedPreferences("CurrentUserInfo", MODE_PRIVATE).getBoolean(
+                "darkTheme",
+                false
+            )
+        )
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
     private fun setCurrentFragment(fragment: Fragment) =
