@@ -3,7 +3,7 @@
 ![Снимок экрана 2024-09-19 105219](https://github.com/user-attachments/assets/ab510796-bcc6-4144-968f-4fd4553ea095)
 
 
-## [Видеодемонстрация](https://drive.google.com/file/d/1o2Wc5jB9eTzXS7mSrzJJU4eL7z6l1F_o/view?usp=sharing)
+## [Видеодемонстрация](https://youtu.be/7-dttA2Ax00)
 
 
 ## Technology stack
@@ -11,19 +11,38 @@
 * Material Design
 * Coroutines
 * Model-View-ViewModel(MVVM)
-* LiveData
-* View Binding
-* Retrofit
-* Android Jetpack Components
+* Component-Based Architecture
+* Clean Architecture
+* Dependency Injection (Dagger 2)
+* Fragments
+* Navigation Component
+* FirabaseAuth
+* ExoPlayer
+* Room
+* Retrofit 2
 * SharedPreferences
+* HorizontalSwipeListener
+* BottomSheetBehaviour
+* Paging 3
+* BottomOffsetDecorator
+* FadeItemAnimator
+* Custom ProgressPlate
+* Glide
+* JUnit 5
+* Mockito
 
-## В приложении можно
-* Авторизоваться
-*	Редактировать личный профиль
-*	Создавать, редактировать и удалять временные слоты в своем расписании
-*	Искать коллег и отправлять им приглашения
-*	Принимать приглашения от других пользователей
-*	Отказываться от приглашений других пользователей
-*	Отзывать свои приглашения
-*	Отменять поход на ланч
-*	Просматривать ожидаемые встречи
+
+
+
+
+## Функционал
+* Авторизация
+* Регистрация
+* Сброс пароля
+* Прослушивание подборок
+* Смена темы
+* Выход из профиля
+* Просмотр и поиск по трекам, артистам, альбомам, плейлистам (+автозаполнение)
+* Просмотр страницы артиста, альбома, плейлиста
+* Прослушивание плейлистов, альбомов, артистов
+* Добавление треков, артистов, альбомов, плейлистов в избранное (+удаление и поиск)
